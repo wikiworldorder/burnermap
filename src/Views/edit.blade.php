@@ -26,7 +26,7 @@
 	<input type="hidden" id="MouseXID" name="MouseX" value="{{ $myBurn->x }}" size="4">
 	<input type="hidden" id="MouseYID" name="MouseY" value="{{ $myBurn->y }}" size="4">
 	<div class="condensed editCenter editF16">My name in the default world is<br />{{ $myBurn->name }}.<br />
-		<input type="checkbox" id="burnThisYearID" name="burnThisYear" value="1" 
+		<input type="checkbox" id="burnThisYearID" name="burnThisYear" value="1" autocomplete="off" 
 		    @if ($myBurn->yearStatus == 'Skipping') CHECKED @endif onChange="onChangeYearStatus(this.checked);"> 
 		<label for="burnThisYearID"><span style="font-size: 10pt;">I'm not going to Burning Man this year</label>
 		    <br /><br /></span>
@@ -37,14 +37,15 @@
 		<div class="condensed editF16">Notes for friends</div>
 			<div class="editFldNotes">Shout outs, etc</div>
 		<textarea id="notes2ID" name="notes2" style="height: 97px; width: 450px; font-size: 10pt;" class="mapper" 
-		    onKeyUp="onKeyNotes();" ><?= str_replace('[[[heart]]]', '<3', $myBurn["notes"]) ?></textarea><br /><br />
+		    onKeyUp="onKeyNotes();" autocomplete="off" ><?= 
+		    str_replace('[[[heart]]]', '<3', $myBurn["notes"]) ?></textarea><br /><br />
 	</center></div></center>
 	
 	<div id="edit2" class="relDiv @if ($myBurn->yearStatus == 'Skipping') disNon @else disBlo @endif " >
 		<div class="editLeft condensed editF16">My playa name is</div>
 		<div class="editRight">
 			<input type="text" name="playaName" value="{{ $myBurn->playaName }}" class="mapper" 
-			    style="font-size: 18pt;" onFocus="return autoBox(0);">
+			    style="font-size: 18pt;" onFocus="return autoBox(0);" autocomplete="off">
 			<div class="editFldNotes"><nobr>Leave blank if you don't have a playa name yet. You will.</nobr></div>
 			<br />
 		</div>
@@ -54,7 +55,7 @@
 		<div class="editRight">
 			<div id="campNameDrop" class="edit7 @if ($myBurn->campID > 0) disBlo @else disNon @endif " >
 				<select id="campIDid" name="campID" class="edit8 mapper" onChange="loadCampInfo(this.value);" 
-				    style="font-size: 14pt;">
+				    style="font-size: 14pt;" autocomplete="off">
 					<option value="0" @if ($myBurn->campID == 0 || $myBurn->yearStatus == 'None') SELECTED @endif 
 					    style="color: #666;">Select...</option>
 					<option value="-3" @if ($myBurn->campID == -3) SELECTED @endif style="color: #333;"
@@ -70,7 +71,7 @@
 				    style="font-size: 10pt; font-weight: bold;">Add it!</a></nobr>--->
 			</div>
 			<div id="campNameText" class=" @if ($myBurn->campID > 0) disNon @else disBlo @endif " >
-				<input type="text" id="campID" name="camp" onKeyUp="return fillDiv(this.value);" 
+				<input type="text" id="campID" name="camp" onKeyUp="return fillDiv(this.value);" autocomplete="off" 
 				    value="{{ $myBurn->camp }}" class="mapper" style="font-size: 18pt; width: 280px;" >
 				<div id="autoCompShell"></div>
 				<div class="editFldNotes">
@@ -93,7 +94,7 @@
 			<div class="editLeft condensed editF16">My village name is</div>
 			<div class="editRight">
 				<select id="villageIDid" name="villageID" class="edit8 mapper" style="font-size: 14pt;" 
-				    onFocus="return autoBox(0);" onChange="onChangeVillage(this.value);">
+				    onFocus="return autoBox(0);" onChange="onChangeVillage(this.value);" autocomplete="off">
 					<option value="-1" @if ($myBurn->campID < 0 || $myBurn->yearStatus == 'None') SELECTED @endif 
 					    style="color: #333;" >Not in a village</option>
 					<!--- <option value="0" style="color: #333;" >--village name--(size on BurnerMap)--</option> --->
@@ -110,14 +111,14 @@
 		    style="font-size: 9pt;">click here</a> for playa map</div> --->
 		<div class="editRight">
 			<div id="mapFields2" class="condensed editF16 @if ($myInfo->myCampHasCoords) disNon @else disIn @endif ">
-				<nobr><select id="addyClockID" name="addyClock" class="mapper edit9">
+				<nobr><select id="addyClockID" name="addyClock" class="mapper edit9" autocomplete="off">
 				@foreach ($vars->streetClocks as $i => $s)
 					<option value="{{ $s }}" @if ($s == $myBurn->addyClock) SELECTED @endif
 					    @if ($s == '4:20') style="color: #007005;"
 					    @elseif (($i > 0 && $i < 5) || $i > 101) style="color: #007397;"
 					    @endif >{{ $s }}</option>
 				@endforeach
-				</select> & <select id="addyLetterID" name="addyLetter" class="mapper edit10">
+				</select> & <select id="addyLetterID" name="addyLetter" class="mapper edit10" autocomplete="off">
 				@foreach ($vars->streetLetters as $i => $s)
 					<option value="{{ $s }}" @if ($s == $myBurn["addyLetter"]) SELECTED @endif
 					    @if ($i > 15) style="color: #007397;" @endif >{{ $s }}</option>
@@ -132,7 +133,7 @@
 				</div>
 			</div>
 			<div id="mapFields5">
-				<select id="addyLetter2ID" name="addyLetter2">
+				<select id="addyLetter2ID" name="addyLetter2" autocomplete="off">
 					<option value="???" @if ($s == $myBurn["addyLetter2"]) SELECTED @endif 
 					    >Which side of the street? (if known)</option>
 					<option value="Man-side" @if ($myBurn["addyLetter2"] == 'Man-side') SELECTED @endif 
@@ -144,7 +145,8 @@
 			
 			<div id="mapFieldsStatic" class="condensed @if ($myInfo->myCampHasCoords) disBlo @else disNon @endif ">
 				@if ($myBurn->campID > 0 && $myInfo->myCampHasCoords)
-					<nobr> @if ($myInfo->myCamp->who=='???') A campmate @else {{ $myInfo->myCamp->who }} @endif 
+					<nobr> @if (isset($myInfo->myCamp->who) && $myInfo->myCamp->who == '???') A campmate 
+					@elseif (isset($myInfo->myCamp->who)) {{ $myInfo->myCamp->who }} @endif 
 					set the camp address to {{ $myInfo->myCamp->addyClock }} & {{ $myInfo->myCamp->addyLetter }}</nobr>
 				@endif
 			</div>
@@ -162,25 +164,28 @@
 			<div class="editFldNotes">Camp description,<br />landmarks, event times,<br />request more campers,<br />
 			    shout outs, etc</div>
 		</div>
-		<div class="editRight"><textarea id="notesID" name="notes" class="mapper"
+		<div class="editRight"><textarea id="notesID" name="notes" class="mapper" autocomplete="off"
 		    ><?= str_replace('[[[heart]]]', '<3', $myBurn->notes) ?></textarea><br /><br /></div>
 		<div class="editClear"></div>
 		
-		<div class="editLeft condensed editF16" style="width: 450px;"><nobr>I'm on the playa from 
-			<select name="dateArrive" class="dateInOut mapper"> {!! $dateArriv !!} </select> to 
-			<select name="dateDepart" class="dateInOut mapper"> {!! $dateDepart !!} </select></nobr><br /><br />
+		<div class="editLeft condensed editF16" style="width: 450px;">
+		    <nobr>I'm on the playa from 
+			<select name="dateArrive" class="dateInOut mapper" autocomplete="off"> {!! $dateArriv !!} </select> to 
+			<select name="dateDepart" class="dateInOut mapper" autocomplete="off"> {!! $dateDepart !!} </select>
+			</nobr><br /><br />
         </div>
 		<div class="editClear"></div>
 		
-		<div id="shareWithCamp" class=" @if ($myBurn->yearStatus == 'None' || $myBurn->campID > 0) disBlo @else disNon 
+		<div id="shareWithCamp" class=" @if ($myBurn->yearStatus != 'None' && $myBurn->campID > 0) disBlo @else disNon 
 		    @endif "><nobr>&nbsp;&nbsp;&nbsp;
-		    <input type="checkbox" id="shareWithCampID" name="shareWithCamp" value="1" 
-		        @if ($myBurn->opts%3 == 0 || $myBurn->yearStatus == 'None') CHECKED @endif > 
+		    <input type="checkbox" id="shareWithCampID" name="shareWithCamp" value="1" autocomplete="off" 
+		        @if ($myBurn->opts%3 == 0 && $myBurn->yearStatus != 'None') CHECKED @endif > 
 			<label for="shareWithCampID">Share my info with my campmates.</label></nobr>
-			<div id="shareWithVillage" class=" @if ($myBurn->villageID > 0) disBlo @else disNon @endif ">
+			<div id="shareWithVillage" class=" @if ($myBurn->villageID > 0) disBlo @else disNon @endif "
+			    style="padding-top: 10px;">
 				<nobr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" id="shareWithVillID" name="shareWithVill" value="1" 
-				    @if ($myBurn->opts%13 == 0 || $myBurn->yearStatus == 'None') CHECKED @endif
+				<input type="checkbox" id="shareWithVillID" name="shareWithVill" value="1" autocomplete="off" 
+				    @if ($myBurn->yearStatus != 'None' && $myBurn->opts%13 == 0) CHECKED @endif
 				    onClick="clickShareVillage();" > 
 				<label for="shareWithVillID">Share with my villagemates too.</label></nobr>
 			</div>
@@ -192,7 +197,8 @@
 		
 		<div id="emailFld1" class="editLeft disBlo condensed editF16">My email address is<br /></div>
 		<div id="emailFld2" class="editRight disBlo">
-		    <input type="text" id="emailID" name="email" value="{{ $myBurn->email }}" class="mapper"></div>
+		    <input type="text" id="emailID" name="email" value="{{ $myBurn->email }}" class="mapper"
+		        autocomplete="off" ></div>
 		<div class="editClear"></div>
 		<div class="edit14">
 		    <?php /* <input type="checkbox" id="emailRemindID" name="emailRemind" value="1" 

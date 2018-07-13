@@ -64,7 +64,7 @@ class MapDeets
         if ($chk->isNotEmpty()) {
             foreach ($chk as $camp) {
                 $this->campDeets[$camp->id] = $camp;
-                $this->chkCampRecord($camp->id);
+                if ($archYear != '') $this->chkCampRecord($camp->id);
             }
         }
         $chk = BurnerVillages::orderBy('name', 'asc')
@@ -172,7 +172,8 @@ class MapDeets
 	            if ($chk) {
 	                $this->campDeets[$campID]->x = $chk->x;
 	                $this->campDeets[$campID]->y = $chk->y;
-	                BurnerCamps::find($campID)->update([ 'x' => $chk->x, 'y' => $chk->y ]);
+	                $campRow = BurnerCamps::find($campID);
+	                if ($campRow) $campRow->update([ 'x' => $chk->x, 'y' => $chk->y ]);
 	            }
 	        }
 	    }

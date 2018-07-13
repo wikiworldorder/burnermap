@@ -13,7 +13,7 @@
                     >open source</a>!</nobr></div>
         </td>
         <td style="margin: 0px; text-align: left; position: relative;">
-            <div class="absDiv" style="top: -2px; left: -4px;">
+            <div class="absDiv" style="top: -4px; left: -4px;">
                 <a href="https://www.patreon.com/morganlesko" target="_blank" 
                     ><div style="background: #fff9eb; margin: 0px; -moz-border-radius: 10px; border-radius: 10px;
                     padding: 0px;"><img src="/images/patreon_navigation_logo_mini_orange.png" border=0 height=36 

@@ -1,5 +1,5 @@
 <!-- map-noncamper-row.blade.php -->
-@if (!$isPrint)
+@if (!isset($isPrint) || !$isPrint)
     <tr>
         <td class="nobord"><img src="/images/spacer.gif" border=0 width=29 ></td>
         <td @if ($first) class="nobord" @endif >{!! $profPic !!}</td>

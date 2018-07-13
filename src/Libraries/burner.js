@@ -86,5 +86,28 @@ function openFBmsgWin(user) {
 
 
 $(document).ready(function(){
+        
 	$("#showJson").click(function() { $("#jsonDeets").slideToggle("fast"); });
+	
+	
+    function toggleHidiv(fldGrp) {
+        if (document.getElementById("hidiv"+fldGrp+"")) {
+            if (document.getElementById("hidiv"+fldGrp+"").style.display!="block") {
+                $("#hidiv"+fldGrp+"").slideDown("fast");
+            } else {
+                $("#hidiv"+fldGrp+"").slideUp("fast");
+            }
+        }
+        return true;
+    }
+	$(document).on("click", ".hidivBtn", function() {
+        var fldGrp = $(this).attr("id").replace("hidivBtn", "");
+        toggleHidiv(fldGrp);
+	});
+	$(document).on("click", ".hidivBtnSelf", function() {
+        var fldGrp = $(this).attr("id").replace("hidivBtn", "");
+        toggleHidiv(fldGrp);
+        $(this).slideUp("fast");
+	});
+	
 });

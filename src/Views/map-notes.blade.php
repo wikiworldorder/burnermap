@@ -17,3 +17,5 @@
 </div>
 <br /><br />
 </center>
+
+{!! view('vendor.burnermap.inc-friendsErrHelp')->render() !!}

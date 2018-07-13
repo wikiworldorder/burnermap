@@ -61,7 +61,7 @@ input.mapper, textarea.mapper {
     width: 280px;
     height: 36px;
     font-size: 18px;
-    padding-left: 5px; 
+    padding: 5px; 
     font-family: Helvetica, Arial, sans-serif;
 }
 a, a:visited, a:active, a:hover {
@@ -1248,11 +1248,13 @@ a.absenteeMores:link, a.absenteeMores:visited, a.absenteeMores:active, a.absente
 }
 
 .frndErrWrap {
+    width: 682px;
+    text-align: left;
     -moz-border-radius: 5px;
     border-radius: 5px;
     border: 4px #ff908f solid;
     padding: 20px;
-    margin-bottom: 40px;
+    display: none;
 }
 .frndErrWrap ol {
     line-height: 20px;

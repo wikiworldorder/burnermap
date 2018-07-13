@@ -102,9 +102,9 @@ class IncUtils
     {
         if ($fld == '' || $opt <= 1) return $currOpts;
         if ($request->has($fld) && intVal($request->get($fld)) > 0) {
-            if ($currOpts%3 > 0) $currOpts = $currOpts*3;
-        } elseif ($currOpts%3 == 0) {
-            $currOpts = $currOpts/3;
+            if ($currOpts%$opt > 0) $currOpts = $currOpts*$opt;
+        } elseif ($currOpts%$opt == 0) {
+            $currOpts = $currOpts/$opt;
         }
         return $currOpts;
     }

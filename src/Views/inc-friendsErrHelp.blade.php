@@ -1,11 +1,10 @@
 <!-- resources/views/vendor/burnermap/inc-friendsErrHelp.blade.php -->
-<div class="frndErrWrap">
-    <center><h3>It looks like we can't find any friends for you :-\</h3></center>
+
+<center><a id="hidivBtnMissFrnds" class="hidivBtnSelf red" href="javascript:;"
+    >Are you missing friends who have already signed up for BurnerMap this year?</a>
+<div id="hidivMissFrnds" class="frndErrWrap">
+    <center><h3>If you are missing friends who are on BurnerMap...</h3></center>
     <p>
-    Either you really don't have any Facebook friends who are using BurnerMap [yet], or something went wrong. 
-    Many burners don't let BurnerMap access their Facebook friends list out of habit. 
-    But BurnerMap is <b><i>only</i></b> useful and fun if it can connect you with your friends.
-    </p><p>
     <b class="red">If you expected to see some friends mapped here, please follow these steps,<br />
     <i>in order...</i></b>
     <ol>
@@ -24,3 +23,4 @@
     </ol>
     </p>
 </div>
+</center><br /><br /><br />

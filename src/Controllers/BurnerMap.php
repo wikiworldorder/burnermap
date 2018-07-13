@@ -33,7 +33,7 @@ class BurnerMap extends FaceController
     {
         $this->loadPage('edit');
         $this->loadVars();
-        $this->editSave($request);
+        if ($this->editSave($request)) return redirect('/map');
         $campOpts = $this->printCampOpts();
         $villOpts = $this->printVillageOpts();
         file_put_contents('../public/lib/camps.js', $this->java);
@@ -203,7 +203,7 @@ class BurnerMap extends FaceController
                 . $this->myBurn->dateDepart . ';' . $this->myBurn->yearStatus . ';' . $this->myBurn->edits;
             $edit->save();
             $this->clearFriendCaches($cacheClearUsers);
-            return redirect('/map');
+            return true;
         }
         return false;
     }
@@ -311,6 +311,9 @@ class BurnerMap extends FaceController
             echo $this->myInfo->myFriends . '<pre>'; print_r($this->usr); echo '</pre>';
         }
         $this->loadVars();
+        if (!isset($this->myBurn->edits) || intVal($this->myBurn->edits) == 0) {
+            return redirect('/edit');
+        }
         if ($request->has('excel')) {
             return $this->excelFriends($request);
         }
@@ -318,8 +321,8 @@ class BurnerMap extends FaceController
             return $this->camps($request);
         }
         $this->chkMapActions($request);
-        $isPrint   = $request->has('print');
-        $isExcel   = $request->has('excel');
+        $isPrint = $request->has('print');
+        $isExcel = $request->has('excel');
         if ($request->has('clearFriendList') && intVal($request->get('clearFriendList')) == 1) {
             $this->mainout .= $this->clearFriendList();
         } else {
@@ -547,7 +550,9 @@ class BurnerMap extends FaceController
             $this->myBurn->save();
             exit;
         }
-        if ($request->has('arch')) $this->archYear = trim($request->get('arch'));
+        if ($request->has('arch') && trim($request->get('arch')) != date("Y")) {
+            $this->archYear = trim($request->get('arch'));
+        }
         return true;
     }
     

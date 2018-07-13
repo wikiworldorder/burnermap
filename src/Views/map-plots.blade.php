@@ -33,10 +33,9 @@
         <nobr><a href="/disclaimers.php" target="_blank">Map disclaimers from Burning Man</a></nobr>
         <br /><nobr><i>Map Archives:</i>&nbsp;&nbsp;
         <select name="chooseArchive" onChange="window.location='?arch='+this.value+'';">
-            <option value="{{ substr(date('Y'), 2) }}" SELECTED >{{ date("Y") }}</option>
+            <option value="{{ date('Y') }}" SELECTED >{{ date("Y") }}</option>
         @for ($y = (intVal(date("Y"))-1); $y > 2010; $y--)
-            <option value="{{ substr($y, 2) }}" @if (intVal($archYear) == intVal(substr($y, 2))) SELECTED @endif
-                >{{ $y }}</option>
+            <option value="{{ $y }}" @if (intVal($archYear) == intVal($y)) SELECTED @endif >{{ $y }}</option>
         @endfor
         </select></nobr>
     </div></div></td></tr></table>

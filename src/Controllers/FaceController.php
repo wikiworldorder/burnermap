@@ -108,6 +108,10 @@ class FaceController extends Controller
                 "usr"    => $this->usr,
                 "myBurn" => $this->myBurn
                 ])->render();
+        } elseif (in_array($this->currPage, ['welcome', 'privacy'])) {
+            return view('vendor.burnermap.inc-header-welcome', [
+                "currPage" => $this->currPage
+                ])->render();
         } elseif ($this->currPage != 'welcome') {
             return view('vendor.burnermap.inc-header', [
                 "usr"      => $this->usr,
