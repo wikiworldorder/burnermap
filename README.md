@@ -100,18 +100,14 @@ $ php artisan db:seed --class=BurnerMapSeeder
 ```
 
 * Download packages and copy to public folers...
-
-<a href="https://jquery.com/download/" target="_blank">jquery.com/download/</a>
-Copy the compressed, production jQuery file to your Laravel directory, eg: public/js/jquery-3.3.1.min.js
-
-<a href="www.shadowbox-js.com/download.html" target="_blank">shadowbox-js.com/download.html</a>
-Copy the Shadowbox folder to your Laravel directory: public/js/shadowbox-3.0.3
-
-<a href="https://github.com/flot/flot" target="_blank">github.com/flot/flot</a>
-Copy flot-master folder to your Laravel directory: public/js/flot-master
-
-<a href="https://fonts.google.com/specimen/Oswald" target="_blank">fonts.google.com/specimen/Oswald</a>
-Copy folder with TTF files to your Laravel directory: public/css/Oswald
+    - <a href="https://jquery.com/download/" target="_blank">jquery.com/download/</a> 
+    Copy the compressed, production jQuery file to your Laravel directory, eg: public/js/jquery-3.3.1.min.js
+    - <a href="www.shadowbox-js.com/download.html" target="_blank">shadowbox-js.com/download.html</a>
+    Copy the Shadowbox folder to your Laravel directory: public/js/shadowbox-3.0.3
+    - <a href="https://github.com/flot/flot" target="_blank">github.com/flot/flot</a>
+    Copy flot-master folder to your Laravel directory: public/js/flot-master
+    - <a href="https://fonts.google.com/specimen/Oswald" target="_blank">fonts.google.com/specimen/Oswald</a>
+    Copy folder with TTF files to your Laravel directory: public/css/Oswald
 
 * Change permissions so admins can upload new maps...
 
@@ -146,9 +142,8 @@ Please report any issue you find in the issues page.
 
 # <a name="security-help"></a>Reporting a Security Vulnerability
 
-We want to ensure that SurvLoop is a secure HTTP open data platform for everyone. 
-If you've discovered a security vulnerability in SurvLoop, 
-we appreciate your help in disclosing it to us in a responsible manner.
+We want to ensure that BurnerMap is a secure HTTP app for everyone. 
+If you've discovered a security vulnerability, appreciate your help in disclosing it to us in a responsible manner.
 
 Publicly disclosing a vulnerability can put the entire community at risk. 
 If you've discovered a security concern, please email us at wikiworldorder *at* protonmail.com. 
