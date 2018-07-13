@@ -1,0 +1,25 @@
+{
+    "name": "wikiworldorder/burnermap",
+    "description": "BurnerMap: Find your pals on the playa. Tracking down friends at Burning Man used to be harder than cleaning playa dust out of gold-sequined booty shorts.",
+    "keywords": [
+    	"BurnerMap",
+    	"Burning Man",
+    	"Facebook App"
+    ],
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Morgan Lesko",
+            "homepage": "https://github.com/wikiworldorder/burnermap",
+            "email": "mo@wikiworldorder.org",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "BurnerMap\\": "src/"
+        }
+    }
+}

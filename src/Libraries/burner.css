@@ -1,0 +1,1272 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+	background: #fff9eb;
+    margin: 0px;
+    padding: 0px;
+}
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Oswald'), url(/css/Oswald/Oswald-Regular.ttf) format('truetype');
+  /* unicode-range: U+0600-06FF, U+200C-200E, U+2010-2011, U+FB50-FDFF, U+FE80-FEFC; */
+}
+.condensed, span.condensed, table tr td.condensed {
+    font-family: 'Oswald', sans-serif;
+    color: #000;
+}
+a.condensed, a.condensed:visited, a.condensed:active, a.condensed:hover {
+    font-family: 'Oswald', sans-serif;
+    color: #007397;
+}
+a.helv, a.helv:visited, a.helv:active, a.helv:hover {
+    font-family: Helvetica, Arial, sans-serif;
+    color: #007397;
+}
+.red, b.red {
+    color: #FF0000;
+}
+.grey, table tr td.grey, table tr th.grey {
+    color: #666;
+}
+.relDiv, .absDiv {
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+}
+.absDiv { position: absolute; }
+.disBlo { display: block; }
+.disIn { display: inline; }
+.disNon, .hid { display: none; }
+
+.taL, table tr td.taL, table tr th.taL { text-align: left; }
+.taR, table tr td.taR, table tr th.taR { text-align: right; }
+.taC, table tr td.taC, table tr th.taC { text-align: center; }
+
+.vaT, table tr td.vaT, table tr th.vaT { vertical-align: top; }
+.vaM, table tr td.vaM, table tr th.vaM { vertical-align: middle; }
+.vaB, table tr td.vaB, table tr th.vaB { vertical-align: bottom; }
+
+.w100 { width: 100%; }
+.wBrn { width: 699px; }
+.wBrnThin { width: 500px; }
+
+.m0 { margin: 0px; }
+.m20 { margin: 20px; }
+.mLn5 { margin-left: -5px; }
+.p0 { padding: 0px; }
+.p20 { padding: 20px; }
+
+input.mapper, textarea.mapper {
+    width: 280px;
+    height: 36px;
+    font-size: 18px;
+    padding-left: 5px; 
+    font-family: Helvetica, Arial, sans-serif;
+}
+a, a:visited, a:active, a:hover {
+    color: #007397;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+h1 a {
+    text-decoration: none;
+    color: #3b5998;
+}
+h1 a:hover {
+    text-decoration: underline;
+}
+#headerBar {
+    position: fixed; 
+    z-index: 90; 
+    width: 100%; 
+    height: 144px; 
+    background: url(https://BurnerMap.com/images/header3BG.jpg); 
+    background-repeat: repeat-x;
+    margin-top: 0px;
+}
+.burnernotes {
+    font-size: 9pt;
+    color: #666666;
+}
+table.burnerForm tr td input, table.burnerForm tr td textarea {
+    width: 200px;
+}
+table.burnerForm tr td select {
+    width: 100px;
+}
+table.burnerForm tr td {
+    font-size: 10pt;
+}
+table tr.row2 td, table tr.row2 th {
+    background: #FFF9EB;
+}
+table.burnFriends tr td, table.burnAbsentFriends tr td {
+    border-top: 1px #c4b36d solid;
+}
+table.burnFriends tr td.col2, table.burnAbsentFriends tr td.col2 {
+    padding-left: 6px;
+}
+table.burnAbsentFmapTabsriends tr td {
+	width: 110px;
+}
+div {
+    padding: 0px;
+    margin: 0px;
+}
+.maplot {
+    position: absolute; 
+    z-index: 50; 
+}
+.maplotLab {
+    position: absolute; 
+    z-index: 51; 
+    width: 18px;
+    height: 14px;
+    text-align: center;
+    padding: 0px;
+}
+.maplotLab a, .maplotLab a:visited, .maplotLab a:active, .maplotLab a:hover {
+    text-decoration: none;
+    font-size: 8pt;
+    letter-spacing: -0.03em;
+    color: #000;
+}
+.maplotDeets, .maplotDeetsSolo {
+    position: absolute; 
+    z-index: 99; 
+    overflow: visible;
+    text-align: center;
+    vertical-align: middle;
+    padding: 3px;
+    font-size: 8pt;
+    letter-spacing: -0.03em;
+    background: #e6e2d4;
+    border: 2px #f15349 solid;
+    display: none;
+}
+table tr td.maplotDeetsHead {
+    font-size: 12pt; 
+    font-weight: bold;
+}
+table tr td.maplotDeetsAnon {
+    font-size: 10pt;
+}
+.maplotDeetsSolo {
+    width: 140px;
+    height: 90px;
+}
+table tr td.mapTabs, table tr td.mapTabsOn {
+    display: inline;
+    border: 1px #938252 solid; 
+    border-bottom: 0px none; 
+    text-align: center; 
+    vertical-align: middle; 
+    font-size: 13pt; 
+    font-weight: bold;
+    background: #dadada; 
+    color: #8a8a8a;
+    padding: 8px;
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 170px;
+}
+table tr td.mapTabsOn {
+    background: #FFF; 
+    color: #000;
+}
+table tr td.mapTabs a, table tr td.mapTabs a:visited, table tr td.mapTabs a:active, table tr td.mapTabs a:hover {
+    color: #8a8a8a;
+}
+table tr td.mapTabsOn a, table tr td.mapTabsOn a:visited, table tr td.mapTabsOn a:active, table tr td.mapTabsOn a:hover {
+    color: #000;
+}
+table tr td.mapTabsScroll {
+    text-align: left;
+    vertical-align: top;
+    padding: 0px; 
+    font-size: 8pt; 
+    line-height: 12px;
+    color: #ff908f;
+    width: 190px;
+}
+table tr td.mapTabsScroll div div {
+	top: -6px;
+	left: 26px;
+}
+table tr td.mapTabsScroll div div select {
+    font-size: 8pt; 
+    width: 60px;
+    height: 14px;
+}
+table tr td.mapTabsScroll a, table tr td.mapTabsScroll a:active, table tr td.mapTabsScroll a:visited, table tr td.mapTabsScroll a:hover {
+    font-size: 8pt;
+    line-height: 12px;
+}
+.footOrange, table tr td.footOrange, span.footOrange {
+    color: #ef9b04;
+}
+span.feets a, span.feets a:visited, span.feets a:active, span.feets a:hover {
+    color: #7fd4ff;
+}
+span.feetSubtle a, span.feetSubtle a:visited, span.feetSubtle a:active, span.feetSubtle a:hover {
+    color: #BBBBBB;
+}
+table tr td.campTitle {
+    width: 100%; 
+    height: 44px; 
+    background: #93824c; 
+    padding-left: 10px;
+}
+table tr td.campTitle, table tr td.campTitle table tr td {
+    color: #FFF; 
+    font-size: 18pt; 
+    vertical-align: middle; 
+}
+table tr td.campTitle table tr td {
+    border: 0px none;
+    padding-right: 10px;
+}
+table.anonMapList tr td {
+    font-size: 9pt;
+    letter-spacing: -0.01em;
+    vertical-align: top;
+}
+table.anonMapList tr td span {
+    color: #9a9a9a;
+}
+img { 
+    border: none; 
+    font-size: 8pt;
+} 
+
+table tr td.headerLogin {
+    text-align: right;
+    font-size: 10pt; 
+    color: #999999;
+}
+table tr td.headerLogin table tr td {
+    font-size: 10pt; 
+    color: #999999;
+}
+table tr td.headerLogin table tr td a, table tr td.headerLogin table tr td a:visited, table tr td.headerLogin table tr td a:active, table tr td.headerLogin table tr td a:hover, 
+table tr td.headerLogin a, table tr td.headerLogin a:visited, table tr td.headerLogin a:active, table tr td.headerLogin a:hover {
+    font-size: 10pt; 
+}
+table tr td.headerLogin table tr td {
+    vertical-align: middle;
+}
+table.collapseAll, table.collapseAll tr td {
+    border-collapse:collapse;
+    padding: 0px;
+}
+.ticketOn, .ticket2On, .ticketOff {
+    width: 143px;
+    height: 61px;
+    background: url(https://BurnerMap.com/images/ticket-button-on.jpg);
+    background-repeat: no-repeat;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+}
+.ticketOff {
+    background: url(https://BurnerMap.com/images/ticket-button-off.jpg);
+}
+.ticketOn div, .ticket2On div, .ticketOff div {
+    width: 77px;
+    text-align: center;
+    font-size: 18pt;
+    line-height: 25px;
+    color: #ff3335;
+    position: absolute;
+    top: 9px;
+    left: 33px;
+}
+.ticketOff div {
+    color: #b5b5b5;
+}
+.ticket2On div {
+    color: #01be7f;
+}
+.ticketRightShell1 {
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    width: 80px;
+    height: 31px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.ticketRightBG, .ticketRightBG2 {
+    width: 41px;
+    height: 21px;
+    background: url(https://BurnerMap.com/images/ticket-rightCol.jpg);
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 15;
+    top: 5px;
+    left: 35px;
+    text-align: left;
+    vertical-align: top;
+}
+.ticketRightBG2 {
+    left: 0px;
+}
+.ticketRightColHas, .ticketRightColNeeds, 
+.ticketRightColFriend, .ticketRightColFriendNeeds {
+    text-align: center;
+    font-size: 13pt;
+    letter-spacing: -0.03em;
+    line-height: 22px;
+    font-weight: bold;
+    color: #4cb77e;
+    padding-left: 6px;
+    width: 30px;
+}
+.ticketRightColNeeds, .ticketRightColFriendNeeds {
+    color: #f95144;
+}
+.ticketFriend {
+    width: 34px;
+    height: 31px;
+    background: url(https://BurnerMap.com/images/ticket-rightCol-friends.jpg);
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 15;
+}
+.ticketTip, .ticketTip2 {
+    width: 200px;
+    height: 85px;
+    position: absolute;
+    z-index: 89;
+    top: 28px;
+    left: -123px;
+    text-align: left;
+    display: none;
+}
+.ticketTip2 {
+    left: -158px;
+}
+table.borderless tr td {
+    border: 0px none;
+}
+a#feedbackright, body > a#feedbackright {
+    background:url("https://BurnerMap.com/images/feedback_tab_white.png") no-repeat scroll 50% 50% #0066CC;
+    display:block;
+    height:90px;
+    line-height:0;
+    padding:5px;
+    position:fixed;
+    right:0;
+    /*left:0;*/
+    text-indent:-99999px;
+    top:50%;
+    width:22px;
+}
+a#feedbackright:hover, body > a#feedbackright:hover {
+    background-color:#FF8B00;
+}
+
+#notifTitle {
+    font-size: 18pt;
+    color: #958445;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+.notifBox {
+    background: url(https://BurnerMap.com/images/notificationBG.jpg);
+    background-repeat: no-repeat;
+    width: 698px;
+    height: 58px;
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+}
+.notifX {
+    width: 698px;
+    text-align: right;
+    padding-top: 3px;
+    padding-right: 3px;
+}
+.notifX a, .notifX a:visited, .notifX a:active, .notifX a:hover {
+    font-size: 14pt;
+    font-weight: bold;
+    color: #fff9eb;
+}
+.notifDesc {
+    width: 698px;
+    margin-top: -12px; 
+    padding-left: 12px; 
+    text-align: left;
+}
+.notifDesc, .notifDesc table tr td {
+    font-size: 17pt; 
+    color: #fff9eb;
+    text-align: left;
+}
+.notifDesc table tr td.notifNote {
+    padding-left: 8px;
+    padding-bottom: 5px;
+}
+.notifDesc a, .notifDesc a:visited, .notifDesc a:active, .notifDesc a:hover,
+.notifDesc table tr td a, .notifDesc table tr td a:visited, .notifDesc table tr td a:active, .notifDesc table tr td a:hover {
+    color: #ffbd00;
+    font-size: 15pt; 
+}
+#bodywrap1 {
+    width: 100%;
+}
+#bodywrap2 {
+    z-index: 50; 
+    text-align: left; 
+}
+#headBuff {
+    width: 100%;
+    height: 166px;
+}
+#head0 {
+    width: 699px; 
+    text-align: center; 
+    vertical-align: top;
+}
+table tr td.head1 {
+    padding-top: 2px;
+}
+table tr td.head2 {
+    font-size: 9pt;
+    color: #999999;
+}
+table tr td.head3 {
+    font-size: 10pt;
+    color: #999;
+}
+table tr td.head4 {
+    padding-left: 8px;
+}
+table tr td.head4 img {
+    height: 29px;
+    border: 1px #333 solid;
+}
+.head5 {
+    padding-top: 12px;
+}
+#footerDiv {
+    width: 100%; 
+    height: 500px; 
+    background: #4d443b;
+}
+#foot1 {
+    padding-top: 20px;
+}
+table tr td.foot2 {
+    font-size: 29pt; 
+    font-weight: bold;
+}
+table tr td.foot3 {
+    color: #9d712b; 
+    font-size: 11pt; 
+    font-weight: bold;
+}
+#foot4 {
+    width: 454px; 
+    text-align: left; 
+    color: #9a9a9a; 
+    font-size: 10pt; 
+    letter-spacing: -0.02em; 
+    line-height: 17px; 
+    padding-top: 15px;
+}
+#foot5 {
+    top: 300px; 
+    left: 75px;
+}
+#foot6 {
+    background: url(https://BurnerMap.com/images/footerFoot.jpg); 
+    height: 80px; 
+    font-size: 9pt; 
+    letter-spacing: 0.03em; 
+    font-weight: bold; 
+    color: #FFF;
+}
+table.nobord tr td, table tr td.nobord {
+    border: 0px none;
+}
+table tr td.print1 {
+    width: 100%; 
+    height: 44px; 
+    background: #93824c; 
+    color: #FFF; 
+    font-size: 18pt; 
+    vertical-align: middle; 
+    padding-left: 10px;
+}
+table tr td.print1 .campDesc {
+    display: none;
+    padding: 10px;
+}
+table tr td.print1 .campDesc, table tr td.print1 .campDesc a:link, table tr td.print1 .campDesc a:visited, table tr td.print1 .campDesc a:active, table tr td.print1 .campDesc a:hover {
+    color: #FFF;
+    font-size: 12pt;
+    font-family: Helvetica, Arial, sans-serif;
+}
+table tr td.print2 {
+    width: 100%; 
+    height: 44px; 
+    background: #93824c; 
+    color: #FFF; 
+    font-size: 18pt; 
+    vertical-align: middle; 
+    padding-left: 10px;
+}
+.print3 {
+    margin-bottom: 20px; 
+    font-size: 13pt;
+    letter-spacing: -0.02em;
+}
+.print3 a, .print3 a:visited, .print3 a:active, .print3 a:hover {
+    font-size: 13pt;
+}
+.print4 {
+    z-index: 80; 
+    top: 33px; 
+    left: 5px;
+}
+.print5 {
+    z-index: 80; 
+    top: 33px; 
+    left: 5px;
+}
+.print6 {
+    margin-bottom: 20px; 
+    font-size: 15pt;
+}
+.print7 {
+    height: 563px;
+}
+.print8 {
+    z-index: 1; 
+    top: 0px; 
+    left: 0px;
+}
+.print8 a img, .print8 a:link img, .print8 a:visited img, .print8 a:active img, .print8 a:hover img {
+    border: 1px #938252 solid;
+}
+.print9 {
+    height: 370px; 
+    overflow: auto; 
+    border: 1px #938252 solid;
+}
+.print10 {
+    z-index: 1; 
+    top: 0px; 
+    left: 0px;
+}
+.print11 {
+    z-index: 1; 
+    top: 0px; 
+    left: 1398px;
+}
+.print12 {
+    z-index: 1; 
+    top: 1098px; 
+    left: 0px;
+}
+.print13 {
+    z-index: 1; 
+    top: 1098px; 
+    left: 1398px;
+}
+.print14 {
+    z-index: 1; 
+    top: 0px; 
+    left: 0px;
+}
+.print15 {
+    z-index: 1; 
+    top: 564px; 
+    left: 0px;	
+}
+.print16 {
+    font-size: 11pt; 
+    color: #999;
+}
+table tr td.print17 {
+    font-size: 13pt;
+}
+table tr td.rgt {
+    text-align: right;
+}
+
+.nobld { font-weight: normal; }
+.f8, table tr td.f8, i.f8, a.f8:link, a.f8:active, a.f8:visited, a.f8:hover, input.f8 , select.f8 , textarea.f8 { font-size: 8pt; }
+.f9, table tr td.f9, i.f9, a.f9:link, a.f9:active, a.f9:visited, a.f9:hover, input.f9 , select.f9 , textarea.f9 { font-size: 9pt; }
+.f10, table tr td.f10, i.f10, a.f10:link, a.f10:active, a.f10:visited, a.f10:hover, input.f10 , select.f10 , textarea.f10 { font-size: 10pt; }
+.f11, table tr td.f11, i.f11, a.f11:link, a.f11:active, a.f11:visited, a.f11:hover, input.f11 , select.f11 , textarea.f11 { font-size: 11pt; }
+.f12, table tr td.f12, i.f12, a.f12:link, a.f12:active, a.f12:visited, a.f12:hover, input.f12 , select.f12 , textarea.f12 { font-size: 12pt; }
+.f13, table tr td.f13, i.f13, a.f13:link, a.f13:active, a.f13:visited, a.f13:hover, input.f13 , select.f13 , textarea.f13 { font-size: 13pt; }
+.f14, table tr td.f14, i.f14, a.f14:link, a.f14:active, a.f14:visited, a.f14:hover, input.f14 , select.f14 , textarea.f14 { font-size: 14pt; }
+.f16, table tr td.f16, i.f16, a.f16:link, a.f16:active, a.f16:visited, a.f16:hover, input.f16 , select.f16 , textarea.f16 { font-size: 16pt; }
+.f18, table tr td.f18, i.f18, a.f18:link, a.f18:active, a.f18:visited, a.f18:hover, input.f18 , select.f18 , textarea.f18 { font-size: 18pt; }
+.f20, table tr td.f20, i.f20, a.f20:link, a.f20:active, a.f20:visited, a.f20:hover, input.f20 , select.f20 , textarea.f20 { font-size: 20pt; }
+.f22, table tr td.f22, i.f22, a.f22:link, a.f22:active, a.f22:visited, a.f22:hover, input.f22 , select.f22 , textarea.f22 { font-size: 22pt; }
+.f24, table tr td.f24, i.f24, a.f24:link, a.f24:active, a.f24:visited, a.f24:hover, input.f24 , select.f24 , textarea.f24 { font-size: 24pt; }
+.f26, table tr td.f26, i.f26, a.f26:link, a.f26:active, a.f26:visited, a.f26:hover, input.f26 , select.f26 , textarea.f26 { font-size: 26pt; }
+.f28, table tr td.f28, i.f28, a.f28:link, a.f28:active, a.f28:visited, a.f28:hover, input.f28 , select.f28 , textarea.f28 { font-size: 28pt; }
+
+table tr td.print18 {
+    width: 50%;
+}
+span.print19 {
+    font-size: 11pt; 
+    color: #ff908f;
+}
+table tr td.print20 {
+    text-align: right; 
+    padding: 0px; 
+    font-size: 10pt; 
+    color: #ff908f; 
+    line-height: 12px;
+}
+.print21 {
+    font-size: 16pt;
+}
+.print22 {
+    font-size: 10pt; 
+    color: #999; 
+    margin-bottom: 5px;
+}
+textarea.print23 {
+    height: 97px; 
+    width: 670px;
+}
+input.print24 {
+    font-size: 12pt; 
+    padding: 8px;
+}
+.print25 {
+    padding-left: 550px;
+}
+#haveTicketsHow, #needTicketsHow {
+    display: none;
+    color: #ff3335;
+    font-size: 10pt;
+    padding-left: 10px;
+    padding-top: 8px;
+}
+table tr td.ticket0 {
+    width: 400px;
+    padding-right: 10px;
+}
+.ticket1 {
+    color: #ff3335; 
+    font-size: 26pt;
+    margin-bottom: 10px;
+}
+table tr td.ticket2 {
+    width: 340px; 
+    border: 1px #958445 solid; 
+    padding: 10px;
+}
+.thankForm0 {
+    border: 1px #c4b36d solid;
+    width: 350px;
+}
+.thankForm1 {
+    margin-bottom: 10px;
+}
+input.thankForm2 {
+    width: 305px;
+    height: 36px;
+    margin-bottom: 5px;
+    font-size: 16pt;
+}
+.thankForm3 {
+    font-size: 9pt; 
+    letter-spacing: -0.01em;
+    color: #999;
+    margin-bottom: 20px;
+}
+.thankForm4 {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    padding-left: 30px;
+}
+span.thanksTitle {
+    font-size: 28pt;
+    color: #000; 
+}
+span.thanksBlack, span.thanksRed, .thanksBlack, .thanksRed {
+    font-size: 12pt;
+    line-height: 20px;
+    font-weight: bold;
+    color: #000; 
+}
+span.thanksRed, .thanksRed {
+    color: #ff3335; 
+}
+.donorWrap {
+    border: 1px #938252 solid;
+    padding: 0px;
+}
+.donorTitle {
+    width: 100%; 
+    height: 44px; 
+    background: #93824c; 
+    color: #FFF; 
+    font-size: 22pt; 
+    vertical-align: middle; 
+    text-align: center;
+    margin-bottom: 10px;
+}
+.donorTitle div {
+    color: #FFF; 
+    font-size: 20pt; 
+}
+span.donorNotes {
+    font-size: 10pt; 
+    color: #999;
+}
+table tr td.donorJPG {
+    width: 55px;
+}
+.designMade {
+    width: 315px;
+    height: 270px;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px #93824c solid;
+    display: block;
+}
+.designMadeQty {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18pt;
+    color: #93824c;
+}
+.designMadeDel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18pt;
+    color: #93824c;
+    font-size: 10pt;
+    font-weight: bold;
+    line-height: 14px;
+}
+.designMadeDel a, .designMadeDel a:visited, .designMadeDel a:active, .designMadeDel a:hover {
+    font-size: 10pt;
+    font-weight: bold;
+    line-height: 14px;
+}
+.designMadeLogo {
+    width: 54px;
+    height: 97px;
+    background: url(https://BurnerMap.com/images/donorJoker.jpg);
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 125px;
+    top: 50px;
+}
+.designMadeText {
+    width: 200px;
+    position: absolute;
+    left: 55px;
+    top: 155px;
+    font-size: 20pt;
+    line-height: 26px;
+    text-align: center;
+    font-size: 18pt;
+    font-weight: bold;
+}
+table tr td.cencen {
+    text-align: center;
+    vertical-align: middle;
+}
+.editF16 {
+    font-size: 16pt;
+}
+#emailID {
+    height: 20px;
+    font-size: 12pt;
+}
+.editLeft {
+    float: left;
+    width: 170px;
+}
+.editRight {
+    float: left;
+    width: 280px;
+}
+.editClear {
+    display: block;
+    clear:both;
+    height: 1px;
+    width: 100%;
+}
+.editSpacer {
+    display: block;
+    width: 100%;
+}
+.editFldNotes {
+    display: block;
+    margin-top:-3;
+    padding-left: 5px;
+    font-size: 8pt;
+    color: #999;
+    letter-spacing: 0.02em;
+}
+#edit0 {
+    width: 454px;
+}
+.edit1 {
+    font-size: 16pt; 
+    margin-bottom: 10px;
+}
+#edit2 {
+    width: 454px; 
+    display: block;
+}
+#edit2b {
+    width: 454px; 
+    height: 50px;
+}
+.edit3 {
+    font-size: 16pt;
+}
+.edit4 {
+    font-size: 8pt; 
+    color: #999; 
+    letter-spacing: 0.02em;
+}
+.edit5 {
+}
+.edit6 {
+    font-size: 16pt;
+}
+.edit7 {
+    display: block;
+    padding-top: 4px;
+}
+a.blackLnk:link, a.blackLnk:active, a.blackLnk:visited, a.blackLnk:hover {
+    color: #000;
+    text-decoration: none;
+}
+a.blackLnk:hover {
+    text-decoration: underline;
+}
+#campNameText {
+    display: none; 
+}
+#mapFields1 {
+    font-size: 16pt; 
+    letter-spacing: -0.01em;
+}
+#mapFields2 {
+}
+#mapFields3 {
+    font-size: 16pt;
+}
+#mapFields4 {
+}
+select.edit8 {
+    width: 280px; 
+    font-size: 12pt; 
+    letter-spacing: -0.03em; 
+    margin-bottom: 6px;
+}
+select#addyClockID {
+    width: 70px; 
+    letter-spacing: -0.03em;
+    font-size: 14pt; 
+    width: 90px; 
+    margin-top: -3px;
+}
+select#addyLetterID {
+    width: 135px; 
+    letter-spacing: -0.03em;
+    font-size: 14pt;
+    width: 170px;
+    margin-top: -3px;
+}
+select#addyLetter2ID {
+    width: 280px;
+    font-size: 12pt;
+}
+#mapFields5desc {
+    left: 210px; 
+    top: 175px;
+}
+#mapFields5 {
+    display: none; 
+    left: 225px; 
+    top: 175px;
+    margin-top: 10px;
+}
+#mapFieldsStatic {
+    top: 145px; 
+    font-size: 16pt; 
+    letter-spacing: -0.04em;
+}
+#mapFieldsStatic2 {
+    left: 175px; 
+    top: 178px; 
+    color: #ff908f; 
+    font-size: 10pt;
+}
+#notesID {
+    height: 97px;
+    font-size: 10pt;
+}
+select.dateInOut {
+    font-size: 12pt;
+    width: 125px;
+    margin-top: -5px;
+}
+.edit11 {
+    top: 214px; 
+    font-size: 16pt; 
+    line-height: 24px;
+}
+.edit12 {
+    top: 270px; 
+    font-size: 10pt; 
+    color: #999;
+}
+.edit13 {
+    left: 171px; 
+    top: 220px;
+}
+#shareWithCamp {
+    left: 0px; 
+    top: 384px; 
+    font-size: 12pt; 
+    letter-spacing: -0.03em;
+}
+span.editNotes, .editNotes {
+    font-size: 10pt; 
+    color: #999;
+}
+.edit14 {
+    left: 25px; 
+    top: 474px; 
+    font-size: 12pt; 
+    letter-spacing: -0.03em;
+}
+#emailFld1 {
+    left: 0px; 
+    top: 443px; 
+    font-size: 14pt;
+}
+#emailFld2 {
+    left: 171px; 
+    top: 444px;             
+}
+.edit15 {
+    left: 325px; 
+    top: 0px;
+}
+.edit16 {
+    margin-top: 10px; 
+    margin-bottom: 15px; 
+    width: 454px; 
+    background-repeat: no-repeat; 
+    padding: 0px; 
+    color: #FFF; 
+}
+.edit17 {
+    width: 430px; 
+    padding: 10px; 
+    text-align: left; 
+    font-size: 11pt; 
+    line-height: 21px;
+}
+.edit18 {
+    top: 337px; 
+    font-size: 16pt; 
+    line-height: 24px;
+}
+.edit18 select {
+    width: 115px;
+    font-size: 12pt;
+}
+table tr td.vertTop {
+    vertical-align: top;
+}
+.listPrint1, table tr td.listPrint1 {
+    font-size: 9pt;
+    font-weight: bold;
+    letter-spacing: -0.02em;
+}
+table tr td.listPrint1 {
+    padding-right: 5px;
+    vertical-align: top;
+}
+.listPrint2 {
+    font-size: 9pt;
+    letter-spacing: -0.02em;
+    padding-top: 5px;
+}
+.listPrint3 {
+    font-size: 9pt;
+    margin-top: 7px;
+    letter-spacing: -0.02em;
+}
+.listPrint4 {
+    border: 1px #666 solid;
+    color: #666;
+    padding: 5px;
+    font-size: 9pt;
+    letter-spacing: -0.04em;
+    width: 270px;
+}
+.listPrint5 {
+    margin-top: 7px;
+}
+table tr td.listPrintCols {
+    width: 349px;
+    vertical-align: top;
+}
+.TatTip1 { 
+    padding-top: 5px;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    width: 39px;
+    height: 76px;
+}
+.TatTip2, .TatTip1 .TatTip2 { 
+    display: none;
+    position: absolute;
+    z-index: 20;
+    top: 73px; 
+    left: -130px;
+}
+.billtips {
+    display: none;
+    position: absolute;
+    top: -25px;
+    left: 130px;
+}
+
+#autoCompShell {
+    display: none;
+    border: 1px #999 solid;
+    width: 280px;
+    height: 194px;
+    overflow: auto;
+}
+#autoCompShell a:link, #autoCompShell a:active, #autoCompShell a:visited, #autoCompShell a:hover {
+    width: 100%;
+    background: #FFF;
+    font-size: 10pt;
+    border-bottom: 1px #DDD solid;
+    display: block;
+    padding: 3px;
+}
+#autoCompShell a:hover {
+    background: #EEE;
+}
+a.closeX:link, a.closeX:visited, a.closeX:active, a.closeX:hover {
+    font-size: 14pt;
+    font-weight: bold;
+    text-decoration: none;
+    color: #FF0000;
+    margin: 5px;
+    border: 0px none;
+}
+
+.adminMenu {
+    background: #FFF;
+    box-shadow: 0px 4px 10px #666;
+    -moz-border-radius: 8px; border-radius: 8px;
+    margin-bottom: 15px;
+}
+.adminMenuPage {
+    width: 699px;
+    margin-top: 10px;
+    text-align: left;
+}
+.adminMenuPageWide {
+    width: 95%;
+    margin-top: 10px;
+    text-align: left;
+}
+.adminHeader, .adminMenu .adminHeader,
+.adminMenu a.admMenu:link, .adminMenu a.admMenu:active, .adminMenu a.admMenu:visited, .adminMenu a.admMenu:hover, 
+.adminMenu a.admMenuCurr:link, .adminMenu a.admMenuCurr:active, .adminMenu a.admMenuCurr:visited, .adminMenu a.admMenuCurr:hover {
+    display: block;
+    -moz-border-radius: 8px; border-radius: 8px;
+    padding: 13px 0px 10px 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 14pt;
+    background: #FFF;
+    color: #000;
+}
+.adminMenu a.admMenu:hover, 
+.adminMenu a.admMenuCurr:link, .adminMenu a.admMenuCurr:active, .adminMenu a.admMenuCurr:visited, .adminMenu a.admMenuCurr:hover {
+    background: #000;
+    color: #FFF;
+    text-decoration: none;
+}
+.adminHeader, .adminMenu .adminHeader {
+    background: #ef554b;
+    color: #FFF;
+}
+.adminMenu a:hover {
+    background: #ddd4fd;
+    color: #ef554b;
+}
+.adminSpacer {
+    background: #fff;
+    font-size: 10pt;
+    color: #666;
+    padding: 20px;
+}
+.adminMenu table.smlFont tr td {
+    font-size: 11pt;
+}
+a.clickLab:link, a.clickLab:visited, a.clickLab:active, a.clickLab:hover {
+    width: 100%;
+    padding: 5px;
+}
+.heartIcon1 {
+    display: inline;
+    position: relative;
+    width: 12px;
+    height: 9px;
+    vertical-align: top;
+    text-align: left;
+}
+.heartIconWrap div {
+    position: absolute;
+    top: -2px;
+    left: 0px;
+}
+
+#absentee {
+    width: 689px; 
+}
+.absentBlock {
+    width: 689px; 
+    display: none;
+}
+a.absenteeMores:link, a.absenteeMores:visited, a.absenteeMores:active, a.absenteeMores:hover {
+    display: none;
+}
+
+
+
+#welcHeadWrap {
+    width: 100%;
+    height: 186px; 
+    background: url(https://burnermap.com/images/header1BG.jpg);
+    background-repeat: repeat-x;
+}
+#welcHead {
+    width: 459px; 
+    text-align: center; 
+    vertical-align: top;
+}
+#welcHeadBar {
+    padding-left: 105px;
+    padding-top: 5px;
+    font-size: 9pt; 
+    color: #999999;
+}
+#headFace {
+    border: none;
+    overflow: hidden;
+    width: 100px;
+    height: 21px;
+}
+#headTwit {
+    margin: 0 7px 0px -7px;
+}
+#welcLogo {
+    padding-top: 22px;
+}
+
+#welcLoginWrap {
+    width: 100%;
+    background: #fff9eb;
+}
+#welcLogin {
+    width: 454px; 
+    text-align: left; 
+    padding-top: 22px;
+}
+
+#welcBodyWrap {
+    width: 100%;
+    min-height: 530px;
+    background: #fff9eb;
+}
+#welcBody {
+    position: relative;
+    vertical-align: top;
+    text-align: left;
+    width: 454px;
+}
+#welcBodyBg {
+    position: absolute;
+    text-align: left;
+    vertical-align: top;
+    z-index: 10;
+    top: -4px;
+    left: -334px;
+}
+#welcBodyMsg {
+    position: absolute;
+    text-align: left;
+    vertical-align: top;
+    z-index: 90; 
+    top: 20px; 
+    left: 10px;
+    width: 454px;
+    color: #4c4c4c;
+    font-size: 11pt;
+    line-height: 24px;
+}
+
+.bodyWrap, .bodyWrapMin {
+    width: 699px;
+    text-align: left;
+}
+.bodyWrapMin {
+    width: 454px;
+}
+
+.archYearLabel, h3.archYearLabel {
+    margin-top: -5px;
+    margin-bottom: 5px;
+    line-height: 14px;
+}
+
+.frndErrWrap {
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 4px #ff908f solid;
+    padding: 20px;
+    margin-bottom: 40px;
+}
+.frndErrWrap ol {
+    line-height: 20px;
+}
+.frndErrBtns, a.frndErrBtns:link, a.frndErrBtns:visited, a.frndErrBtns:active, a.frndErrBtns:hover {
+    background: #007397; 
+    color: #FFF;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px 5px 2px 5px;
+}
+
+.infoImg {
+    height: 15px;
+    width: 15px;
+    border: 0px none;
+}
