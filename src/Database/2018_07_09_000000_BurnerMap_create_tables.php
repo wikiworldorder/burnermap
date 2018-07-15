@@ -122,7 +122,7 @@ class SLCreateTables extends Migration
 			$table->integer('ticketEdits')->nullable();
 			$table->integer('ticketHas')->nullable();
 			$table->integer('ticketNeeds')->nullable();
-			$table->string('browser', 200)->nullable();
+			$table->text('browser')->nullable();
 			$table->string('ip', 200)->nullable();
 			$table->timestamps();
 		});
@@ -154,7 +154,7 @@ class SLCreateTables extends Migration
                 $table->integer('ticketEdits')->nullable();
                 $table->integer('ticketHas')->nullable();
                 $table->integer('ticketNeeds')->nullable();
-                $table->string('browser', 200)->nullable();
+                $table->text('browser')->nullable();
                 $table->string('ip', 200)->nullable();
                 $table->timestamps();
             });
@@ -186,7 +186,7 @@ class SLCreateTables extends Migration
 			$table->integer('ticketEdits')->nullable();
 			$table->integer('ticketHas')->nullable();
 			$table->integer('ticketNeeds')->nullable();
-			$table->string('browser', 200)->nullable();
+			$table->text('browser')->nullable();
 			$table->string('ip', 200)->nullable();
 			$table->timestamps();
 		});

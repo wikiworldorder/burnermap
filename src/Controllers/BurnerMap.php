@@ -33,7 +33,7 @@ class BurnerMap extends FaceController
     {
         $this->loadPage('edit');
         $this->loadVars();
-        if ($this->editSave($request)) return redirect('/map');
+        if ($this->editSave($request)) return redirect('/map?refresh=1');
         $campOpts = $this->printCampOpts();
         $villOpts = $this->printVillageOpts();
         file_put_contents('../public/lib/camps.js', $this->java);
@@ -147,8 +147,7 @@ class BurnerMap extends FaceController
                         }
                     }
                 } else { // adding new camp
-                    $campID = 1;
-                    $campRow = new BurnerCamp;
+                    $campRow = new BurnerCamps;
                     $campRow->name        = $campName;
                     $campRow->x           = $x;
                     $campRow->y           = $y;
@@ -160,6 +159,7 @@ class BurnerMap extends FaceController
                     $campRow->villageID   = $villageID;
                     $campRow->apiID       = -3;
                     $campRow->save();
+                    $campID = $campRow->id;
                 }
                 DB::table('CacheAuto')->truncate();
             }
@@ -181,7 +181,7 @@ class BurnerMap extends FaceController
             $this->myBurn->x           = $x;
             $this->myBurn->y           = $y;
             $this->myBurn->emailRemind = $emailRemind;
-            $this->myBurn->browser     = $_SERVER["HTTP_USER_AGENT"];
+            $this->myBurn->browser     = $GLOBALS["util"]->getBrowser();
             $this->myBurn->ip          = $_SERVER["REMOTE_ADDR"];
             $this->myBurn->dateArrive  = (($request->has('dateArrive')) ? $request->get('dateArrive') : '');
             $this->myBurn->dateDepart  = (($request->has('dateDepart')) ? $request->get('dateDepart') : '');

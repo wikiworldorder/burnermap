@@ -30,8 +30,8 @@ class AdminImportExport extends FaceController
             {
                 $table->increments('id');
                 $table->bigInteger('user')->unsigned();
-                $table->string('name', 100)->nullable();
-                $table->string('playaName', 100)->nullable();
+                $table->string('name', 255)->nullable();
+                $table->string('playaName', 255)->nullable();
                 $table->string('yearStatus', 20)->nullable();
                 $table->string('addyClock', 50)->default('?:??');
                 $table->string('addyLetter', 50)->default('???');
@@ -53,7 +53,7 @@ class AdminImportExport extends FaceController
                 $table->integer('ticketEdits')->nullable();
                 $table->integer('ticketHas')->nullable();
                 $table->integer('ticketNeeds')->nullable();
-                $table->string('browser', 200)->nullable();
+                $table->text('browser')->nullable();
                 $table->string('ip', 200)->nullable();
                 $table->timestamps();
             });
@@ -107,9 +107,9 @@ class AdminImportExport extends FaceController
                 $table->increments('id');
                 $table->bigInteger('user')->unsigned();
                 $table->bigInteger('currUser')->unsigned();
-                $table->string('page', 250)->nullable();
+                $table->string('page', 255)->nullable();
                 $table->string('ip', 50)->nullable();
-                $table->string('browser', 250)->nullable();
+                $table->string('browser', 255)->nullable();
                 $table->dateTime('date')->nullable();
                 $table->timestamps();
             });
@@ -155,6 +155,14 @@ class AdminImportExport extends FaceController
             Totals::whereIn('type', ['ticketExtra', 'ticketNeeds', 'totActiveCamps', 'avgCampSize'])
                 ->update([ 'value' => 0 ]);
         }
+        $utf = " CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+        DB::raw("ALTER TABLE `Burners` CHANGE `name` `name` VARCHAR(255)" . $utf);
+        DB::raw("ALTER TABLE `Burners` CHANGE `playaName` `playaName` VARCHAR(255)" . $utf);
+        DB::raw("ALTER TABLE `BurnerCamps` CHANGE `name` `name` VARCHAR(255)" . $utf);
+        DB::raw("ALTER TABLE `AllPastUsers` CHANGE `name` `name` VARCHAR(255)" . $utf);
+        DB::raw("ALTER TABLE `AllPastUsers` CHANGE `playaName` `playaName` VARCHAR(255)" . $utf);
+        DB::raw("ALTER TABLE `AllPastUsersDel` CHANGE `name` `name` VARCHAR(255)" . $utf);
+        DB::raw("ALTER TABLE `AllPastUsersDel` CHANGE `playaName` `playaName` VARCHAR(255)" . $utf);
         $this->mainout .= view('vendor.burnermap.admin.new-year-archiving', [ "msg" => $msg ])->render();
         return $this->printPage($request);
     }

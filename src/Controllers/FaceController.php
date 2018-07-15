@@ -130,7 +130,7 @@ class FaceController extends Controller
         $load->currUser = $uID;
         $load->page     = $this->currUrl;
         $load->ip       = $_SERVER["REMOTE_ADDR"];
-        $load->browser  = $_SERVER["HTTP_USER_AGENT"];
+        $load->browser  = $GLOBALS["util"]->getBrowser();
         $load->save();
         return view('vendor.burnermap.master', [
             "request"  => $request,
@@ -279,7 +279,7 @@ class FaceController extends Controller
             foreach ($cacheClearUsers as $u) $cachQry .= " OR `friends` LIKE '%," . $u . ",%'";
         }
         DB::raw("DELETE FROM `CacheBlobs` WHERE " . $cachQry);
-        for ($i = 0; $i < 10; $i++) DB::raw("DELETE FROM `CacheBlobs".$i."` WHERE " . $cachQry);
+        for ($i = 0; $i < 10; $i++) DB::raw("DELETE FROM `CacheBlobs" . $i . "` WHERE " . $cachQry);
         return true;
     }
     

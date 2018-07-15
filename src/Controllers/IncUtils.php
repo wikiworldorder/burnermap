@@ -123,5 +123,15 @@ class IncUtils
             . '</script></body></html>';
         exit;
     }
+    
+    public function getBrowser()
+    {
+        $browser = '';
+        if (isset($_SERVER["HTTP_USER_AGENT"])) {
+            $browser = ((strlen($_SERVER["HTTP_USER_AGENT"]) > 255) ? substr($_SERVER["HTTP_USER_AGENT"], 0, 255) 
+                : $_SERVER["HTTP_USER_AGENT"]);
+        }
+        return $browser;
+    }
 
 }

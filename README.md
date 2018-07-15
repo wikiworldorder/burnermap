@@ -2,7 +2,7 @@
 # WikiWorldOrder/BurnerMap
 
 [![Laravel](https://img.shields.io/badge/Laravel-5.6-orange.svg?style=flat-square)](http://laravel.com)
-[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <a href="https://github.com/wikiworldorder/burnermap" target="_blank">BurnerMap</a>, atop 
 <a href="https://laravel.com/" target="_blank">Laravel</a>. 
