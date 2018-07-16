@@ -5,8 +5,8 @@
 <div id="hidivMissFrnds" class="frndErrWrap">
     <center><h3>If you are missing friends who are on BurnerMap...</h3></center>
     <p>
-    <b class="red">If you expected to see some friends mapped here, please follow these steps,<br />
-    <i>in order...</i></b>
+    <b class="red">If you expected to see some friends mapped here, please follow these steps, <i>in order.</i></b>
+    <br />Still working to figure out what's going on here, so this might not fix your problem.
     <ol>
     <li><a href="/map/?clearFriendList=1" target="hidFrame" class="frndErrBtns">CLICK HERE</a> 
         to clear the friend list BurnerMap currently has stored for you.

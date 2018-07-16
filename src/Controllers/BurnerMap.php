@@ -321,7 +321,12 @@ class BurnerMap extends FaceController
     {
         $this->loadPage('map');
         if ($this->isAdmin() && $request->has('debug')) {
-            echo $this->myInfo->myFriends . '<pre>'; print_r($this->usr); echo '</pre>';
+            foreach ($this->myInfo->myFriends as $f) {
+                echo '<div class="relDiv" style="float: left;"><div class="absDiv f8">' . $f . '</div>' 
+                    . $this->profPic(null, 50, 0, $f) . '</div>';
+            }
+            echo '<div style="clear: both;"></div>' . implode(', ', $this->myInfo->myFriends) . '<pre>'; 
+            print_r($this->usr); echo '</pre>';
         }
         $this->loadVars();
         if (!isset($this->myBurn->edits) || intVal($this->myBurn->edits) == 0) {
@@ -371,8 +376,13 @@ class BurnerMap extends FaceController
             $changeCutoff = (($this->archYear != '') ? $this->archYear : date("Y")) . '-02-01 00:00:00';
             $qryBase = "\$resFriends = BurnerMap\\Models\\Burners" . $this->archYear 
                 . "::where('yearStatus', 'NOT LIKE', 'None')";
+            // This query using only the current friend list should work but it's not.
+            // So for now, we're going to search for all past users. Grr
+            //$qryWhereIn = "->whereIn('user', [" . $this->usr->id . ((sizeof($this->myInfo->myFriends) > 0) 
+            //    ? ", " . implode(", ", $this->myInfo->myFriends) : "") . "])";
             $qryWhereIn = "->whereIn('user', [" . $this->usr->id . ((sizeof($this->myInfo->myFriends) > 0) 
-                ? ", " . implode(", ", $this->myInfo->myFriends) : "") . "])";
+                ? ", " . implode(", ", $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers)) 
+                : "") . "])";
             if ($this->myBurn->yearStatus != 'Skipping' 
                 && (intVal($this->myBurn->campID) > 0 || intVal($this->myBurn->villageID) > 0)) {
                 $qryBase .= "->where(function (\$query) { \$query" . $qryWhereIn;
@@ -397,7 +407,6 @@ class BurnerMap extends FaceController
                 ];
             foreach ($qrys as $q => $qry) {
                 eval($qryBase . $qry . $qryOrder);
-//echo $qryBase . $qry . $qryOrder . '<br />' . $resFriends->count() . '<br /><br />';
                 if ($resFriends->isNotEmpty()) {
                     foreach ($resFriends as $f => $friend) {
                         $this->map->friendDone[] = $friend->user;
@@ -406,7 +415,6 @@ class BurnerMap extends FaceController
                             $this->map->resCnt2b++;
                             if (in_array($friend->user, $this->myInfo->myFriends)) $this->map->resCnt2c++;
                         }
-//echo '<pre>'; print_r($friend); echo '</pre>';
                         if ($friend->yearStatus == 'Skipping') {
                             if ($isPrint) {
                                 $this->map->skips[] = $GLOBALS["util"]->prntFrmtName($friend);
@@ -472,7 +480,7 @@ class BurnerMap extends FaceController
                                         "isPrint" => $isPrint
                                         ])->render();
                                 }
-                                $this->map->plotNonCamper($friend, $this->profPic($friend, 25));
+                                $this->map->plotNonCamper($friend, $this->profPic($friend, 25), $x, $y);
                             }
                         }
                         if ($isPrint && trim($friend->notes) != '') {
@@ -581,6 +589,7 @@ class BurnerMap extends FaceController
     protected function canAddFriend($friend)
     {
         return ($friend->user != $this->myBurn->user && !in_array($friend->user, $this->myInfo->myFriends)
+            && strpos($this->myInfo->allPastFrnds->friendUsers, ',' . $friend->user . ',') === false
             && ($friend->campID == $this->myBurn->campID || $friend->villageID == $this->myBurn->villageID));
     }
     

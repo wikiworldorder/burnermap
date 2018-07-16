@@ -82,8 +82,9 @@ class MapDeets
             $y = $this->zeros[1];
             if ($this->zeros[0] < 670) $this->zeros[0] += 20;
             else $this->zeros = array(20, 25+$this->zeros[1]);
+        } elseif ($zoom) {
+            return $this->zoomXY($x, $y);
         }
-        if ($zoom) return $this->zoomXY($x, $y);
         return [$x, $y];
     }
     
@@ -121,12 +122,16 @@ class MapDeets
         return true;
     }
     
-    public function plotNonCamper($friend, $profPic = '')
+    public function plotNonCamper($friend, $profPic = '', $x = -3, $y = -3)
     {
+        if ($x < 0 || $y < 0) {
+            $x = $friend->x;
+            $y = $friend->y;
+        }
         $this->plots[] = view('vendor.burnermap.map-noncamper-plot', [
             "cnt"       => $this->cnt,
-            "x"         => $friend->x,
-            "y"         => $friend->y,
+            "x"         => $x,
+            "y"         => $y,
             "pointOffX" => $this->pointOffX,
             "pointOffY" => $this->pointOffY,
             "friend"    => $friend,
@@ -137,7 +142,6 @@ class MapDeets
     
     public function plotCampDeets($zoom = false)
     {
-//echo 'plotCampDeets<pre>'; print_r($this->campGraph); echo '</pre>'; exit;
         foreach ($this->campDeets as $id => $camp) {
             if (isset($this->campGraph[$id]) && trim($this->campGraph[$id][3]) != '') {
                 $x = $camp->x;
@@ -161,14 +165,12 @@ class MapDeets
 	public function chkCampRecord($campID)
 	{
 	    if (isset($this->campDeets[$campID]) && $this->campDeets[$campID]) {
-//echo '<pre>'; print_r($this->campDeets[$campID]); echo '</pre>';
 	        if (isset($this->campDeets[$campID]->addyClock) && $this->campDeets[$campID]->addyClock != '?:??' 
 	            && isset($this->campDeets[$campID]->addyLetter) && $this->campDeets[$campID]->addyLetter != '???'
 	            && (intVal($this->campDeets[$campID]->x) == 0 || intVal($this->campDeets[$campID]->y) == 0)) {
 	            $chk = CoordConvert::where('addyClock', $this->campDeets[$campID]->addyClock)
 	                ->where('addyLetter', $this->campDeets[$campID]->addyLetter)
 	                ->first();
-//echo 'chkCampRecord(' . $this->campDeets[$campID]->name . '<pre>'; print_r($chk); echo '</pre>';
 	            if ($chk) {
 	                $this->campDeets[$campID]->x = $chk->x;
 	                $this->campDeets[$campID]->y = $chk->y;

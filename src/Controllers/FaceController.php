@@ -205,6 +205,7 @@ class FaceController extends Controller
     public function profPic($burner = null, $w = 50, $vspace = 0, $uID = -3)
     {
         $props = ' width=' . $w . ' vspace=' . $vspace . ' border=0 ';
+        if (!$burner && $uID > 0) $burner = AllPastUsers::where('user', $uID)->first();
         if ($burner && isset($burner->user) && intVal($burner->user) > 0) {
             $name = $GLOBALS["util"]->formatPlayaName($this->printProfileName($burner), 15);
             $name = preg_replace("/[^a-zA-Z0-9\s@_.\-\+\(\)]/", "", $name);
