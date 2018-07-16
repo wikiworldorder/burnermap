@@ -38,12 +38,18 @@ class BurnerMap extends FaceController
         $villOpts = $this->printVillageOpts();
         file_put_contents('../public/lib/camps.js', $this->java);
         $this->java = '';
+        if (intVal($this->myBurn->campID) > 0) {
+            $this->myInfo->myCamp = BurnerCamps::find($this->myBurn->campID);
+        }
+        if (intVal($this->myBurn->villageID) > 0) {
+            $this->myInfo->myVillage = BurnerVillages::find($this->myBurn->villageID);
+        }
         $this->mainout .= view('vendor.burnermap.edit', [
             "usr"        => $this->usr,
             "myBurn"     => $this->myBurn,
             "myInfo"     => $this->myInfo,
             "vars"       => $this->vars,
-            "prevUsers"  => $this->previewFriendUsers(),
+            "prevUsers"  => $this->previewFriendUsers($request),
             "dateArriv"  => (($this->myBurn && isset($this->myBurn->dateArrive))
                 ? $this->vars->printDateOpts($this->myBurn->dateArrive) : ''),
             "dateDepart" => (($this->myBurn && isset($this->myBurn->dateDepart))
@@ -54,7 +60,7 @@ class BurnerMap extends FaceController
         return $this->printPage($request);
     }
     
-    public function editSave(Request $request)
+    protected function editSave(Request $request)
     {
         if ($request->has('sub') && $request->has('uID') && intVal($request->get('uID')) > 0) {
             $cacheClearUsers = [];
@@ -208,11 +214,23 @@ class BurnerMap extends FaceController
         return false;
     }
     
-    protected function previewFriendUsers()
+    protected function previewFriendUsers(Request $request)
     {
+        eval("\$cache = BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . "::where('user', "
+            . $this->usr->id . ")->where('type', 'previewFriends')->first();");
+        if (!$request->has('refresh') && $cache && isset($cache->blobber) && trim($cache->blobber) != ''
+            && $this->cachExpir < strtotime($cache->updated_at)) {
+            return $cache->blobber;
+        }
+        if (!$cache) {
+            eval("\$cache = new BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . ";");
+            $cache->user = $this->usr->id;
+            $cache->type = 'previewFriends';
+        }
+        $this->getAllPastFriends($request);
         $max = 10;
         $usersDone = [];
-        $ret = '<table border=0 width=100% class="burnFriends" ><tr>' . "\n";
+        $cache->blobber = '<table border=0 width=100% class="burnFriends" ><tr>' . "\n";
         $frnds = Burners::whereIn('user', $this->myInfo->myFriends)
             ->select('user', 'name', 'playaName')
             ->orderBy('updated_at', 'desc')
@@ -221,38 +239,33 @@ class BurnerMap extends FaceController
         if ($frnds->isNotEmpty()) {
             foreach ($frnds as $i => $f) {
                 if (sizeof($usersDone) < $max) {
-                    $ret .= '<td style="border: 0px none;">' . $this->profPic($f, 36) . '</td>' . "\n";
+                    $cache->blobber .= '<td style="border: 0px none;">' . $this->profPic($f, 36) . '</td>' . "\n";
                     $usersDone[] = $f->user;
                 }
             }
         }
-        for ($yr = (intVal(date("Y"))-1); $yr > 2010; $yr--) {
-            if (sizeof($usersDone) < $max) {
-                eval("\$chk = BurnerMap\\Models\\BurnerFriends" . $yr . "::where('user', " . $this->usr->id 
-                    . ")->first();");
-                if ($chk && isset($chk->friends)) {
-                    $frnds = $GLOBALS["util"]->mexplode(',', $chk->friends);
-                    if (sizeof($frnds) > 0) {
-                        foreach ($frnds as $f) {
-                            if (!in_array($f, $usersDone) && sizeof($usersDone) < $max) {
-                                $fUsr = AllPastUsers::where('user', $f)
-                                    ->first();
-                                if ($fUsr) {
-                                    $ret .= '<td style="border: 0px none;">' . $this->profPic($fUsr, 36) 
-                                        . '</td>'."\n";
-                                    $usersDone[] = $f;
-                                }
-                            }
-                        }
-                    }
-                }
+        $chk = AllPastUsers::whereIn('user', $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers))
+            ->whereNotIn('user', $usersDone)
+            ->orderBy('updated_at', 'desc')
+            ->limit($max-sizeof($usersDone))
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $f) {
+                $cache->blobber .= '<td style="border: 0px none;">' . $this->profPic($f, 36) . '</td>'."\n";
+                $usersDone[] = $f->user;
             }
         }
         while (sizeof($usersDone) < $max) {
-            $ret .= '<td style="border: 0px none;">' . $this->profPic(null, 36) . '</td>'."\n";
+            $cache->blobber .= '<td style="border: 0px none;">' . $this->profPic(null, 36) . '</td>'."\n";
             $usersDone[] = 0;
         }
-        return $ret . '</tr></table>';
+        $cache->blobber .= '</tr></table>';
+        $cache->blobber = $this->map->skips[] = view('vendor.burnermap.edit-previous-users', [
+            "tot"  => $this->myInfo->allPastFrnds->tot,
+            "blobber" => $cache->blobber
+            ])->render();
+        $cache->save();
+        return $cache->blobber;
     }
     
     protected function printCampOpts()
@@ -321,8 +334,8 @@ class BurnerMap extends FaceController
             return $this->camps($request);
         }
         $this->chkMapActions($request);
-        $isPrint = $request->has('print');
-        $isExcel = $request->has('excel');
+        $isPrint = ($request->has('print') && intVal($request->get('print')) > 0);
+        $isExcel = ($request->has('excel') && intVal($request->get('excel')) > 0);
         if ($request->has('clearFriendList') && intVal($request->get('clearFriendList')) == 1) {
             $this->mainout .= $this->clearFriendList();
         } else {
@@ -336,12 +349,15 @@ class BurnerMap extends FaceController
             if (!$request->has('refresh') && $cache && isset($cache->blobber) && trim($cache->blobber) != '') {
                 $this->mainout .= '<div>' . $cache->blobber . '</div>' . "\n" 
                     . '<!-- Hurray! saved some database power by displaying a cache this time -->' . "\n";
+                $this->mapPostCache($isPrint);
                 return $this->printPage($request);
             }
+            $this->getAllPastFriends($request);
             if (!$cache) {
                 eval("\$cache = new BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . ";");
                 $cache->user = $this->usr->id;
                 $cache->type = $this->currUrl;
+                $cache->friends = $this->myInfo->allPastFrnds->friendUsers;
             }
             $cache->blobber = '';
             if ($this->archYear != '') {
@@ -469,9 +485,9 @@ class BurnerMap extends FaceController
                 unset($resFriends);
             }
             
-            if ($this->myInfo->allPastFrndTot > 0 && !$isPrint) {
-                $this->getAllPastFriends();
-                $absentList = $this->myInfo->allPastFrnds;
+            $this->getAllPastFriends($request);
+            if ($this->myInfo->allPastFrnds->tot > 0 && !$isPrint) {
+                $absentList = $this->myInfo->allPastFrnds->friendUsers;
                 if (sizeof($this->map->friendDone) > 0) {
                     foreach ($this->map->friendDone as $f) $absentList = str_replace(',' . $f . ',', ',', $absentList);
                 }
@@ -483,8 +499,8 @@ class BurnerMap extends FaceController
                     foreach ($chk as $friend) {
                         if ($friend->user > 0) {
                             $this->map->absents[] = view('vendor.burnermap.map-absent', [
-                                "friend"  => $friend,
-                                "profPic" => $this->profPic($friend, 50, 8),
+                                "friend"    => $friend,
+                                "profPic"   => $this->profPic($friend, 50, 8),
                                 "absentCnt" => sizeof($this->map->absents)
                                 ])->render();
                         }
@@ -533,13 +549,19 @@ class BurnerMap extends FaceController
                 unset($cache);
             }
         }
+        $this->mapPostCache($isPrint);
+        return $this->printPage($request);
+    }
+    
+    protected function mapPostCache($isPrint)
+    {
         if (!$isPrint) {
             $this->mainout .= view('vendor.burnermap.map-notes', [
                 "user"   => $this->usr->id,
                 "myBurn" => $this->myBurn
                 ])->render();
         }
-        return $this->printPage($request);
+        return true;
     }
     
     public function chkMapActions(Request $request)
@@ -558,7 +580,6 @@ class BurnerMap extends FaceController
     
     protected function canAddFriend($friend)
     {
-//echo 'canAddFriend(' . $friend->user . ' ? '; print_r($this->myInfo->myFriends); echo '<br />'; // WTF?!
         return ($friend->user != $this->myBurn->user && !in_array($friend->user, $this->myInfo->myFriends)
             && ($friend->campID == $this->myBurn->campID || $friend->villageID == $this->myBurn->villageID));
     }

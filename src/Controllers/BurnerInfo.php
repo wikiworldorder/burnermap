@@ -4,8 +4,7 @@ namespace BurnerMap\Controllers;
 class BurnerInfo
 {
     public $myFriends       = [];
-    public $allPastFrndTot  = 0;
-    public $allPastFrnds    = '';
+    public $allPastFrnds    = null;
     public $myCamp          = null;
     public $myVillage       = null;
     public $myCampHasCoords = false;

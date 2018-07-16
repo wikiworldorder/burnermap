@@ -32,12 +32,15 @@ class FaceController extends Controller
     protected $java      = '';
     protected $ajax      = '';
     
+    protected $cachExpir = 0;
+    
     protected $fbFields = ['id', 'name', 'link', 'picture', 'friends'];
     protected $fbScopes = ['public_profile', 'user_friends'];
     
     function __construct()
     {
         $GLOBALS["util"] = new IncUtils;
+        $this->cachExpir = mktime(0, 0, 0, date("n"), date("j")-1, date("Y"));
         return true;
     }
     
@@ -46,11 +49,16 @@ class FaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToProvider()
+    public function redirectToProvider(Request $request)
     {
-        return Socialite::driver('facebook')
-            ->scopes($this->fbScopes)
-            ->redirect();
+        try {
+            return Socialite::driver('facebook')
+                ->scopes($this->fbScopes)
+                //->stateless()
+                ->redirect();
+        } catch ( \InvalidArgumentException $e ) {
+            return redirect('/welcome');
+        }
     }
 
     /**
@@ -58,7 +66,7 @@ class FaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(Request $request)
     {
         $user = Socialite::driver('facebook')
             ->user();
@@ -172,12 +180,6 @@ class FaceController extends Controller
         }
         $this->myInfo = new BurnerInfo;
         $this->myInfo->userMod = $this->usr->id%10;
-        if (intVal($this->myBurn->campID) > 0) {
-            $this->myInfo->myCamp = BurnerCamps::find($this->myBurn->campID);
-        }
-        if (intVal($this->myBurn->villageID) > 0) {
-            $this->myInfo->myVillage = BurnerVillages::find($this->myBurn->villageID);
-        }
         
         $frnds = BurnerFriends::where('user', $this->usr->id)
             ->first();
@@ -196,32 +198,7 @@ class FaceController extends Controller
             $frnds->friends .= implode(',', $this->myInfo->myFriends) . ',';
         }
         $frnds->save();
-        
-        $chkTime = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
-        if (!isset($allChk->totFriends) || strtotime($allChk->updated_at) < $chkTime) {
-            $allFrnds = $this->myInfo->myFriends;
-            for ($yr = (intVal(date("Y"))-1); $yr > 2010; $yr--) {
-                eval("\$chk = BurnerMap\\Models\\BurnerFriends" . $yr . "::where('user', " . $this->usr->id 
-                    . ")->first();");
-                if ($chk && isset($chk->friends)) {
-                    $frnds = $GLOBALS["util"]->mexplode(',', $chk->friends);
-                    if (sizeof($frnds) > 0) {
-                        foreach ($frnds as $f) {
-                            if (!in_array($f, $allFrnds)) {
-                                $fUsr = AllPastUsers::where('user', $f)
-                                    ->select('name')
-                                    ->first();
-                                if ($fUsr) $allFrnds[] = $f;
-                            }
-                        }
-                    }
-                }
-            }
-            $allChk->totFriends = sizeof($allFrnds);
-            $allChk->save();
-        }
-        $this->myInfo->allPastFrndTot = intVal($allChk->totFriends);
-        
+        unset($this->usr->user["friends"]["data"]); // saving the memory once ids in simpler array
         return true;
     }
     
@@ -246,12 +223,49 @@ class FaceController extends Controller
         return '';
     }
     
-    public function getAllPastFriends()
+    public function getAllPastFriends(Request $request)
     {
-        $past = BurnerPastFriendUsers::where('user', $this->usr->id)
+        $this->myInfo->allPastFrnds = BurnerPastFriendUsers::where('user', $this->usr->id)
             ->first();
-        if ($past && isset($past->friendUsers)) {
-            $this->myInfo->allPastFrnds = $past->friendUsers;
+        if ($request->has('refresh') || !isset($this->myInfo->allPastFrnds->tot) 
+            || strtotime($this->myInfo->allPastFrnds->updated_at) < $this->cachExpir) {
+            BurnerPastFriendUsers::where('user', $this->usr->id)
+                ->delete();
+            $this->myInfo->allPastFrnds = null;
+        }
+        if (!$this->myInfo->allPastFrnds || !isset($this->myInfo->allPastFrnds->friendUsers)) {
+            $this->myInfo->allPastFrnds = new BurnerPastFriendUsers;
+            $this->myInfo->allPastFrnds->user = $this->usr->id;
+            $this->myInfo->allPastFrnds->friendUsers = ',';
+            $empties = ['', ',,', ',0,'];
+            $all = [];
+            $frnds = BurnerFriends::where('user', $this->usr->id)
+                ->first();
+            if ($frnds && isset($frnds->friends) && !in_array(trim($frnds->friends), $empties)) {
+                $all = $GLOBALS["util"]->mexplode(',', $frnds->friends);
+            }
+            for ($year = intVal(date("Y"))-1; $year > 2010; $year--) {
+                eval("\$frnds = BurnerMap\\Models\\BurnerFriends" . $year . "::where('user', " . $this->usr->id . ")
+                    ->first();");
+                if ($frnds && isset($frnds->friends) && !in_array(trim($frnds->friends), $empties)) {
+                    $more = $GLOBALS["util"]->mexplode(',', $frnds->friends);
+                    if (sizeof($more) > 0) {
+                        foreach ($more as $f) {
+                            if (!in_array($f, $all)) {
+                                $fUsr = AllPastUsers::where('user', $f)
+                                    ->select('name')
+                                    ->first();
+                                if ($fUsr) $all[] = $f;
+                            }
+                        }
+                    }
+                }
+            }
+            $this->myInfo->allPastFrnds->tot = sizeof($all);
+            if ($this->myInfo->allPastFrnds->tot > 0) {
+                $this->myInfo->allPastFrnds->friendUsers = ',' . implode(',', $all) . ',';
+            }
+            $this->myInfo->allPastFrnds->save();
         }
         return true;
     }

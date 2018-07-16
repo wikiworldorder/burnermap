@@ -5,7 +5,7 @@
 <div class="condensed print3 w100 m0 p0 taC"><nobr>
     @if ($archYear == '')
         {!! $totsLabels !!} have shared their camp info <i>this year</i>.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="#notYets" class="blackLnk">{{ number_format($myInfo->allPastFrndTot) }} friends</a>
+        <a href="#notYets" class="blackLnk">{{ number_format($myInfo->allPastFrnds->tot) }} friends</a>
         have mapped here before.
     @else {!! $totsLabels !!} shared their camp info in {{ $archYear }}.
     @endif <br />

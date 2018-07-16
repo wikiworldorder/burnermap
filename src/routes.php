@@ -13,13 +13,16 @@
 
 Route::group(['middleware' => ['web']], function () {
     
-    Route::post('/',        'BurnerMap\\Controllers\\OtherPages@welcomeHome');
-    Route::get( '/',        'BurnerMap\\Controllers\\OtherPages@welcomeHome');
-    Route::post('/welcome', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
-    Route::get( '/welcome', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::post('/',            'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::get( '/',            'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::post('/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::get( '/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::get( '/welcome.php', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     
-    Route::get('/login/facebook',          'BurnerMap\\Controllers\\FaceController@redirectToProvider');
-    Route::get('/login/facebook/callback', 'BurnerMap\\Controllers\\FaceController@handleProviderCallback');
+    Route::get('/login/facebook',          'BurnerMap\\Controllers\\FaceController@redirectToProvider')
+        ->middleware('guest');
+    Route::get('/login/facebook/callback', 'BurnerMap\\Controllers\\FaceController@handleProviderCallback')
+        ->middleware('guest');
     Route::get('/logout',                  'BurnerMap\\Controllers\\FaceController@logout');
     
     Route::post('/edit', 'BurnerMap\\Controllers\\BurnerMap@edit');
