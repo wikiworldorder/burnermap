@@ -11,6 +11,7 @@ class BurnerPastFriendUsers extends Model
     [
         'user', 
         'friendUsers', 
+        'hideUsers', 
         'tot', 
     ];
 }

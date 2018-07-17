@@ -13,21 +13,21 @@ class OtherPages extends FaceController
     // Functions which prep and save the Welcome Page
     public function welcomeHome(Request $request)
     {
-        $this->loadPage();
+        $this->loadPage($request);
         $this->mainout .= view('vendor.burnermap.welcome')->render();
         return $this->printPage($request);
     }
     
     public function privacyPage(Request $request)
     {
-        $this->loadPage('privacy');
+        $this->loadPage($request, 'privacy');
         $this->mainout .= view('vendor.burnermap.privacy')->render();
         return $this->printPage($request);
     }
     
     public function tickets(Request $request)
     {
-        $this->loadPage('tickets');
+        $this->loadPage($request, 'tickets');
         //$this->completeNotif(7);
         if ($request->has('ticketSub') && trim($request->ticketType) != '') {
             $this->myBurn->ticketEdits++;

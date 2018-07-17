@@ -12,6 +12,5 @@ class AllPastUsers extends Model
         'user', 
         'name', 
         'playaName', 
-        'totFriends',
     ];
 }

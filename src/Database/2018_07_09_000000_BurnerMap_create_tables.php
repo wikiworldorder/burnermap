@@ -19,7 +19,6 @@ class SLCreateTables extends Migration
 			$table->bigInteger('user')->unsigned();
 			$table->string('name', 100)->nullable();
 			$table->string('playaName', 100)->nullable();
-			$table->integer('totFriends')->nullable();
 			$table->timestamps();
 		});
     	Schema::create('AllPastUsersDel', function(Blueprint $table)
@@ -28,7 +27,13 @@ class SLCreateTables extends Migration
 			$table->bigInteger('user')->unsigned();
 			$table->string('name', 100)->nullable();
 			$table->string('playaName', 100)->nullable();
-			$table->integer('totFriends')->nullable();
+			$table->timestamps();
+		});
+    	Schema::create('BlockUsers', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->bigInteger('user')->unsigned();
+			$table->binary('blocks')->nullable();
 			$table->timestamps();
 		});
 		
@@ -91,6 +96,7 @@ class SLCreateTables extends Migration
 			$table->increments('id');
 			$table->bigInteger('user')->unsigned();
 			$table->binary('friendUsers')->nullable();
+			$table->binary('hideUsers')->nullable();
             $table->integer('tot')->nullable();
 			$table->timestamps();
 		});

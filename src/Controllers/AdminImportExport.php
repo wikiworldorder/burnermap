@@ -19,7 +19,7 @@ class AdminImportExport extends FaceController
     
     public function newYearArchiving(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         $y = intVal(date("Y"));
         $lastY = $y-1;
@@ -169,7 +169,7 @@ class AdminImportExport extends FaceController
     
     public function apiImport(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         $apiFld = '../storage/app/imports';
         $apiFile = 'BORG-API-' . date("Y") . '.json';
@@ -264,7 +264,7 @@ class AdminImportExport extends FaceController
     
     public function exportNewEmails(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $csvOut = '';
         $this->uList = [];
         $msg = $this->loadEmails() . $this->loadEmails('' . (intVal(date("Y"))-1) . '');

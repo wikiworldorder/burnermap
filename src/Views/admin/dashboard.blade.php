@@ -18,6 +18,7 @@
     <div class="adminMenu" style="width: 400px;">
         <div class="adminHeader">Admin Upkeep</div>
         @if (trim($msg) != '') <div class="adminSpacer">{!! $msg !!}</div> @endif
+        <a href="/admin?refresh=1" class="admMenu">Clear All Map Caches</a>
         <a href="/admin/merge-camps" class="admMenu">Merge Duplicate Camps</a>
         <a href="/admin/check-deleted-accounts" class="admMenu">Check For Deleted Accounts</a>
         <div class="adminSpacer taC">

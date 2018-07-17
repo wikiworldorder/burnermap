@@ -17,7 +17,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/',            'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::post('/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::get( '/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
-    Route::get( '/welcome.php', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::get( '/welcome.php', function () { return redirect('/welcome'); });
     
     Route::get('/login/facebook',          'BurnerMap\\Controllers\\FaceController@redirectToProvider')
         ->middleware('guest');
@@ -30,6 +30,9 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::post('/map',  'BurnerMap\\Controllers\\BurnerMap@map');
     Route::get( '/map',  'BurnerMap\\Controllers\\BurnerMap@map');
+    
+    Route::post('/blockers',  'BurnerMap\\Controllers\\BurnerMap@blockers');
+    Route::get( '/blockers',  'BurnerMap\\Controllers\\BurnerMap@blockers');
     
     Route::get( '/json', 'BurnerMap\\Controllers\\BurnerMap@jsonAllCamps');
     

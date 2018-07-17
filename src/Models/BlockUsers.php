@@ -2,15 +2,14 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class AllPastUsersDel extends Model
+class BlockUsers extends Model
 {
-    protected $table      = 'AllPastUsersDel';
+    protected $table      = 'BlockUsers';
     protected $primaryKey = 'id';
     public $timestamps    = true;
     protected $fillable   = 
     [
         'user', 
-        'name', 
-        'playaName', 
+        'blocks', 
     ];
 }

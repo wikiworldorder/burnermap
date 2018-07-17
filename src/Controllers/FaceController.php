@@ -81,7 +81,7 @@ class FaceController extends Controller
         return redirect('/welcome');
     }
 
-    public function loadPage($currPage = 'welcome')
+    public function loadPage(Request $request, $currPage = 'welcome')
     {
         $this->currPage = $currPage;
         if (session()->has('burntok')) {
@@ -90,6 +90,9 @@ class FaceController extends Controller
                 ->fields($this->fbFields)
                 ->scopes($this->fbScopes)
                 ->userFromToken($tok);
+        }
+        if ($request->has('arch') && trim($request->get('arch')) != date("Y")) {
+            $this->archYear = trim($request->get('arch'));
         }
         if ($this->currPage == 'welcome') {
             if ($this->usr && isset($this->usr->id)) {
@@ -162,10 +165,10 @@ class FaceController extends Controller
 
     public function loadUserInfo()
     {
-        $this->myBurn = Burners::where('user', $this->usr->id)
-            ->first();
+        eval("\$this->myBurn = BurnerMap\\Models\\Burners" . $this->archYear . "::where('user', " . $this->usr->id . ")
+            ->first();");
         if (!$this->myBurn) {
-            $this->myBurn = new Burners;
+            eval("\$this->myBurn = new BurnerMap\\Models\\Burners" . $this->archYear . ";");
             $this->myBurn->user = $this->usr->id;
             $this->myBurn->name = $this->usr->name;
             $this->myBurn->save();
@@ -224,20 +227,27 @@ class FaceController extends Controller
         return '';
     }
     
-    public function getAllPastFriends(Request $request)
+    public function clearAllPastFriends()
+    {
+        BurnerPastFriendUsers::where('user', $this->usr->id)
+            ->delete();
+        $this->myInfo->allPastFrnds = null;
+        return true;
+    }
+    
+    public function getAllPastFriends()
     {
         $this->myInfo->allPastFrnds = BurnerPastFriendUsers::where('user', $this->usr->id)
             ->first();
-        if ($request->has('refresh') || !isset($this->myInfo->allPastFrnds->tot) 
-            || strtotime($this->myInfo->allPastFrnds->updated_at) < $this->cachExpir) {
-            BurnerPastFriendUsers::where('user', $this->usr->id)
-                ->delete();
-            $this->myInfo->allPastFrnds = null;
+        if ($this->myInfo->allPastFrnds && (!isset($this->myInfo->allPastFrnds->tot) 
+            || strtotime($this->myInfo->allPastFrnds->updated_at) < $this->cachExpir)) {
+            $this->clearAllPastFriends();
         }
         if (!$this->myInfo->allPastFrnds || !isset($this->myInfo->allPastFrnds->friendUsers)) {
             $this->myInfo->allPastFrnds = new BurnerPastFriendUsers;
             $this->myInfo->allPastFrnds->user = $this->usr->id;
             $this->myInfo->allPastFrnds->friendUsers = ',';
+            $this->myInfo->loadBlocks($this->usr->id);
             $empties = ['', ',,', ',0,'];
             $all = [];
             $frnds = BurnerFriends::where('user', $this->usr->id)
@@ -253,10 +263,10 @@ class FaceController extends Controller
                     if (sizeof($more) > 0) {
                         foreach ($more as $f) {
                             if (!in_array($f, $all)) {
-                                $fUsr = AllPastUsers::where('user', $f)
+                                $chk = AllPastUsers::where('user', $f)
                                     ->select('name')
                                     ->first();
-                                if ($fUsr) $all[] = $f;
+                                if ($chk) $all[] = $f;
                             }
                         }
                     }
@@ -266,6 +276,13 @@ class FaceController extends Controller
             if ($this->myInfo->allPastFrnds->tot > 0) {
                 $this->myInfo->allPastFrnds->friendUsers = ',' . implode(',', $all) . ',';
             }
+            $all = $this->myInfo->myBlocks;
+            if (sizeof($this->myInfo->theirBlocks) > 0) {
+                foreach ($this->myInfo->theirBlocks as $block) {
+                    if (!in_array($block, $all)) $all[] = $block;
+                }
+            }
+            $this->myInfo->allPastFrnds->hideUsers = ',' . implode(',', $all) . ',';
             $this->myInfo->allPastFrnds->save();
         }
         return true;
@@ -287,14 +304,22 @@ class FaceController extends Controller
     // Clear all map caches for all of this user's friends
     protected function clearFriendCaches($cacheClearUsers = [])
     {
-        if (sizeof($cacheClearUsers) == 0) $cacheClearUsers = $this->myInfo->myFriends;
+        if (sizeof($cacheClearUsers) == 0) {
+            if (!isset($this->myInfo->allPastFrnds->friendUsers)) $this->getAllPastFriends();
+            $cacheClearUsers = $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers);
+        }
+        /*
         $cachQry = "`friends` LIKE '%," . $this->usr->id . ",%' OR `user` IN (" . $this->usr->id
             . ((sizeof($cacheClearUsers) > 0) ? ", " . implode(", ", $cacheClearUsers) : "") . ")";
-        if (sizeof($cacheClearUsers) > 0) {
-            foreach ($cacheClearUsers as $u) $cachQry .= " OR `friends` LIKE '%," . $u . ",%'";
-        }
         DB::raw("DELETE FROM `CacheBlobs` WHERE " . $cachQry);
         for ($i = 0; $i < 10; $i++) DB::raw("DELETE FROM `CacheBlobs" . $i . "` WHERE " . $cachQry);
+        */
+        eval("BurnerMap\\Models\\CacheBlobs::whereIn('user', \$cacheClearUsers)"
+            . "->orWhere('friends', 'LIKE', '%,\$this->usr->id,%')->delete();");
+        for ($i = 0; $i < 10; $i++) {
+            eval("BurnerMap\\Models\\CacheBlobs" . $i . "::whereIn('user', \$cacheClearUsers)"
+                . "->orWhere('friends', 'LIKE', '%,\$this->usr->id,%')->delete();");
+        }
         return true;
     }
     
@@ -323,13 +348,15 @@ class FaceController extends Controller
                 };';
             }
             $notifCnt = 0;
-            if ($this->myBurn->messages%29 > 0) { // && (isAdmin() || $_GET["test29"])
-                $notifCnt++;
-                $ret .= view('vendor.burnermap.notification-dontate')->render();
-            }
-            if ($this->myBurn->messages%7 > 0) {
-                $notifCnt++;
-                $ret .= view('vendor.burnermap.notification-ticket')->render();
+            if ($this->archYear == '') {
+                if ($this->myBurn->messages%29 > 0) { // && (isAdmin() || $_GET["test29"])
+                    $notifCnt++;
+                    $ret .= view('vendor.burnermap.notification-dontate')->render();
+                }
+                if ($this->myBurn->messages%7 > 0) {
+                    $notifCnt++;
+                    $ret .= view('vendor.burnermap.notification-ticket')->render();
+                }
             }
             if ($ret != '') {
                 $this->java .= 'var notifTot = ' . $notifCnt . ';

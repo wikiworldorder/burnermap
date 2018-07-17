@@ -24,7 +24,7 @@ class BurnerAdmin extends FaceController
 {
     public function dashboard(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = $this->dataChecks($request);
         // ugh, why couldn't i figure out a simple DISTINCT query
         $editUs = [];
@@ -66,6 +66,19 @@ class BurnerAdmin extends FaceController
             DB::raw("UPDATE `Burners` u JOIN `BurnerCamps` c ON (u.`campID` = c.`id`) SET u.`camp` = c.`name`, "
                 . "u.`addyClock` = c.`addyClock`, u.`addyLetter` = c.`addyLetter`, u.`addyLetter2` = c.`addyLetter2`, "
                 . "u.`x` = c.`x`, u.`y` = c.`y`, u.`villageID` = c.`villageID` WHERE u.`campID` > '0'");
+        }
+        $camps = [];
+        $chk = Burners::where('campID', '>', 0)
+            ->select('campID')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $user) {
+                if (!isset($camps[$user->campID])) $camps[$user->campID] = 1;
+                else $camps[$user->campID]++;
+            }
+            foreach ($camps as $campID => $size) {
+                BurnerCamps::find($campID)->update([ 'size' => $size ]);
+            }
         }
         return $msg;
     }
@@ -161,7 +174,7 @@ class BurnerAdmin extends FaceController
     
     public function mergeCamps(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         if ($request->has('subMerge') && sizeof($request->get('merger1')) > 0 && sizeof($request->get('merger2')) > 0) {
             $merger1    = $request->get('merger1');
@@ -225,7 +238,7 @@ class BurnerAdmin extends FaceController
     
     public function checkDeleted(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         $start = (($request->has('start')) ? intVal($request->start) : 0);
         $perPage = 100;
@@ -248,7 +261,7 @@ class BurnerAdmin extends FaceController
     
     public function textSettings(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         $y = intVal(date("Y"));
         $settingList = ['streetLet01Esplanade', 'streetLet20A', 'streetLet21B', 'streetLet22C', 'streetLet23D', 
@@ -316,7 +329,7 @@ class BurnerAdmin extends FaceController
     
     public function uploadMaps(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         $filenameList = ['map.png', 'map-print.png', 'map-zoom.png', 
             'map-zoom1.png', 'map-zoom2.png', 'map-zoom3.png', 'map-zoom4.png'];
@@ -347,7 +360,7 @@ class BurnerAdmin extends FaceController
     
     public function setKeypoints(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $this->map = new MapDeets;
         $msg = $jsLoad = $clcklst = '';
         $mapPoints = $mapIDs = [];
@@ -406,7 +419,7 @@ class BurnerAdmin extends FaceController
     
     public function setMiscPoints(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $this->vars = new BurnerVars;
         $this->map = new MapDeets;
         $msg = '';
@@ -434,7 +447,7 @@ class BurnerAdmin extends FaceController
     
     public function calcNewCoords(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         if ($request->has('run')) {
             $this->vars = new BurnerVars;
@@ -528,7 +541,7 @@ class BurnerAdmin extends FaceController
 
     public function reassignNewCoords(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $msg = '';
         if ($request->has('run')) {
             $run = intVal($request->get('run'));
@@ -583,7 +596,7 @@ class BurnerAdmin extends FaceController
 
     public function showCurrCoords(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $this->map = new MapDeets;
         $plots = '';
         $specials = ['Esplanade', 'Center Camp Plaza', 'Inner Circle', 'Rods Road', 'Portal', 'Plaza', 'Deep Plaza', 
@@ -626,7 +639,7 @@ class BurnerAdmin extends FaceController
     // defaults to format for Laravel database seeder
     public function exportLaravelSeeder(Request $request)
     {
-        $this->loadPage('admin');
+        $this->loadPage($request, 'admin');
         $chk = TextSettings::orderBy('year', 'desc')
             ->orderBy('type', 'asc')
             ->get();

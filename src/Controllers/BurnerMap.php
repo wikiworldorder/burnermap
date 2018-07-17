@@ -8,6 +8,8 @@ use BurnerMap\Models\Burners;
 use BurnerMap\Models\BurnerCamps;
 use BurnerMap\Models\BurnerVillages;
 use BurnerMap\Models\AllPastUsers;
+use BurnerMap\Models\BurnerPastFriendUsers;
+use BurnerMap\Models\BlockUsers;
 use BurnerMap\Models\CoordConvert;
 
 use BurnerMap\Models\JerkCheck;
@@ -31,7 +33,7 @@ class BurnerMap extends FaceController
     // Functions which prep and save the Edit Page
     public function edit(Request $request)
     {
-        $this->loadPage('edit');
+        $this->loadPage($request, 'edit');
         $this->loadVars();
         if ($this->editSave($request)) return redirect('/map?refresh=1');
         $campOpts = $this->printCampOpts();
@@ -208,7 +210,7 @@ class BurnerMap extends FaceController
                 . $this->myBurn->browser . ';' . $this->myBurn->ip . ';' . $this->myBurn->dateArrive . ';'
                 . $this->myBurn->dateDepart . ';' . $this->myBurn->yearStatus . ';' . $this->myBurn->edits;
             $edit->save();
-            $this->clearFriendCaches($cacheClearUsers);
+            $this->clearFriendCaches();
             return true;
         }
         return false;
@@ -227,11 +229,12 @@ class BurnerMap extends FaceController
             $cache->user = $this->usr->id;
             $cache->type = 'previewFriends';
         }
-        $this->getAllPastFriends($request);
+        if ($request->has('refresh')) $this->clearAllPastFriends();
+        $this->getAllPastFriends();
         $max = 10;
         $usersDone = [];
         $cache->blobber = '<table border=0 width=100% class="burnFriends" ><tr>' . "\n";
-        $frnds = Burners::whereIn('user', $this->myInfo->myFriends)
+        $frnds = Burners::whereIn('user', $this->myInfo->getMapFriends())
             ->select('user', 'name', 'playaName')
             ->orderBy('updated_at', 'desc')
             ->limit($max)
@@ -244,7 +247,7 @@ class BurnerMap extends FaceController
                 }
             }
         }
-        $chk = AllPastUsers::whereIn('user', $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers))
+        $chk = AllPastUsers::whereIn('user', $this->myInfo->getMapFriends())
             ->whereNotIn('user', $usersDone)
             ->orderBy('updated_at', 'desc')
             ->limit($max-sizeof($usersDone))
@@ -319,8 +322,8 @@ class BurnerMap extends FaceController
     // Functions which prep and save the Map Page
     public function map(Request $request)
     {
-        $this->loadPage('map');
-        if ($this->isAdmin() && $request->has('debug')) {
+        $this->loadPage($request, 'map');
+        if ($this->isAdmin() && $request->has('debug')) { // temporary for working on the friend list bug
             foreach ($this->myInfo->myFriends as $f) {
                 echo '<div class="relDiv" style="float: left;"><div class="absDiv f8">' . $f . '</div>' 
                     . $this->profPic(null, 50, 0, $f) . '</div>';
@@ -329,7 +332,7 @@ class BurnerMap extends FaceController
             print_r($this->usr); echo '</pre>';
         }
         $this->loadVars();
-        if (!isset($this->myBurn->edits) || intVal($this->myBurn->edits) == 0) {
+        if ($this->archYear == '' && (!isset($this->myBurn->edits) || intVal($this->myBurn->edits) == 0)) {
             return redirect('/edit');
         }
         if ($request->has('excel')) {
@@ -338,7 +341,12 @@ class BurnerMap extends FaceController
         if ($request->has('listAll')) {
             return $this->camps($request);
         }
-        $this->chkMapActions($request);
+        if ($request->has('sub') && $request->has('uID') && intVal($request->get('uID')) == $this->usr->id
+            && $request->has('mini') && $request->has('privNotes')) {
+            $this->myBurn->privateNotes = $request->get('privateNotes');
+            $this->myBurn->save();
+            exit;
+        }
         $isPrint = ($request->has('print') && intVal($request->get('print')) > 0);
         $isExcel = ($request->has('excel') && intVal($request->get('excel')) > 0);
         if ($request->has('clearFriendList') && intVal($request->get('clearFriendList')) == 1) {
@@ -357,7 +365,8 @@ class BurnerMap extends FaceController
                 $this->mapPostCache($isPrint);
                 return $this->printPage($request);
             }
-            $this->getAllPastFriends($request);
+            if ($request->has('refresh')) $this->clearAllPastFriends();
+            $this->getAllPastFriends();
             if (!$cache) {
                 eval("\$cache = new BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . ";");
                 $cache->user = $this->usr->id;
@@ -376,13 +385,7 @@ class BurnerMap extends FaceController
             $changeCutoff = (($this->archYear != '') ? $this->archYear : date("Y")) . '-02-01 00:00:00';
             $qryBase = "\$resFriends = BurnerMap\\Models\\Burners" . $this->archYear 
                 . "::where('yearStatus', 'NOT LIKE', 'None')";
-            // This query using only the current friend list should work but it's not.
-            // So for now, we're going to search for all past users. Grr
-            //$qryWhereIn = "->whereIn('user', [" . $this->usr->id . ((sizeof($this->myInfo->myFriends) > 0) 
-            //    ? ", " . implode(", ", $this->myInfo->myFriends) : "") . "])";
-            $qryWhereIn = "->whereIn('user', [" . $this->usr->id . ((sizeof($this->myInfo->myFriends) > 0) 
-                ? ", " . implode(", ", $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers)) 
-                : "") . "])";
+            $qryWhereIn = "->whereIn('user', \$this->myInfo->getMapFriends(\$this->usr->id))";
             if ($this->myBurn->yearStatus != 'Skipping' 
                 && (intVal($this->myBurn->campID) > 0 || intVal($this->myBurn->villageID) > 0)) {
                 $qryBase .= "->where(function (\$query) { \$query" . $qryWhereIn;
@@ -413,7 +416,9 @@ class BurnerMap extends FaceController
                         $this->map->resCnt++;
                         if (strtotime($friend->updated_at) > strtotime($changeCutoff)) {
                             $this->map->resCnt2b++;
-                            if (in_array($friend->user, $this->myInfo->myFriends)) $this->map->resCnt2c++;
+                            if (strpos($this->myInfo->allPastFrnds->friendUsers, ',' . $friend->user . ',') !== false) {
+                                $this->map->resCnt2c++;
+                            }
                         }
                         if ($friend->yearStatus == 'Skipping') {
                             if ($isPrint) {
@@ -493,9 +498,8 @@ class BurnerMap extends FaceController
                 unset($resFriends);
             }
             
-            $this->getAllPastFriends($request);
-            if ($this->myInfo->allPastFrnds->tot > 0 && !$isPrint) {
-                $absentList = $this->myInfo->allPastFrnds->friendUsers;
+            if ($this->myInfo->allPastFrnds->tot > 0 && !$isPrint && $this->archYear == '') {
+                $absentList = ',' . implode(',', $this->myInfo->getMapFriends($this->usr->id)) . ',';
                 if (sizeof($this->map->friendDone) > 0) {
                     foreach ($this->map->friendDone as $f) $absentList = str_replace(',' . $f . ',', ',', $absentList);
                 }
@@ -564,26 +568,55 @@ class BurnerMap extends FaceController
     protected function mapPostCache($isPrint)
     {
         if (!$isPrint) {
-            $this->mainout .= view('vendor.burnermap.map-notes', [
-                "user"   => $this->usr->id,
-                "myBurn" => $this->myBurn
+            $this->mainout .= view('vendor.burnermap.map-footer', [
+                "user"     => $this->usr->id,
+                "myBurn"   => $this->myBurn,
+                "archYear" => $this->archYear
                 ])->render();
         }
         return true;
     }
     
-    public function chkMapActions(Request $request)
+    public function blockers(Request $request)
     {
-        if ($request->has('sub') && $request->has('uID') && intVal($request->get('uID')) == $this->usr->id
-            && $request->has('mini') && $request->has('privNotes')) {
-            $this->myBurn->privateNotes = $request->get('privateNotes');
-            $this->myBurn->save();
-            exit;
+        $this->loadPage($request, 'map');
+        $this->getAllPastFriends();
+        $this->myInfo->loadBlocks($this->usr->id);
+        $all = AllPastUsers::whereIn('user', $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers))
+            ->orderBy('name', 'asc')
+            ->orderBy('playaName', 'asc')
+            ->get();
+        if ($request->has('sub')) {
+            $clearUsers = $this->myInfo->myBlocks;
+            $chk = BlockUsers::where('user', $this->usr->id)
+                ->first();
+            if ($request->has('blockers') && sizeof($request->get('blockers')) > 0) {
+                if (!$chk) {
+                    $chk = new BlockUsers;
+                    $chk->user = $this->usr->id;
+                }
+                $chk->blocks = ',';
+                foreach ($request->get('blockers') as $blockInd) {
+                    $chk->blocks .= $all[$blockInd]->user . ',';
+                    $clearUsers[] = $all[$blockInd]->user;
+                }
+                $chk->save();
+            } elseif ($chk) {
+                BlockUsers::where('user', $this->usr->id)
+                    ->delete();
+            }
+            // Going ahead and clearing all caches 
+            BurnerPastFriendUsers::whereIn('user', $clearUsers)
+                ->delete();
+            DB::table('CacheBlobs')->truncate();
+            for ($i = 0; $i < 10; $i++) DB::table('CacheBlobs' . $i)->truncate();
+            return redirect('/map?refresh=1');
         }
-        if ($request->has('arch') && trim($request->get('arch')) != date("Y")) {
-            $this->archYear = trim($request->get('arch'));
-        }
-        return true;
+        $this->mainout = view('vendor.burnermap.map-blockers', [
+            "all"      => $all,
+            "myBlocks" => $this->myInfo->myBlocks
+            ])->render();
+        return $this->printPage($request);
     }
     
     protected function canAddFriend($friend)
@@ -608,9 +641,8 @@ class BurnerMap extends FaceController
 	    $filename = 'FriendList-'.date("Y-m-d").'.xls';
 	    $innerTable = '<tr><td>Mailing Address Line 1</td><td>Address Line 2</td><td>Address Line 3</td></tr>';
 	    eval("\$chk = BurnerMap\\Models\\Burners" . $this->archYear . "::where('edits', '>', 0)->"
-	        . "where('addyLetter', 'NOT LIKE', '???')->where('addyClock', 'NOT LIKE', '?:??')->whereIn('user', [" 
-	        . $this->usr->id . ((sizeof($this->myInfo->myFriends) > 0) ? ", " . implode(", ", $this->myInfo->myFriends)
-	        : "") . "])->orderBy('name', 'asc')->get();");
+	        . "where('addyLetter', 'NOT LIKE', '???')->where('addyClock', 'NOT LIKE', '?:??')->whereIn('user', "
+	        . "\$this->myInfo->getMapFriends(\$this->usr->id))->orderBy('name', 'asc')->get();");
 	    if ($chk->isNotEmpty()) {
 	        foreach ($chk as $i => $friend) {
 	            $innerTable .= '<tr><td>' . ((trim($friend->playaName) != '') ? $friend->playaName . ' (' 
@@ -680,7 +712,7 @@ class BurnerMap extends FaceController
     
     public function jsonAllCamps(Request $request)
     {
-        $this->loadPage('map');
+        $this->loadPage($request, 'map');
         $this->map = new MapDeets;
         return $this->map->jsonAllCamps(($request->has('year')) ? intVal($request->get('year')) : 0);
     }

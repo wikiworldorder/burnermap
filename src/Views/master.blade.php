@@ -76,7 +76,10 @@
             <a href="http://www.nectarvillage.com/" target="_blank">Nectar Village</a><br /><br />
             
             With special thanks to <a href="/images/zuckerborg.jpg" rel="shadowbox">The Zuckerborg</a>. 
-            Best with Firefox or Chrome, not IE.<br />
+            Best with Firefox or Chrome, not IE.
+            <br /><br />
+            <a href="https://github.com/wikiworldorder/burnermap" target="_blank"
+                ><img src="/images/github.png" border=0 height=40 ><br />View our code on GitHub</a><br />
         </center></div>
     </center></div>
     

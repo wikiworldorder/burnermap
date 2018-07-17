@@ -4,7 +4,7 @@
 <div id="welcHeadBar"><table border=0 cellpadding=0 cellspacing=0 ><tr><td>
     Spread the <img src="/images/heart.gif" border=0 > : 
 </td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
-    <iframe src="https://www.facebook.com/plugins/like.php?app_id=149079168500658&amp;href=http%3A%2F%2Fburnermap.com%2Fwelcome&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" 
+    <iframe src="https://www.facebook.com/plugins/like.php?app_id=149079168500658&amp;href=http%3A%2F%2Fburnermap.com%2Fwelcome.php&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" 
         id="headFace" scrolling="no" frameborder="0" allowTransparency="true" ></iframe>
 </td><td>
     <div id="headTwit">

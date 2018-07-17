@@ -99,7 +99,7 @@ $ composer dump-autoload
 $ php artisan db:seed --class=BurnerMapSeeder
 ```
 
-* Download packages and copy to public folers...
+* Download packages and copy to these locations in Laravel's public folder...
     - <a href="https://jquery.com/download/" target="_blank">jquery.com/download/</a> 
     Copy the compressed, production jQuery file to your Laravel directory, eg: public/js/jquery-3.3.1.min.js
     - <a href="www.shadowbox-js.com/download.html" target="_blank">shadowbox-js.com/download.html</a>

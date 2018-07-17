@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/burnermap/inc-friendsErrHelp.blade.php -->
 
-<center><a id="hidivBtnMissFrnds" class="hidivBtnSelf red" href="javascript:;"
+<center><a id="hidivBtnMissFrnds" class="hidivBtnSelf" href="javascript:;"
     >Are you missing friends who have already signed up for BurnerMap this year?</a>
 <div id="hidivMissFrnds" class="frndErrWrap">
     <center><h3>If you are missing friends who are on BurnerMap...</h3></center>

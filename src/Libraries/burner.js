@@ -87,8 +87,7 @@ function openFBmsgWin(user) {
 
 $(document).ready(function(){
         
-	$("#showJson").click(function() { $("#jsonDeets").slideToggle("fast"); });
-	
+	$(document).on("click", "#showJson", function() { $("#jsonDeets").slideToggle("fast"); });
 	
     function toggleHidiv(fldGrp) {
         if (document.getElementById("hidiv"+fldGrp+"")) {
