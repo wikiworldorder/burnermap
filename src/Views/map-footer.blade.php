@@ -22,10 +22,8 @@
 <br /><br />
 </center>
 @if ($archYear == '')
-    @if ($user == 5712943)
-        <center><a href="/blockers?print=1" rel="shadowbox;height=500;width=699"
-            >Want to hide someone from your map, and/or hide your info from theirs?</a></center>
-        <br /><br />
-    @endif
+    <center><a href="/blockers?print=1" rel="shadowbox;height=500;width=699"
+        >Want to hide someone from your map, and/or hide your info from theirs?</a></center>
+    <br /><br />
     {!! view('vendor.burnermap.inc-friendsErrHelp')->render() !!}
 @endif
