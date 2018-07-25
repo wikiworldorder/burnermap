@@ -2,7 +2,8 @@
 <!doctype html>
 <html xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="Text/HTML" />
+    <meta charset="UTF-8" />
     <title>BURNER MAP. A printable map of your pals on the playa.</title>
     <meta name="keywords" content="Burner Map, Burning Man, Black Rock City, map, facebook, playa, 2018, 2011" />
     <meta name="description" content="Tracking down friends in Black Rock City used to be harder than cleaning playa 

@@ -35,6 +35,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/blockers',  'BurnerMap\\Controllers\\BurnerMap@blockers');
     
     Route::get( '/json', 'BurnerMap\\Controllers\\BurnerMap@jsonAllCamps');
+    Route::get( '/json.php', 'BurnerMap\\Controllers\\BurnerMap@jsonAllCamps');
     
     Route::post('/tickets', 'BurnerMap\\Controllers\\OtherPages@tickets');
     Route::get( '/tickets', 'BurnerMap\\Controllers\\OtherPages@tickets');

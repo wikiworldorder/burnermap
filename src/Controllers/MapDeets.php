@@ -263,7 +263,7 @@ class MapDeets
     public function jsonAllCamps($year = 0)
     {
         header('Content-Type: application/json');
-        if ($year > 0) {
+        if ($year == 0) {
             echo json_encode([ "year" => $year, "camps" => [], "error" => "sorry, no data" ]);
             exit;
         }

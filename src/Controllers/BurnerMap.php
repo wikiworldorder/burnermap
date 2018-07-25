@@ -712,7 +712,7 @@ class BurnerMap extends FaceController
     
     public function jsonAllCamps(Request $request)
     {
-        $this->loadPage($request, 'map');
+        $this->loadPage($request, 'welcome');
         $this->map = new MapDeets;
         return $this->map->jsonAllCamps(($request->has('year')) ? intVal($request->get('year')) : 0);
     }

@@ -6,5 +6,5 @@
         <nobr>{{ $camp->addyClock }} & {{ $camp->addyLetter }}</nobr>
         @if ($graph[2] > 0) <br /><nobr><span class="f8">in {{ $villDeets[$graph[2]]["name"] }}</span> @endif
     </td></tr>
-    {!! $graph[3] !!}</table>
+    @if (isset($graph[3])) {!! $graph[3] !!} @endif </table>
 </div>
