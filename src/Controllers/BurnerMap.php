@@ -77,7 +77,7 @@ class BurnerMap extends FaceController
                     ->first();
                 if ($coord) {
                     $x = $coord->x;
-                    $y = $coord->x;
+                    $y = $coord->y;
                 }
             }
             

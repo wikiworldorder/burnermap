@@ -573,9 +573,22 @@ class BurnerAdmin extends FaceController
                             $row->y = $rowCoord->y;
                             $row->save();
                             $msg .= $tbls[$tbl] . ' #' . $row->getKey() . ' (' . $row->x . ', ' . $row->y . '), ';
+                        } elseif ($row->addyLetter == 'Landing Strip') {
+                            $rowCoord = CoordConvert::where('addyLetter', 'LIKE', 'Landing Strip')
+                                ->first();
+                            if ($rowCoord) {
+                                $ranOne = true;
+                                $row->x = $rowCoord->x;
+                                $row->y = $rowCoord->y;
+                                $row->save();
+                                $msg .= $tbls[$tbl] . ' #' . $row->getKey() . ' (' . $row->x . ', ' . $row->y . '), ';
+                            } else {
+                                $msg .= 'failed finding ' . $tbls[$tbl] . ' #' . $row->getKey() . ' at ' 
+                                    . $row->addyClock . ' & ' . $row->addyLetter . ', ';
+                            }
                         } else {
-                            $msg .= 'failed finding ' . $tbls[$tbl] . ' #' . $row->getKey() . ' at ' . $row->addyClock 
-                                . ' & ' . $row->addyLetter . ', ';
+                            $msg .= 'failed finding ' . $tbls[$tbl] . ' #' . $row->getKey() . ' at ' 
+                                . $row->addyClock . ' & ' . $row->addyLetter . ', ';
                         }
                     }
                 } else {
