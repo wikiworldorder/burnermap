@@ -32,29 +32,28 @@ class FaceController extends Controller
     // User information returned from Facebook via Socialite plugin
     protected $usr       = null;
     
-    // The BurnerMap user's core database row with their year's camping info (largely contents of Edit form)
+    // The user's core `Burners` database table row with their year's camping info (largely contents of Edit form)
     protected $myBurn    = null;
     
-    // A class which can load and contain many more details about this user's friend lists, etc.
+    // BurnerInfo: A class which can load and contain many more details about this user's friend lists, etc.
     protected $myInfo    = null;
     
     // System totals
     protected $tots      = [];
     
-    // Some general system variables like list of street clock addresses, etc.
+    // BurnerVars: Some general system variables like list of street clock addresses, etc.
     protected $vars      = [];
     
     // Current page [type] being loaded
     protected $currPage  = 'welcome';
     protected $currUrl   = '';
     protected $archYear  = '';
+    protected $cachExpir = 0;
     
     // Collection of HTML and JS content destined for this page load
     protected $mainout   = '';
     protected $java      = '';
     protected $ajax      = '';
-    
-    protected $cachExpir = 0;
     
     // Scopes assigned for Facebook API connection
     protected $fbFields = ['id', 'name', 'link', 'picture', 'friends'];
@@ -116,7 +115,7 @@ class FaceController extends Controller
     /**
      * Load key user variables and load fresh friends list.
      *
-     * @return true
+     * @return boolean
      */
     public function loadUserInfo()
     {
@@ -160,18 +159,18 @@ class FaceController extends Controller
         unset($this->usr->user["friends"]["data"]); // saving the memory once ids in cruder array
         return true;
     }
-
+    
     /**
-     * Primary function call to initiate and check each page load.
+     * Primary function call to initiate and check each page load, and reestablish Facebook connection.
      *
      * @param  Illuminate\Http\Request $request
      * @param  string $currPage The page (type) currently being loaded
-     * @return true
+     * @return boolean
      */
     public function loadPage(Request $request, $currPage = 'welcome')
     {
         $this->currPage = $currPage;
-        // Attempt re-establishing Facebook connection if session token exists
+        // Attempt reestablishing Facebook connection if session token exists
         if (session()->has('burntok')) {
             $tok = session()->get('burntok');
             $this->usr = Socialite::driver('facebook')
@@ -199,7 +198,12 @@ class FaceController extends Controller
         $this->tots["totCurrUsers"] = Burners::get()->count();
         return true;
     }
-
+    
+    /**
+     * Determine and return page header to print at the top of this page.
+     *
+     * @return string
+     */
     public function loadHeader()
     {
         if ($this->currPage == 'admin') {
@@ -221,6 +225,12 @@ class FaceController extends Controller
         return '';
     }
     
+    /**
+     * Pass the previously compiled page output into the master view, and give the user their page.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function printPage(Request $request)
     {
         $uID = (($this->usr && isset($this->usr->id) && intVal($this->usr->id) > 0) ? $this->usr->id : 0);
@@ -245,12 +255,25 @@ class FaceController extends Controller
             ]);
     }
     
-    // Admin user IDs set in Laravel's .env file as variable "BURNER_ADMINS"
+    /**
+     * Determine if current user is a BurnerMap Admin, with IDs set in Laravel's .env file as variable BURNER_ADMINS.
+     *
+     * @return boolean
+     */
     public function isAdmin()
     {
         return in_array($this->usr->id, $GLOBALS["util"]->mexplode(',', env('BURNER_ADMINS')));
     }
     
+    /**
+     * Generate a user's profile picture with their playa name or name.
+     *
+     * @param  BurnerMap\Models\Burners $burner Database table record of user to be printed
+     * @param  integer $w Width of image to be printed
+     * @param  integer $vspace Vertical space for the image to be printed
+     * @param  integer $uID Facebook user ID to be used instead of a table record
+     * @return string
+     */
     public function profPic($burner = null, $w = 50, $vspace = 0, $uID = -3)
     {
         $props = ' width=' . $w . ' vspace=' . $vspace . ' border=0 ';
@@ -266,6 +289,12 @@ class FaceController extends Controller
         return '<img src="/images/spacer.gif"' . $props . '>';
     }
     
+    /**
+     * Retrieve a users playa name or default world name.
+     *
+     * @param  BurnerMap\Models\Burners $burner Database table record of user to be printed
+     * @return string
+     */
     public function printProfileName($burner)
     {
         if (isset($burner->playaName) && trim($burner->playaName) != '') return $burner->playaName;
@@ -273,14 +302,11 @@ class FaceController extends Controller
         return '';
     }
     
-    public function clearAllPastFriends()
-    {
-        BurnerPastFriendUsers::where('user', $this->usr->id)
-            ->delete();
-        $this->myInfo->allPastFrnds = null;
-        return true;
-    }
-    
+    /**
+     * Load all the current user's friends into $myInfo, as well as incoming and outgoing blocks of others.
+     *
+     * @return boolean
+     */
     public function getAllPastFriends()
     {
         $this->myInfo->allPastFrnds = BurnerPastFriendUsers::where('user', $this->usr->id)
@@ -334,11 +360,28 @@ class FaceController extends Controller
         return true;
     }
     
+    /**
+     * Clear the current user's cache of all past friends
+     *
+     * @return boolean
+     */
+    public function clearAllPastFriends()
+    {
+        BurnerPastFriendUsers::where('user', $this->usr->id)
+            ->delete();
+        $this->myInfo->allPastFrnds = null;
+        return true;
+    }
+    
+    /**
+     * Delete both the cache of past friends, current friend list, and caches.
+     *
+     * @return string
+     */
     protected function clearFriendList()
     {
+        $this->clearAllPastFriends();
         BurnerFriends::where('user', $this->usr->id)
-            ->delete();
-        BurnerPastFriendUsers::where('user', $this->usr->id)
             ->delete();
         eval("BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . "::where('user', " . $this->usr->id . ")
             ->delete();");
@@ -347,7 +390,11 @@ class FaceController extends Controller
             . '</script>';
     }
     
-    // Clear all map caches for all of this user's friends
+    /**
+     * Clear all map caches for all of this user's friends.
+     *
+     * @return boolean
+     */
     protected function clearFriendCaches($cacheClearUsers = [])
     {
         if (sizeof($cacheClearUsers) == 0) {
@@ -369,6 +416,11 @@ class FaceController extends Controller
         return true;
     }
     
+    /**
+     * Check for any standard-issue notifications this users should see, and has not.
+     *
+     * @return string
+     */
     protected function chkNotifs(Request $request)
     {
         $ret = '';
