@@ -36,7 +36,7 @@ class BurnerAdmin extends FaceController
         }
         $this->mainout .= view('vendor.burnermap.admin.dashboard', [
             "msg"            => $msg,
-            "graphStats"     => $this->graphStats(),
+            "graphStats"     => $this->graphStats($request->has('refresh')),
             "plotAll"        => $this->plotAllYear(),
             "totUsers"       => Burners::count(),
             "totActiveUsers" => sizeof($editUs)
@@ -83,7 +83,7 @@ class BurnerAdmin extends FaceController
         return $msg;
     }
     
-    protected function graphStats()
+    protected function graphStats($refresh = false)
     {
         $statsToday = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
         $currDay = mktime(0, 0, 0, date("n")-2, date("j"), date("Y"));
@@ -102,7 +102,8 @@ class BurnerAdmin extends FaceController
         }
         while ($currDay <= $statsToday) {
             $day = date("Y-m-d", $currDay);
-            if (!isset($dataLines[$day]) || sizeof($dataLines[$day]) == 0 || $day == date("Y-m-d", $statsToday)) {
+            if (!isset($dataLines[$day]) || sizeof($dataLines[$day]) == 0 || $day == date("Y-m-d", $statsToday)
+                || $refresh) {
                 $dataLines[$day] = [0, 0, 0, 0, 0];
                 $uNiques = [ [], [] ]; // loadsU, editsU
                 $chk = PageLoads::where('created_at', '>=', date("Y-m-d", $currDay) . ' 00:00:00')

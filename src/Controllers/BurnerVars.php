@@ -69,7 +69,7 @@ class BurnerVars
             $simpleDateFormat = date("n/j", $currDate);
             if (date("D", $currDate) == 'Sat') $numSats++;
             if ($currDate == strtotime($this->mainDates[1])) {
-                $ret .= '<option value=""> </option><option value="">---BURNING MAN WEEK---</option>';
+                $ret .= '<option DISABLED > </option><option DISABLED >---BURNING MAN WEEK---</option>';
                 $currStage = '';
             }
             $ret .= '<option value="' . $simpleDateFormat . '" ' 
@@ -79,7 +79,7 @@ class BurnerVars
                 . (($numSats == 2 && date("D", $currDate) == 'Sun') ? ' (Temple Burns!)' : '')
                 . '</option>';
             if ($currDate == strtotime($this->mainDates[2])) {
-                $ret .= '<option value=""> </option><option DISABLED >---LATE DEPARTURE---</option>';
+                $ret .= '<option DISABLED > </option><option DISABLED >---LATE DEPARTURE---</option>';
                 $currStage = 'Early';
             }
             $currDate = mktime(0, 0, 0, date("n", $currDate), date("j", $currDate)+1, date("Y", $currDate));

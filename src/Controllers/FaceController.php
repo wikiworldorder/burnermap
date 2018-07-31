@@ -19,29 +19,56 @@ use BurnerMap\Controllers\IncUtils;
 
 class FaceController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Facebook Connection Controller
+    |--------------------------------------------------------------------------
+    |
+    | Since most pages require an established Facebook connection, this controller is core.
+    | The Facebook connection itself uses Laravel's Socialite plugin: https://github.com/laravel/socialite
+    |
+    */
+    
+    // User information returned from Facebook via Socialite plugin
     protected $usr       = null;
+    
+    // The BurnerMap user's core database row with their year's camping info (largely contents of Edit form)
     protected $myBurn    = null;
+    
+    // A class which can load and contain many more details about this user's friend lists, etc.
     protected $myInfo    = null;
+    
+    // System totals
     protected $tots      = [];
+    
+    // Some general system variables like list of street clock addresses, etc.
     protected $vars      = [];
     
+    // Current page [type] being loaded
     protected $currPage  = 'welcome';
     protected $currUrl   = '';
     protected $archYear  = '';
+    
+    // Collection of HTML and JS content destined for this page load
     protected $mainout   = '';
     protected $java      = '';
     protected $ajax      = '';
     
     protected $cachExpir = 0;
     
+    // Scopes assigned for Facebook API connection
     protected $fbFields = ['id', 'name', 'link', 'picture', 'friends'];
     protected $fbScopes = ['public_profile', 'user_friends'];
     
+    /**
+     * Create a new Facebook Controller instance. Initializes global utility functions.
+     *
+     * @return void
+     */
     function __construct()
     {
         $GLOBALS["util"] = new IncUtils;
         $this->cachExpir = mktime(0, 0, 0, date("n"), date("j")-1, date("Y"));
-        return true;
     }
     
     /**
@@ -54,7 +81,7 @@ class FaceController extends Controller
         try {
             return Socialite::driver('facebook')
                 ->scopes($this->fbScopes)
-                //->stateless()
+                //->stateless()     // (tried this fix to no avail)
                 ->redirect();
         } catch ( \InvalidArgumentException $e ) {
             return redirect('/welcome');
@@ -74,16 +101,77 @@ class FaceController extends Controller
         return redirect('/map');
     }
 
+    /**
+     * Logout by deleting the session token used to quickly reestablish current Facebook connection.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function logout()
     {
         session()->forget('burntok');
         //Auth::logout();
         return redirect('/welcome');
     }
+    
+    /**
+     * Load key user variables and load fresh friends list.
+     *
+     * @return true
+     */
+    public function loadUserInfo()
+    {
+        eval("\$this->myBurn = BurnerMap\\Models\\Burners" . $this->archYear . "::where('user', " . $this->usr->id . ")
+            ->first();");
+        if (!$this->myBurn) {
+            eval("\$this->myBurn = new BurnerMap\\Models\\Burners" . $this->archYear . ";");
+            $this->myBurn->user = $this->usr->id;
+            $this->myBurn->name = $this->usr->name;
+            $this->myBurn->save();
+        }
+        $allChk = AllPastUsers::where('user', $this->usr->id)
+            ->first();
+        if (!$allChk) {
+            $allChk = new AllPastUsers;
+            $allChk->user = $this->usr->id;
+            $allChk->name = $this->usr->name;
+            $allChk->save();
+        }
+        $this->myInfo = new BurnerInfo;
+        $this->myInfo->userMod = $this->usr->id%10;
+        
+        $frnds = BurnerFriends::where('user', $this->usr->id)
+            ->first();
+        if (!$frnds) { 
+            $frnds = new BurnerFriends;
+            $frnds->user    = $this->usr->id;
+            $frnds->friends = ',';
+            $frnds->save();
+        }
+        $frnds->friends = ',';
+        // This friends list returned from Facebook seems to be incomplete!
+        if (isset($this->usr->user) && isset($this->usr->user["friends"]) && isset($this->usr->user["friends"]["data"])
+            && sizeof($this->usr->user["friends"]["data"]) > 0) {
+            foreach ($this->usr->user["friends"]["data"] as $i => $f) {
+                $this->myInfo->myFriends[] = $f["id"];
+            }
+            $frnds->friends .= implode(',', $this->myInfo->myFriends) . ',';
+        }
+        $frnds->save();
+        unset($this->usr->user["friends"]["data"]); // saving the memory once ids in cruder array
+        return true;
+    }
 
+    /**
+     * Primary function call to initiate and check each page load.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @param  string $currPage The page (type) currently being loaded
+     * @return true
+     */
     public function loadPage(Request $request, $currPage = 'welcome')
     {
         $this->currPage = $currPage;
+        // Attempt re-establishing Facebook connection if session token exists
         if (session()->has('burntok')) {
             $tok = session()->get('burntok');
             $this->usr = Socialite::driver('facebook')
@@ -161,48 +249,6 @@ class FaceController extends Controller
     public function isAdmin()
     {
         return in_array($this->usr->id, $GLOBALS["util"]->mexplode(',', env('BURNER_ADMINS')));
-    }
-
-    public function loadUserInfo()
-    {
-        eval("\$this->myBurn = BurnerMap\\Models\\Burners" . $this->archYear . "::where('user', " . $this->usr->id . ")
-            ->first();");
-        if (!$this->myBurn) {
-            eval("\$this->myBurn = new BurnerMap\\Models\\Burners" . $this->archYear . ";");
-            $this->myBurn->user = $this->usr->id;
-            $this->myBurn->name = $this->usr->name;
-            $this->myBurn->save();
-        }
-        $allChk = AllPastUsers::where('user', $this->usr->id)
-            ->first();
-        if (!$allChk) {
-            $allChk = new AllPastUsers;
-            $allChk->user = $this->usr->id;
-            $allChk->name = $this->usr->name;
-            $allChk->save();
-        }
-        $this->myInfo = new BurnerInfo;
-        $this->myInfo->userMod = $this->usr->id%10;
-        
-        $frnds = BurnerFriends::where('user', $this->usr->id)
-            ->first();
-        if (!$frnds) { 
-            $frnds = new BurnerFriends;
-            $frnds->user    = $this->usr->id;
-            $frnds->friends = ',';
-            $frnds->save();
-        }
-        $frnds->friends = ',';
-        if (isset($this->usr->user) && isset($this->usr->user["friends"]) && isset($this->usr->user["friends"]["data"])
-            && sizeof($this->usr->user["friends"]["data"]) > 0) {
-            foreach ($this->usr->user["friends"]["data"] as $i => $f) {
-                $this->myInfo->myFriends[] = $f["id"];
-            }
-            $frnds->friends .= implode(',', $this->myInfo->myFriends) . ',';
-        }
-        $frnds->save();
-        unset($this->usr->user["friends"]["data"]); // saving the memory once ids in simpler array
-        return true;
     }
     
     public function profPic($burner = null, $w = 50, $vspace = 0, $uID = -3)

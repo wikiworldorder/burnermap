@@ -80,7 +80,7 @@
             Best with Firefox or Chrome, not IE.
             <br /><br />
             <a href="https://github.com/wikiworldorder/burnermap" target="_blank"
-                ><img src="/images/github.png" border=0 height=40 ><br />View our code on GitHub</a><br />
+                ><img src="/images/github.png" border=0 height=40 ><br />Help our code on GitHub</a><br />
         </center></div>
     </center></div>
     

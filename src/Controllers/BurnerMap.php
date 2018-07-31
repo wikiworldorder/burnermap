@@ -46,16 +46,16 @@ class BurnerMap extends FaceController
         if (intVal($this->myBurn->villageID) > 0) {
             $this->myInfo->myVillage = BurnerVillages::find($this->myBurn->villageID);
         }
+        $dateArrive = (($this->myBurn && isset($this->myBurn->dateArrive)) ? $this->myBurn->dateArrive : '');
+        $dateDepart = (($this->myBurn && isset($this->myBurn->dateDepart)) ? $this->myBurn->dateDepart : '');
         $this->mainout .= view('vendor.burnermap.edit', [
             "usr"        => $this->usr,
             "myBurn"     => $this->myBurn,
             "myInfo"     => $this->myInfo,
             "vars"       => $this->vars,
             "prevUsers"  => $this->previewFriendUsers($request),
-            "dateArriv"  => (($this->myBurn && isset($this->myBurn->dateArrive))
-                ? $this->vars->printDateOpts($this->myBurn->dateArrive) : ''),
-            "dateDepart" => (($this->myBurn && isset($this->myBurn->dateDepart))
-                ? $this->vars->printDateOpts($this->myBurn->dateDepart) : ''),
+            "dateArriv"  => $this->vars->printDateOpts($dateArrive),
+            "dateDepart" => $this->vars->printDateOpts($dateDepart),
             "campOpts"   => $campOpts,
             "villOpts"   => $villOpts
             ])->render();
