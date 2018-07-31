@@ -82,6 +82,8 @@ class BurnerMap extends FaceController
             }
             
             // Storing camp info
+            $upCamps = [];
+            if (isset($this->myBurn->campID) && intVal($this->myBurn->campID) > 0) $upCamps[] = $this->myBurn->campID;
             $who = ((isset($this->myBurn->playaName) && trim($this->myBurn->playaName) != '') 
                 ? $this->myBurn->playaName : $this->myBurn->name);
             $villageID = intVal($request->get('villageID'));
@@ -211,6 +213,13 @@ class BurnerMap extends FaceController
                 . $this->myBurn->dateDepart . ';' . $this->myBurn->yearStatus . ';' . $this->myBurn->edits;
             $edit->save();
             $this->clearFriendCaches();
+            if ($campID > 0 && !in_array($campID, $upCamps)) $upCamps[] = $campID;
+            if (sizeof($upCamps) > 0) {
+                foreach ($upCamps as $cID) {
+                    $size = Burners::where('campID', $cID)->count();
+                    BurnerCamps::find($cID)->update([ 'size' => $size ]);
+                }
+            }
             return true;
         }
         return false;

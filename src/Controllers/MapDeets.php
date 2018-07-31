@@ -4,6 +4,7 @@ namespace BurnerMap\Controllers;
 use DB;
 use Illuminate\Http\Request;
 
+use BurnerMap\Models\Burners;
 use BurnerMap\Models\BurnerCamps;
 use BurnerMap\Models\BurnerVillages;
 use BurnerMap\Models\CoordConvert;
@@ -180,6 +181,22 @@ class MapDeets
 	        }
 	    }
 	    return true;
+	}
+    
+    public function chkCampSizes()
+    {
+        $sizes = [];
+        $chk = Burners::where('campID', '>', 0)
+            ->select('campID')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $u) {
+                if (!isset($sizes[$u->campID])) $sizes[$u->campID] = 1;
+                else $sizes[$u->campID]++;
+            }
+            foreach ($sizes as $campID => $size) BurnerCamps::find($campID)->update([ 'size' => $size ]);
+        }
+        return true;
 	}
     
     public function plotAllCamps($isPrint = false, $isZoom = false)

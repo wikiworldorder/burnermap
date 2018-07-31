@@ -66,6 +66,8 @@ class BurnerAdmin extends FaceController
             DB::raw("UPDATE `Burners` u JOIN `BurnerCamps` c ON (u.`campID` = c.`id`) SET u.`camp` = c.`name`, "
                 . "u.`addyClock` = c.`addyClock`, u.`addyLetter` = c.`addyLetter`, u.`addyLetter2` = c.`addyLetter2`, "
                 . "u.`x` = c.`x`, u.`y` = c.`y`, u.`villageID` = c.`villageID` WHERE u.`campID` > '0'");
+            $this->map = new MapDeets;
+            $this->map->chkCampSizes();
         }
         $camps = [];
         $chk = Burners::where('campID', '>', 0)
