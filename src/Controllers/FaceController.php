@@ -146,18 +146,48 @@ class FaceController extends Controller
             $frnds->friends = ',';
             $frnds->save();
         }
-        $frnds->friends = ',';
-        // This friends list returned from Facebook seems to be incomplete!
-        if (isset($this->usr->user) && isset($this->usr->user["friends"]) && isset($this->usr->user["friends"]["data"])
-            && sizeof($this->usr->user["friends"]["data"]) > 0) {
-            foreach ($this->usr->user["friends"]["data"] as $i => $f) {
-                $this->myInfo->myFriends[] = $f["id"];
+        if ($frnds->friends == ',' || !session()->has('frndChk')) {
+            $frnds->friends = ',';
+            if (isset($this->usr->user) && isset($this->usr->user["friends"]) && isset($this->usr->user["friends"]["data"])
+                && sizeof($this->usr->user["friends"]["data"]) > 0) {
+                foreach ($this->usr->user["friends"]["data"] as $i => $f) {
+                    $this->myInfo->myFriends[] = $f["id"];
+                }
+                $frnds->friends .= implode(',', $this->myInfo->myFriends) . ',';
             }
-            $frnds->friends .= implode(',', $this->myInfo->myFriends) . ',';
+            if (isset($this->usr->user) && isset($this->usr->user["friends"]) 
+                && isset($this->usr->user["friends"]["paging"]) 
+                && isset($this->usr->user["friends"]["paging"]["next"])) {
+                $frnds->friends .= $this->loadFriendsLists($this->usr->user["friends"]["paging"]["next"]);
+            }
+            $frnds->save();
+            session()->put('frndChk', date("Y-m-d"));
         }
-        $frnds->save();
-        unset($this->usr->user["friends"]["data"]); // saving the memory once ids in cruder array
         return true;
+    }
+    
+    /**
+     * Load pages of friend lists from Facebook, returns comma separated IDs.
+     *
+     * @param  string $nextPage
+     * @return string
+     */
+    public function loadFriendsLists($nextPage = '')
+    {
+        $ret = '';
+        $page = json_decode(file_get_contents($nextPage), true);
+        if (is_array($page) && isset($page["data"]) && sizeof($page["data"]) > 0) {
+            foreach ($page["data"] as $i => $f) {
+                if (!in_array($f["id"], $this->myInfo->myFriends)) {
+                    $this->myInfo->myFriends[] = $f["id"];
+                    $ret .= $f["id"] . ',';
+                }
+            }
+            if (isset($page["paging"]) && isset($page["paging"]["next"]) && trim($page["paging"]["next"]) != '') {
+                $ret .= $this->loadFriendsLists($page["paging"]["next"]);
+            }
+        }
+        return $ret;
     }
     
     /**
@@ -180,12 +210,14 @@ class FaceController extends Controller
         }
         if ($request->has('arch') && trim($request->get('arch')) != date("Y")) {
             $this->archYear = trim($request->get('arch'));
+        } elseif ($request->has('year')) {
+            $this->archYear = trim($request->get('year'));
         }
         if ($this->currPage == 'welcome') {
             if ($this->usr && isset($this->usr->id)) {
                 return $GLOBALS["util"]->jsRedirect('/map');
             }
-        } elseif ($this->currPage != 'privacy') {
+        } elseif (!in_array($this->currPage, ['privacy', 'json'])) {
             if (!$this->usr || !isset($this->usr->id) || intVal($this->usr->id) <= 0 || !session()->has('burntok')) {
                 return $GLOBALS["util"]->jsRedirect('/welcome');
             }
@@ -198,6 +230,8 @@ class FaceController extends Controller
         $this->tots["totCurrUsers"] = Burners::get()->count();
         return true;
     }
+    
+    
     
     /**
      * Determine and return page header to print at the top of this page.
@@ -447,10 +481,14 @@ class FaceController extends Controller
             }
             $notifCnt = 0;
             if ($this->archYear == '') {
-                if ($this->myBurn->messages%29 > 0) { // && (isAdmin() || $_GET["test29"])
+                if ($this->myBurn->messages%29 > 0) {
                     $notifCnt++;
                     $ret .= view('vendor.burnermap.notification-dontate')->render();
                 }
+                /* if ($this->myBurn->messages%11 > 0 && $this->isAdmin()) {
+                    $notifCnt++;
+                    $ret .= view('vendor.burnermap.notification-github-issue')->render();
+                } */
                 if ($this->myBurn->messages%7 > 0) {
                     $notifCnt++;
                     $ret .= view('vendor.burnermap.notification-ticket')->render();

@@ -1,5 +1,9 @@
 <!-- resources/views/vendor/burnermap/camps.blade.php -->
 @if ($isPrint)
+<div class="relDiv">
+    <a id="printClearDeets" onmouseover="clearMapDeets();"
+        ><img src="/images/spacer.gif" border=0 onmouseover="clearMapDeets();" ></a>
+</div>
 <div class="wBrn">
 @else 
 <center><div class="wBrn taL">
@@ -63,7 +67,7 @@
 		        && $map->campDeets[$camp]->addyLetter2 != '???') 
 		        ({{ $map->campDeets[$camp]->addyLetter2 }})
 		    @endif </span><br />
-			@if (($i+1) == ceil(sizeof($map->campDeets)/2)) </td><td class="print18"> @endif
+			@if (($i+1) == ceil(sizeof($map->camps)/2)) </td><td class="print18"> @endif
         @empty
         @endforelse
     </table>

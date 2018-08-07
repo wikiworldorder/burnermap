@@ -605,6 +605,16 @@ table tr td.rgt {
     text-align: right;
 }
 
+#printClearDeets {
+    position: absolute;
+    top: 0px;
+    left: 700px;
+}
+#printClearDeets, #printClearDeets img {
+    width: 400px;
+    height: 700px;
+}
+
 .nobld { font-weight: normal; }
 .f8, table tr td.f8, i.f8, a.f8:link, a.f8:active, a.f8:visited, a.f8:hover, input.f8 , select.f8 , textarea.f8 { font-size: 8pt; }
 .f9, table tr td.f9, i.f9, a.f9:link, a.f9:active, a.f9:visited, a.f9:hover, input.f9 , select.f9 , textarea.f9 { font-size: 9pt; }

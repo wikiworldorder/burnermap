@@ -35,7 +35,12 @@ class BurnerMap extends FaceController
     {
         $this->loadPage($request, 'edit');
         $this->loadVars();
-        if ($this->editSave($request)) return redirect('/map?refresh=1');
+        if ($this->editSave($request)) {
+            $this->mainout .= '<br /><br /><center><img src="/images/burnerMapLogo-anim.gif" border=0 width=100 >'
+                . '<br /><br />... redirecting to <a href="/map?refresh=1">your map</a> ...</center><br /><br />'
+                . '<script type="text/javascript"> setTimeout("window.location=\'/map?refresh=1\'", 100); </script>';
+            return $this->printPage($request);
+        }
         $campOpts = $this->printCampOpts();
         $villOpts = $this->printVillageOpts();
         file_put_contents('../public/lib/camps.js', $this->java);
@@ -721,9 +726,9 @@ class BurnerMap extends FaceController
     
     public function jsonAllCamps(Request $request)
     {
-        $this->loadPage($request, 'welcome');
+        $this->loadPage($request, 'json');
         $this->map = new MapDeets;
-        return $this->map->jsonAllCamps(($request->has('year')) ? intVal($request->get('year')) : 0);
+        return $this->map->jsonAllCamps(($request->has('year')) ? intVal($request->get('year')) : intVal(date("Y")));
     }
     
 }
