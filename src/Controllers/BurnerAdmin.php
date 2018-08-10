@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use BurnerMap\Models\AllPastUsers;
 use BurnerMap\Models\Burners;
+use BurnerMap\Models\BurnerFriends;
 use BurnerMap\Models\BurnerCamps;
 use BurnerMap\Models\BurnerVillages;
 use BurnerMap\Models\CoordConvert;
@@ -68,6 +69,7 @@ class BurnerAdmin extends FaceController
                 . "u.`x` = c.`x`, u.`y` = c.`y`, u.`villageID` = c.`villageID` WHERE u.`campID` > '0'");
             $this->map = new MapDeets;
             $this->map->chkCampSizes();
+            DB::raw("UPDATE `BurnerFriends` SET `friends` = ','");
         }
         $camps = [];
         $chk = Burners::where('campID', '>', 0)

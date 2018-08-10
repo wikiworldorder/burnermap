@@ -117,7 +117,7 @@ class FaceController extends Controller
      *
      * @return boolean
      */
-    public function loadUserInfo()
+    public function loadUserInfo(Request $request)
     {
         eval("\$this->myBurn = BurnerMap\\Models\\Burners" . $this->archYear . "::where('user', " . $this->usr->id . ")
             ->first();");
@@ -146,7 +146,7 @@ class FaceController extends Controller
             $frnds->friends = ',';
             $frnds->save();
         }
-        if ($frnds->friends == ',' || !session()->has('frndChk')) {
+        if ($frnds->friends == ',' || !session()->has('frndChk') || $request->has('refresh')) {
             $frnds->friends = ',';
             if (isset($this->usr->user) && isset($this->usr->user["friends"]) && isset($this->usr->user["friends"]["data"])
                 && sizeof($this->usr->user["friends"]["data"]) > 0) {
@@ -162,6 +162,8 @@ class FaceController extends Controller
             }
             $frnds->save();
             session()->put('frndChk', date("Y-m-d"));
+        } else {
+            $this->myInfo->myFriends = $GLOBALS["util"]->mexplode(',', $frnds->friends);
         }
         return true;
     }
@@ -207,6 +209,7 @@ class FaceController extends Controller
                 ->fields($this->fbFields)
                 ->scopes($this->fbScopes)
                 ->userFromToken($tok);
+            if ($this->isAdmin()) $GLOBALS["util"]->isAdmin = true;
         }
         if ($request->has('arch') && trim($request->get('arch')) != date("Y")) {
             $this->archYear = trim($request->get('arch'));
@@ -221,8 +224,8 @@ class FaceController extends Controller
             if (!$this->usr || !isset($this->usr->id) || intVal($this->usr->id) <= 0 || !session()->has('burntok')) {
                 return $GLOBALS["util"]->jsRedirect('/welcome');
             }
-            $this->loadUserInfo();
-            if ($this->currPage == 'admin' && !$this->isAdmin()) {
+            $this->loadUserInfo($request);
+            if ($this->currPage == 'admin' && !$GLOBALS["util"]->isAdmin) {
                 return $GLOBALS["util"]->jsRedirect('/map');
             }
         }
@@ -447,6 +450,8 @@ class FaceController extends Controller
             eval("BurnerMap\\Models\\CacheBlobs" . $i . "::whereIn('user', \$cacheClearUsers)"
                 . "->orWhere('friends', 'LIKE', '%,\$this->usr->id,%')->delete();");
         }
+        BurnerFriends::whereIn('user', $cacheClearUsers)
+            ->update([ 'friends' => ',' ]);
         return true;
     }
     
@@ -485,7 +490,7 @@ class FaceController extends Controller
                     $notifCnt++;
                     $ret .= view('vendor.burnermap.notification-dontate')->render();
                 }
-                /* if ($this->myBurn->messages%11 > 0 && $this->isAdmin()) {
+                /* if ($this->myBurn->messages%11 > 0 && $GLOBALS["util"]->isAdmin) {
                     $notifCnt++;
                     $ret .= view('vendor.burnermap.notification-github-issue')->render();
                 } */

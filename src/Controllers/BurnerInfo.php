@@ -32,8 +32,12 @@ class BurnerInfo
     
     public function getMapFriends($user = -1)
     {
-        $mappers = (($user > 0) ? $user : '') . $this->allPastFrnds->friendUsers;
-        $blocks = $GLOBALS["util"]->mexplode(',', $this->allPastFrnds->hideUsers);
+        $mappers = ',' . (($user > 0) ? $user . ',' : '') 
+            . ((sizeof($this->myFriends) > 0) ? implode(',', $this->myFriends) : '') . ',';
+        $blocks = [];
+        if (isset($this->allPastFrnds->hideUsers) && trim($this->allPastFrnds->hideUsers) != '') {
+            $blocks = $GLOBALS["util"]->mexplode(',', $this->allPastFrnds->hideUsers);
+        }
         if (sizeof($blocks) > 0) {
             foreach ($blocks as $block) $mappers = str_replace(',' . $block . ',', ',', $mappers);
         }

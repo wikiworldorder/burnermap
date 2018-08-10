@@ -285,8 +285,11 @@ class MapDeets
             exit;
         }
         $arr = [ "year" => $year, "camps" => [] ];
-        eval("\$resCamps = BurnerMap\\Models\\BurnerCamps" . (($year > 2010 && $year < intVal(date("Y"))) ? $year : "")
-            . "::orderBy('name', 'asc')->get();");
+        $tblYr = (($year > 2010 && $year < intVal(date("Y"))) ? $year : "");
+        eval("\$resCamps = DB::table('BurnerCamps" . $tblYr . "')" 
+            . (($tblYr == '') ? "->leftJoin('OfficialCampsAPI', 'BurnerCamps.apiID', '=', 'OfficialCampsAPI.id')
+            ->select('BurnerCamps.*', 'OfficialCampsAPI.uid')" : "") 
+            . "->orderBy('name', 'asc')->get();");
         if ($resCamps->isNotEmpty()) {
             foreach ($resCamps as $camp) {
                 $arr["camps"][] = [
@@ -299,7 +302,7 @@ class MapDeets
                     'y' 		=> $camp->y, 
                     'size'		=> $camp->size,
                     'id' 		=> $camp->id, 
-                    'apiID' 	=> ((trim($camp->apiID) != '') ? $camp->apiID : '')
+                    'apiID' 	=> ((trim($camp->uid) != '') ? $camp->uid : '')
                     ];
             }
         }

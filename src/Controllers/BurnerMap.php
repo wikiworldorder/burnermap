@@ -37,7 +37,7 @@ class BurnerMap extends FaceController
         $this->loadVars();
         if ($this->editSave($request)) {
             $this->mainout .= '<br /><br /><center><img src="/images/burnerMapLogo-anim.gif" border=0 width=100 >'
-                . '<br /><br />... redirecting to <a href="/map?refresh=1">your map</a> ...</center><br /><br />'
+                . '<br />... redirecting to <a href="/map?refresh=1">your map</a> ...</center><br /><br /><br /><br />'
                 . '<script type="text/javascript"> setTimeout("window.location=\'/map?refresh=1\'", 100); </script>';
             return $this->printPage($request);
         }
@@ -93,7 +93,7 @@ class BurnerMap extends FaceController
                 ? $this->myBurn->playaName : $this->myBurn->name);
             $villageID = intVal($request->get('villageID'));
             $campID = intVal($request->get('campID'));
-            $campName = (($request->has('camp')) ? trim($request->get('camp')) : '');
+            $campName = (($request->has('camp')) ? strip_tags(trim($request->get('camp'))) : '');
             if ($campID == -1) $campName = '';
             if (trim($campName) != '') {
                 $campRow = BurnerCamps::where('name', $campName)
@@ -182,11 +182,16 @@ class BurnerMap extends FaceController
             // Finally storing burner profile changes
             $prevName = $this->myBurn->playaName;
             if (intVal($this->myBurn->opts) <= 0) $this->myBurn->opts = 1;
+            $notes = '';
+            if ($request->has('notes')) {
+                $notes = strip_tags($request->notes, '<b><i><br>');
+                $notes = preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>', $notes);
+            }
             $this->myBurn->opts = $GLOBALS["util"]->chkReqOpts($request, $this->myBurn->opts, 'shareWithCamp', 3);
             $this->myBurn->opts = $GLOBALS["util"]->chkReqOpts($request, $this->myBurn->opts, 'shareWithVill', 13);
-            $this->myBurn->playaName   = (($request->has('playaName')) ? $request->get('playaName') : '');
+            $this->myBurn->playaName   = (($request->has('playaName')) ? strip_tags($request->get('playaName')) : '');
             $this->myBurn->email       = (($request->has('email')) ? $request->get('email') : '');
-            $this->myBurn->notes       = (($request->has('notes')) ? strip_tags($request->notes, '<a><b><i><br>') : '');
+            $this->myBurn->notes       = $notes;
             $this->myBurn->camp        = $campName;
             $this->myBurn->campID      = $campID;
             $this->myBurn->villageID   = $villageID;
@@ -206,7 +211,8 @@ class BurnerMap extends FaceController
             $this->myBurn->save();
             if ($this->myBurn->edits == 1) session()->put('firstFormSubmission', true);
             if ($prevName != $this->myBurn->playaName) {
-                AllPastUsers::where('user', $this->usr->id)->update([ 'playaName' => $this->myBurn->playaName ]);
+                AllPastUsers::where('user', $this->usr->id)
+                    ->update([ 'playaName' => $this->myBurn->playaName ]);
             }
             $edit = new PageEdits;
             $edit->user = $this->usr->id;
@@ -337,14 +343,6 @@ class BurnerMap extends FaceController
     public function map(Request $request)
     {
         $this->loadPage($request, 'map');
-        if ($this->isAdmin() && $request->has('debug')) { // temporary for working on the friend list bug
-            foreach ($this->myInfo->myFriends as $f) {
-                echo '<div class="relDiv" style="float: left;"><div class="absDiv f8">' . $f . '</div>' 
-                    . $this->profPic(null, 50, 0, $f) . '</div>';
-            }
-            echo '<div style="clear: both;"></div>' . implode(', ', $this->myInfo->myFriends) . '<pre>'; 
-            print_r($this->usr); echo '</pre>';
-        }
         $this->loadVars();
         if ($this->archYear == '' && (!isset($this->myBurn->edits) || intVal($this->myBurn->edits) == 0)) {
             return redirect('/edit');
@@ -394,6 +392,8 @@ class BurnerMap extends FaceController
             }
             $this->map = new MapDeets;
             $this->map->loadCampDeets($this->archYear);
+            
+//if ($GLOBALS["util"]->isAdmin) { echo '<pre>'; print_r($this->myInfo->myFriends); echo '</pre>'; }
             
             // Construct queries to find friends to map
             $changeCutoff = (($this->archYear != '') ? $this->archYear : date("Y")) . '-02-01 00:00:00';

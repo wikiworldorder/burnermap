@@ -63,7 +63,7 @@ class OtherPages extends FaceController
             "myBurn"      => $this->myBurn,
             "currTickets" => $currTickets,
             "totTickets"  => $totTickets,
-            "isAdmin"     => $this->isAdmin()
+            "isAdmin"     => $GLOBALS["util"]->isAdmin
             ])->render();
         return $this->printPage($request);
     }

@@ -19,7 +19,9 @@ Screw Scalping.</div>
 <nobr>in need with friends who have extras.</b></nobr><br />
 <br />
 <nobr>There is no charge for this nifty service.</nobr><br />
-<nobr><a href="/love" style="font-size: 11pt;">(But if it turns you on, slip a bill into our fishnets!)</a></nobr><br />
+<nobr><a href="#donate" style="font-size: 11pt;">
+    (But if it turns you on, slip a bill into our fishnets!)
+</a></nobr><br />
 <br />
 <nobr>Just please <b>gift</b> tickets or sell at <b>face</nobr><br />
 <nobr>value</b> because <b>scalping is worse than</nobr><br />

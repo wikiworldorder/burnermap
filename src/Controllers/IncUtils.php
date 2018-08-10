@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 class IncUtils
 {
     public $sessMsg = '';
+    public $isAdmin = false;
     
     public function printSessMsg()
     {

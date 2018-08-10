@@ -84,6 +84,7 @@
         </center></div>
     </center></div>
     
+    <a name="donate"></a>
     <div id="foot6"><center>
         <br /><span class="f12">BurnerMap turn you on? Consider donating to help keep the server sparkly!</span><br />
         <table border=0 ><tr><td>

@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/burnermap/inc-friendsErrHelp.blade.php -->
 
 <center>
-Are you brand new to BurnerMap, and have zero friends showing up?<br />
+Are you brand new to BurnerMap, and/or have zero friends showing up?<br />
 You might be having an issue with your app permissions.<br />
 <a id="hidivBtnMissFrndsSteps" class="hidivBtn" href="javascript:;"
     >Click here for steps to attempt a fix for this.</a>
