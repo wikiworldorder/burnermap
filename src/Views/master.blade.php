@@ -100,9 +100,10 @@
         <td style="padding: 0px 20px; font-size: 10pt; vertical-align: middle; font-weight: normal;"><i>or</i></td>
         <td><a href="https://www.patreon.com/morganlesko" target="_blank"
             ><img src="/images/patreon_navigation_logo_mini_orange.png" border=0 height=30 ></a></td>
-        <td style="padding-left: 20px; font-size: 10pt; vertical-align: middle; font-weight: normal;"><i>or</i>
+        <td style="padding-left: 20px; font-size: 8pt; vertical-align: middle; font-weight: normal;"><i>or</i>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1BLcNNL4bv8fQ8d4XN9KXt7T2LU2pjLMN5</td>
-        <td><img src="/images/bitcoin.png" height=30 border=0 ></td>
+        <td><a href="/images/qr-code.jpg" rel="shadowbox"><img src="/images/bitcoin.png" height=30 border=0 >
+            <img src="/images/qr-code.jpg" height=30 border=0 ></a></td>
         </tr></table>
     </center></div>
     

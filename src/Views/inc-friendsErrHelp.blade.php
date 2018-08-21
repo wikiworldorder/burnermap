@@ -5,7 +5,7 @@ Are you brand new to BurnerMap, and/or have zero friends showing up?<br />
 You might be having an issue with your app permissions.<br />
 <a id="hidivBtnMissFrndsSteps" class="hidivBtn" href="javascript:;"
     >Click here for steps to attempt a fix for this.</a>
-    </center>
+<br /><br />
 <div id="hidivMissFrndsSteps" class="frndErrWrap">
     <h3>Steps to try fully refreshing your app permissions...</h3>
     <ol>
@@ -16,6 +16,8 @@ You might be having an issue with your app permissions.<br />
         to go to your Facebook Settings, in the Apps section, and FULLY REMOVE the BurnerMap App from your account.
         ( <a href="https://www.facebook.com/help/204306713029340/" target="_blank">FB Instructions</a> )
         <br /><br /></li>
+    <li>Clear the cache in the web browser. (Not sure if this step is required, but can only help the odds.)
+        <br /><br /></li>
     <li><a href="https://burnermap.com"><b>CLICK HERE</b></a> 
         to go back to BurnerMap and reconnect with it like new, 
         <b>be sure to allow it access to your friends list,</b> 
@@ -24,4 +26,5 @@ You might be having an issue with your app permissions.<br />
         </li>
     </ol>
 </div>
+</center>
 <br /><br /><br />

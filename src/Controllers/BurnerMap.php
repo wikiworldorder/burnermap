@@ -163,7 +163,6 @@ class BurnerMap extends FaceController
                     }
                 } else { // adding new camp
                     $campRow = new BurnerCamps;
-                    $campRow->name        = $campName;
                     $campRow->x           = $x;
                     $campRow->y           = $y;
                     $campRow->addyClock   = $addyClock;
@@ -173,6 +172,8 @@ class BurnerMap extends FaceController
                     $campRow->who         = $who;
                     $campRow->villageID   = $villageID;
                     $campRow->apiID       = -3;
+                    $campRow->save();
+                    $campRow->name        = $campName;
                     $campRow->save();
                     $campID = $campRow->id;
                 }
@@ -192,7 +193,6 @@ class BurnerMap extends FaceController
             $this->myBurn->playaName   = (($request->has('playaName')) ? strip_tags($request->get('playaName')) : '');
             $this->myBurn->email       = (($request->has('email')) ? $request->get('email') : '');
             $this->myBurn->notes       = $notes;
-            $this->myBurn->camp        = $campName;
             $this->myBurn->campID      = $campID;
             $this->myBurn->villageID   = $villageID;
             $this->myBurn->addyClock   = $addyClock;
@@ -231,6 +231,8 @@ class BurnerMap extends FaceController
                     BurnerCamps::find($cID)->update([ 'size' => $size ]);
                 }
             }
+            $this->myBurn->camp        = $campName;
+            $this->myBurn->save();
             return true;
         }
         return false;

@@ -210,6 +210,7 @@ class FaceController extends Controller
                 ->scopes($this->fbScopes)
                 ->userFromToken($tok);
             if ($this->isAdmin()) $GLOBALS["util"]->isAdmin = true;
+            //if ($request->has('debug')) { echo '<br /><br /><br /><pre>'; print_r($this->usr); echo '</pre>'; }
         }
         if ($request->has('arch') && trim($request->get('arch')) != date("Y")) {
             $this->archYear = trim($request->get('arch'));
