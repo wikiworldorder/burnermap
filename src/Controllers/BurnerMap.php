@@ -280,13 +280,15 @@ class BurnerMap extends FaceController
                 $usersDone[] = $f->user;
             }
         }
-        while (sizeof($usersDone) < $max) {
-            $cache->blobber .= '<td style="border: 0px none;">' . $this->profPic(null, 36) . '</td>'."\n";
-            $usersDone[] = 0;
+        if (sizeof($usersDone) > 0) {
+            while (sizeof($usersDone) < $max) {
+                $cache->blobber .= '<td style="border: 0px none;">' . $this->profPic(null, 36) . '</td>'."\n";
+                $usersDone[] = 0;
+            }
         }
         $cache->blobber .= '</tr></table>';
         $cache->blobber = $this->map->skips[] = view('vendor.burnermap.edit-previous-users', [
-            "tot"  => $this->myInfo->allPastFrnds->tot,
+            "tot"     => $this->myInfo->allPastFrnds->tot,
             "blobber" => $cache->blobber
             ])->render();
         $cache->save();
