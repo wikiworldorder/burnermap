@@ -8,9 +8,7 @@
             <div class="f18" style="letter-spacing: -0.01em; margin-top: -9px; height: 35px;"><nobr>
                 Please consider donating a couple bucks</nobr></div>
             <div class="f10" style="font-weight: normal; font-family: Helvetica, Arial, sans-serif;"><nobr>
-                After 8 years of BurnerMap, we've just gone 
-                <a href="https://github.com/wikiworldorder/burnermap" target="_blank" style="font-size: 10pt;"
-                    >open source</a>!</nobr></div>
+                Welcome home to the ninth year of BurnerMap, and counting!</nobr></div>
         </td>
         <td style="margin: 0px; text-align: left; position: relative;">
             <div class="absDiv" style="top: -4px; left: -4px;">

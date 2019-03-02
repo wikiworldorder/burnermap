@@ -98,6 +98,20 @@ class FaceController extends Controller
             ->user();
         session()->put('burntok', $user->token);
         return redirect('/map');
+        
+        try {
+            $user = Socialite::driver('facebook')
+                ->user();
+            $create['name'] = $user->getName();
+            $create['email'] = $user->getEmail();
+            $create['facebook_id'] = $user->getId();
+            $userModel = new User;
+            $createdUser = $userModel->addNew($create);
+            Auth::loginUsingId($createdUser->id);
+            return redirect()->route('/map');
+        } catch (Exception $e) {
+            return redirect('/login/facebook');
+        }
     }
 
     /**
@@ -232,8 +246,8 @@ class FaceController extends Controller
                 return $GLOBALS["util"]->jsRedirect('/map');
             }
         }
-        $this->tots["totUsers"] = AllPastUsers::get()->count();
-        $this->tots["totCurrUsers"] = Burners::get()->count();
+        $this->tots["totUsers"] = DB::table('AllPastUsers')->count();
+        $this->tots["totCurrUsers"] = DB::table('Burners')->count();
         return true;
     }
     

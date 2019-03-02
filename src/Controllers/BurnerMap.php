@@ -288,8 +288,9 @@ class BurnerMap extends FaceController
         }
         $cache->blobber .= '</tr></table>';
         $cache->blobber = $this->map->skips[] = view('vendor.burnermap.edit-previous-users', [
-            "tot"     => $this->myInfo->allPastFrnds->tot,
-            "blobber" => $cache->blobber
+            "tot"       => $this->myInfo->allPastFrnds->tot,
+            "usersDone" => $usersDone,
+            "blobber"   => $cache->blobber
             ])->render();
         $cache->save();
         return $cache->blobber;

@@ -1,5 +1,5 @@
 <div class="edit16" style=" 
-    @if (is_array($tot) && sizeof($tot) > 0) height: 127px; background: url(/images/editInstructs.jpg);
+    @if (sizeof($usersDone) > 0) height: 127px; background: url(/images/editInstructs.jpg);
     @else height: 86px; background: url(/images/editInstructs2.jpg); @endif ">
 	<center><div class="edit17">
         {!! $blobber !!}

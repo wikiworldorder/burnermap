@@ -151,7 +151,9 @@ class AdminImportExport extends FaceController
             DB::table('BurnerPastFriendUsers')->truncate();
             DB::table('JerkCheck')->truncate();
             DB::table('CacheBlobs')->truncate();
-            for ($i=0; $i<10; $i++) $qmen[] = DB::table('CacheBlobs' . $i)->truncate();
+            for ($i=0; $i<10; $i++) {
+                $qmen[] = DB::table('CacheBlobs' . $i)->truncate();
+            }
             Totals::whereIn('type', ['ticketExtra', 'ticketNeeds', 'totActiveCamps', 'avgCampSize'])
                 ->update([ 'value' => 0 ]);
         }

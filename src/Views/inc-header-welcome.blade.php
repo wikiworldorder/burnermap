@@ -11,7 +11,7 @@
         <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://burnermap.com/welcome" 
             data-text="Just made a map of my friends' camps at @BurningMan with @BurnerMap! Where are YOU camping?" 
             data-count="horizontal" data-via="micahdaigle">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
     </div>
 </td></tr></table></div>
 
