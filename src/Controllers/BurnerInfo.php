@@ -25,7 +25,9 @@ class BurnerInfo
         $chk = BlockUsers::where('blocks', 'LIKE', ',' . $user . ',')
             ->get();
         if ($chk->isNotEmpty()) {
-            foreach ($chk as $block) $this->theirBlocks[] = $block->user;
+            foreach ($chk as $block) {
+                $this->theirBlocks[] = $block->user;
+            }
         }
         return true;
     }
@@ -39,7 +41,9 @@ class BurnerInfo
             $blocks = $GLOBALS["util"]->mexplode(',', $this->allPastFrnds->hideUsers);
         }
         if (sizeof($blocks) > 0) {
-            foreach ($blocks as $block) $mappers = str_replace(',' . $block . ',', ',', $mappers);
+            foreach ($blocks as $block) {
+                $mappers = str_replace(',' . $block . ',', ',', $mappers);
+            }
         }
         return $GLOBALS["util"]->mexplode(',', $mappers);
     }

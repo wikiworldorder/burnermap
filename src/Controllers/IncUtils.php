@@ -11,7 +11,9 @@ class IncUtils
     public function printSessMsg()
     {
         $tmp = '';
-        if (trim($this->sessMsg) != '') $tmp .= '<div>' . $this->sessMsg . '</div>';
+        if (trim($this->sessMsg) != '') {
+            $tmp .= '<div>' . $this->sessMsg . '</div>';
+        }
         if (session()->has('sessMsg')) {
             $tmp .= '<div>' . session()->get('sessMsg') . '</div>';
             session()->forget('sessMsg');
@@ -21,8 +23,12 @@ class IncUtils
     
     public function prepExplode($delim, $str)
     {
-        if (substr($str, 0, 1) == $delim) $str = substr($str, 1);
-        if (substr($str, strlen($str)-1) == $delim) $str = substr($str, 0, strlen($str)-1);
+        if (substr($str, 0, 1) == $delim) {
+            $str = substr($str, 1);
+        }
+        if (substr($str, strlen($str)-1) == $delim) {
+            $str = substr($str, 0, strlen($str)-1);
+        }
         return $str;
     }
     
@@ -44,7 +50,9 @@ class IncUtils
         $arr = $this->mexplode($delim, $str);
         if (sizeof($arr) > 0) {
             foreach ($arr as $s) {
-                if (trim($s) != '') $ret .= (($ret != '') ? $delim : '') . $s;
+                if (trim($s) != '') {
+                    $ret .= (($ret != '') ? $delim : '') . $s;
+                }
             }
         }
         return $ret;
@@ -64,8 +72,11 @@ class IncUtils
     public function prntName($friend)
     {
         if (isset($friend->name) && trim($friend->name) != '') {
-            if (!isset($friend->playaName) || trim($friend->playaName) == '') return $friend->name;
-            else return $friend->playaName . ' (' . $friend->name . ')';
+            if (!isset($friend->playaName) || trim($friend->playaName) == '') {
+                return $friend->name;
+            } else {
+                return $friend->playaName . ' (' . $friend->name . ')';
+            }
         }
         return '';
     }
@@ -78,7 +89,9 @@ class IncUtils
         $nameOut = '';
         $words = $this->mexplode(' ', $name);
         if (sizeof($words) > 0) {
-            foreach ($words as $w) $nameOut .= ' ' . $this->formatPlayaWord($w, $lenMax);
+            foreach ($words as $w) {
+                $nameOut .= ' ' . $this->formatPlayaWord($w, $lenMax);
+            }
         }
         $nameOut = str_replace('  ', ' ', $nameOut);
         return trim($nameOut);
@@ -91,7 +104,9 @@ class IncUtils
             $ret .= '<span class="mLn5"> </span>' . substr($name, 0, $lenMax);
             $name = substr($name, $lenMax);
         }
-        if ($ret == '') return $name;
+        if ($ret == '') {
+            return $name;
+        }
         $ret = trim($ret . '<span class="mLn5"> </span>' . $name);
         if (strpos($ret, '<span class="mLn5"> </span>') == 0) {
             $ret = substr($ret, strlen('<span class="mLn5"> </span>'));
@@ -101,9 +116,13 @@ class IncUtils
 
     public function chkReqOpts(Request $request, $currOpts, $fld = '', $opt = 1)
     {
-        if ($fld == '' || $opt <= 1) return $currOpts;
+        if ($fld == '' || $opt <= 1) {
+            return $currOpts;
+        }
         if ($request->has($fld) && intVal($request->get($fld)) > 0) {
-            if ($currOpts%$opt > 0) $currOpts = $currOpts*$opt;
+            if ($currOpts%$opt > 0) {
+                $currOpts = $currOpts*$opt;
+            }
         } elseif ($currOpts%$opt == 0) {
             $currOpts = $currOpts/$opt;
         }

@@ -80,6 +80,23 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/admin/export-new-emails', 'BurnerMap\\Controllers\\AdminImportExport@exportNewEmails');
     
     Route::get( '/export-laravel-seeder', 'BurnerMap\\Controllers\\BurnerAdmin@exportLaravelSeeder');
+
+    
+    Route::get( '/js/jquery.min.js', function() {
+        $response = Response::make(file_get_contents('../vendor/components/jquery/jquery.min.js'));
+        $response->header('Content-Type', 'application/javascript');
+        return $response;
+    });
+    Route::get( '/js/jquery-ui.min.js', function() {
+        $response = Response::make(file_get_contents('../vendor/components/jqueryui/jquery-ui.min.js'));
+        $response->header('Content-Type', 'application/javascript');
+        return $response;
+    });
+    Route::get( '/js/jquery-ui.min.css', function() {
+        $response = Response::make(file_get_contents('../vendor/components/jqueryui/themes/base/jquery-ui.min.css'));
+        $response->header('Content-Type', 'text/css');
+        return $response;
+    });
     
 });    
 

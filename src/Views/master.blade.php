@@ -1,6 +1,4 @@
-<!-- resources/views/vendor/burnermap/master.blade.php -->
-<!doctype html>
-<html xmlns:fb="http://www.facebook.com/2008/fbml">
+<!doctype html><html xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
     <meta http-equiv="Content-Type" content="Text/HTML" />
     <meta charset="UTF-8" />
@@ -12,7 +10,7 @@
         Ray Bacon Baker. (sold separately)" />
     <link rel="shortcut icon" href="/images/favicon.png" />
     <link rel="image_src" href="/images/logo2.png">
-    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/lib/burner.css">
     <link rel="stylesheet" type="text/css" href="/js/shadowbox-3.0.3/shadowbox.css">
     <script type="text/javascript" src="/js/shadowbox-3.0.3/shadowbox.js"></script>

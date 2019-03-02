@@ -1,7 +1,7 @@
 
 # WikiWorldOrder/BurnerMap
 
-[![Laravel](https://img.shields.io/badge/Laravel-5.6-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-5.8-orange.svg?style=flat-square)](http://laravel.com)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <a href="https://github.com/wikiworldorder/burnermap" target="_blank">BurnerMap</a>, atop 
@@ -19,9 +19,9 @@
 
 # <a name="requirements"></a>Requirements
 
-* php: >=7.1.*
-* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.6.*
-* <a href="https://packagist.org/packages/laravel/socialite" target="_blank">laravel/socialite</a>: 3.*
+* php: >=7.2.11
+* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.8.*
+* <a href="https://packagist.org/packages/laravel/socialite" target="_blank">laravel/socialite</a>: 4.*
 
 # <a name="getting-started"></a>Getting Started
 
@@ -48,8 +48,8 @@ $ nano composer.json
 ...
 "require": {
 	...
-    "laravel/socialite": "^3.0",
-    "wikiworldorder/burnermap": "0.*",
+    "laravel/socialite": "^4.1.0",
+    "wikiworldorder/burnermap": "^1.0",
 	...
 },
 ...
@@ -100,8 +100,6 @@ $ php artisan db:seed --class=BurnerMapSeeder
 ```
 
 * Download packages and copy to these locations in Laravel's public folder...
-    - <a href="https://jquery.com/download/" target="_blank">jquery.com/download/</a> 
-    Copy the compressed, production jQuery file to your Laravel directory, eg: public/js/jquery-3.3.1.min.js
     - <a href="www.shadowbox-js.com/download.html" target="_blank">shadowbox-js.com/download.html</a>
     Copy the Shadowbox folder to your Laravel directory: public/js/shadowbox-3.0.3
     - <a href="https://github.com/flot/flot" target="_blank">github.com/flot/flot</a>
