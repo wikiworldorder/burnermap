@@ -18,6 +18,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::get( '/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::get( '/welcome.php', function () { return redirect('/welcome'); });
+
+    Route::post('/canvas-page', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    Route::get( '/canvas-page', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     
     Route::get('/login/facebook',          'BurnerMap\\Controllers\\FaceController@redirectToProvider')
         ->middleware('guest');
