@@ -17,7 +17,8 @@
         Baker.<span style="font-size: 10pt;"><sup>sold separately</sup></span>
         <br /><br /><br /><br />
         <center>
-        <a href="/login/facebook"><img src="/images/loginWfb.jpg" border=0 alt="Login with Facebook" ></a>
+        <a href="/login/facebook"
+            ><img src="/images/facebook-continue-with.png" border=0 alt="Login with Facebook" style="width: 50%;" ></a>
         <br /><br /><br /><br /><br /><br />
         <span style="font-size: 9pt; letter-spacing: -0.02em;">Sorry, non-Facebookers. This is a Facebook-only app. 
         <a href="/images/zuckerborg.jpg" rel="shadowbox">Don't use Facebook?</a></span>
