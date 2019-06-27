@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +13,139 @@ class BurnerMapSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('TextSettings')->insert([
+		// 2019
+		DB::table('TextSettings')->insert([
+			'type'  => 'date01EarlyStart',
+			'year'  => 2019,
+			'value' => '2019-08-18'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'date02BurnStart',
+			'year'  => 2019,
+			'value' => '2019-08-25'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'date03BurningEnd',
+			'year'  => 2019,
+			'value' => '2019-09-02'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'date04LateLeave',
+			'year'  => 2019,
+			'value' => '2019-09-09'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet01Esplanade',
+			'year'  => 2019,
+			'value' => 'Esplanade'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet20A',
+			'year'  => 2019,
+			'value' => 'Andromeda'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet21B',
+			'year'  => 2019,
+			'value' => 'Bacchus'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet22C',
+			'year'  => 2019,
+			'value' => 'Cupid'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet23D',
+			'year'  => 2019,
+			'value' => 'Diana'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet24E',
+			'year'  => 2019,
+			'value' => 'Echo'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet25F',
+			'year'  => 2019,
+			'value' => 'Fortuna'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet26G',
+			'year'  => 2019,
+			'value' => 'Ganymede'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet27H',
+			'year'  => 2019,
+			'value' => 'Hyacinth'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet28I',
+			'year'  => 2019,
+			'value' => 'Icarus'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet29J',
+			'year'  => 2019,
+			'value' => 'Jove'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet30K',
+			'year'  => 2019,
+			'value' => 'Kronos'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet31L',
+			'year'  => 2019,
+			'value' => 'Labyrinth'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet32M',
+			'year'  => 2019,
+			'value' => 'M'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet33N',
+			'year'  => 2019,
+			'value' => 'N'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet40InnerCircle',
+			'year'  => 2019,
+			'value' => 'Center Camp Plaza'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet41RodsRoad',
+			'year'  => 2019,
+			'value' => 'Rods Road'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet42Portal',
+			'year'  => 2019,
+			'value' => 'Portal'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet43Plaza',
+			'year'  => 2019,
+			'value' => 'Plaza'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet44DeepPlaza',
+			'year'  => 2019,
+			'value' => 'Deep Plaza	'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet46WalkIn',
+			'year'  => 2019,
+			'value' => 'Walk-In Camping'
+		]);
+		DB::table('TextSettings')->insert([
+			'type'  => 'streetLet47Landing',
+			'year'  => 2019,
+			'value' => 'Landing Strip'
+		]);
+		// 2018
+		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2018,
 			'value' => '2018-08-19'
@@ -143,6 +275,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2018,
 			'value' => 'Landing Strip'
 		]);
+		// 2017
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2017,
@@ -273,6 +406,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2017,
 			'value' => 'Landing Strip'
 		]);
+		// 2016
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2016,
@@ -403,6 +537,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2016,
 			'value' => 'Landing Strip'
 		]);
+		// 2015
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2015,
@@ -533,6 +668,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2015,
 			'value' => 'Landing Strip'
 		]);
+		// 2014
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2014,
@@ -663,6 +799,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2014,
 			'value' => 'Landing Strip'
 		]);
+		// 2013
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2013,
@@ -793,6 +930,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2013,
 			'value' => 'Landing Strip'
 		]);
+		// 2012
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2012,
@@ -923,6 +1061,7 @@ class BurnerMapSeeder extends Seeder
 			'year'  => 2012,
 			'value' => 'Landing Strip'
 		]);
+		// 2011
 		DB::table('TextSettings')->insert([
 			'type'  => 'date01EarlyStart',
 			'year'  => 2011,
