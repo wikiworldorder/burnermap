@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use BurnerMap\Models\Burners;
 use BurnerMap\Models\BurnerCamps;
 use BurnerMap\Models\BurnerVillages;
+use BurnerMap\Models\OfficialCampsAPI;
 use BurnerMap\Models\AllPastUsers;
 use BurnerMap\Models\BurnerPastFriendUsers;
 use BurnerMap\Models\BlockUsers;
@@ -352,6 +353,9 @@ class BurnerMap extends FaceController
         if ($this->archYear == '' && (!isset($this->myBurn->edits) || intVal($this->myBurn->edits) == 0)) {
             return redirect('/edit');
         }
+        if ($request->has('json')) {
+            return $this->jsonFriends($request);
+        }
         if ($request->has('excel')) {
             return $this->excelFriends($request);
         }
@@ -371,9 +375,13 @@ class BurnerMap extends FaceController
         } else {
             
             // First, check for a cache of the requested map
-            $this->currUrl = (($isPrint) ? '?print=1' : (($isExcel) ? '?excel=1' : '?list=1'));
-            if ($this->archYear != '') $this->currUrl .= '&arch=' . $this->archYear;
-            if ($request->has('zoom')) $this->currUrl .= '&zoom=1';
+            if ($request->has('remind')) {
+                $this->currUrl = '?remind=1';
+            } else {
+                $this->currUrl = (($isPrint) ? '?print=1' : (($isExcel) ? '?excel=1' : '?list=1'));
+                if ($this->archYear != '') $this->currUrl .= '&arch=' . $this->archYear;
+                if ($request->has('zoom')) $this->currUrl .= '&zoom=1';
+            }
             eval("\$cache = BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . "::where('user', "
                 . $this->usr->id . ")->where('type', '" . $this->currUrl . "')->first();");
             if (!$request->has('refresh') && $cache && isset($cache->blobber) && trim($cache->blobber) != '') {
@@ -382,7 +390,9 @@ class BurnerMap extends FaceController
                 $this->mapPostCache($isPrint);
                 return $this->printPage($request);
             }
-            if ($request->has('refresh')) $this->clearAllPastFriends();
+            if ($request->has('refresh')) {
+                $this->clearAllPastFriends();
+            }
             $this->getAllPastFriends();
             if (!$cache) {
                 eval("\$cache = new BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . ";");
@@ -539,33 +549,34 @@ class BurnerMap extends FaceController
                 }
             }
             
-            if ($isExcel) {
-            
-            } else {
+            if (!$isExcel) {
                 if ($isPrint) {
                     $this->map->campsHalf = floor(sizeof($this->map->campOrd)*2/3);
                     // make this smarter, dynamic
                 }
-                $this->map->plotCampDeets($request->has('zoom'));
-                $this->map->fullPlot = view('vendor.burnermap.map-plots', [
-                    "myInfo"     => $this->myInfo,
-                    "vars"       => $this->vars,
-                    "map"        => $this->map,
-                    "request"    => $request,
-                    "archYear"   => $this->archYear,
-                    "totsLabels" => (($request->has('all')) ? $this->map->resCnt2 . ' burners' 
-                        : $this->map->resCnt2c . ' of your friends'),
-                    "currUrl"    => $this->currUrl,
-                    "isPrint"    => $isPrint
+                if (!$request->has('remind')) {
+                    $this->map->plotCampDeets($request->has('zoom'));
+                    $this->map->fullPlot = view('vendor.burnermap.map-plots', [
+                        "myInfo"     => $this->myInfo,
+                        "vars"       => $this->vars,
+                        "map"        => $this->map,
+                        "request"    => $request,
+                        "archYear"   => $this->archYear,
+                        "totsLabels" => (($request->has('all')) ? $this->map->resCnt2 . ' burners' 
+                            : $this->map->resCnt2c . ' of your friends'),
+                        "currUrl"    => $this->currUrl,
+                        "isPrint"    => $isPrint
                     ])->render();
+                }
                 $this->mainout .= view('vendor.burnermap.map' . (($isPrint) ? '-print' : ''), [
-                    "usr"        => $this->usr,
-                    "myBurn"     => $this->myBurn,
-                    "myInfo"     => $this->myInfo,
-                    "vars"       => $this->vars,
-                    "map"        => $this->map,
-                    "tots"       => $this->tots
-                    ])->render();
+                    "usr"     => $this->usr,
+                    "myBurn"  => $this->myBurn,
+                    "myInfo"  => $this->myInfo,
+                    "vars"    => $this->vars,
+                    "map"     => $this->map,
+                    "tots"    => $this->tots,
+                    "request" => $request
+                ])->render();
                 $cache->blobber .= $this->mainout;
                 if (!$isPrint) {
                     $this->java .= 'plotCnt = ' . $this->map->cnt . ';';
@@ -654,25 +665,56 @@ class BurnerMap extends FaceController
             "cntTot" => $cntTot
             ])->render();
 	}
-	
-	protected function excelFriends(Request $request)
-	{
-	    $filename = 'FriendList-'.date("Y-m-d").'.xls';
-	    $innerTable = '<tr><td>Mailing Address Line 1</td><td>Address Line 2</td><td>Address Line 3</td></tr>';
-	    eval("\$chk = BurnerMap\\Models\\Burners" . $this->archYear . "::where('edits', '>', 0)->"
-	        . "where('addyLetter', 'NOT LIKE', '???')->where('addyClock', 'NOT LIKE', '?:??')->whereIn('user', "
-	        . "\$this->myInfo->getMapFriends(\$this->usr->id))->orderBy('name', 'asc')->get();");
-	    if ($chk->isNotEmpty()) {
-	        foreach ($chk as $i => $friend) {
-	            $innerTable .= '<tr><td>' . ((trim($friend->playaName) != '') ? $friend->playaName . ' (' 
-	                . $friend->name . ')' : $friend->name) . ', ' . ((trim($friend->camp) != '') ? $friend->camp . ', '
-	                : '') . $friend->addyClock . ' & ' . $friend->addyLetter . ((trim($friend->addyLetter2) != '' 
-	                && $friend->addyLetter2 != '???') ? ' ' . $friend->addyLetter2 : '')
-	                . '</td><td>BRCPO9</td><td>Black Rock City, NV 89412</td></tr>'; // Gerlach NV 89412-0149
-	        }
-	    }
+    
+    protected function jsonFriends(Request $request)
+    {
+        $data = [];
+        $chk = DB::table('Burners')
+            ->leftJoin('BurnerCamps', 'Burners.campID', '=', 'BurnerCamps.id')
+            ->leftJoin('OfficialCampsAPI', 'BurnerCamps.apiID', '=', 'OfficialCampsAPI.id')
+            ->whereIn('Burners.user', $this->myInfo->getMapFriends($this->usr->id))
+            ->where('edits', '>', 0)
+            ->orderBy('Burners.name', 'asc')
+            ->select('Burners.*', 'OfficialCampsAPI.uid')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $i => $friend) {
+                $data[] = [
+                    "name" => ((trim($friend->playaName) != '') 
+                        ? $friend->playaName . ' (' . $friend->name . ')' : $friend->name),
+                    "camp" => ((trim($friend->camp) != '') ? $friend->camp : ''),
+                    "campUID" => ((isset($friend->uid)) ? $friend->uid : ''),
+                    "addyClock"    => $friend->addyClock,
+                    "addyLetter"   => $friend->addyLetter,
+                    "frontage"     => $friend->addyLetter2,
+                    "datesOnPlaya" => $friend->dateArrive . '-' . $friend->dateDepart,
+                    "notes"        => $friend->notes
+                ];
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
+    }
+    
+    protected function excelFriends(Request $request)
+    {
+        $filename = 'FriendList-'.date("Y-m-d").'.xls';
+        $innerTable = '<tr><td>Mailing Address Line 1</td><td>Address Line 2</td><td>Address Line 3</td></tr>';
+        eval("\$chk = BurnerMap\\Models\\Burners" . $this->archYear . "::where('edits', '>', 0)->"
+            . "where('addyLetter', 'NOT LIKE', '???')->where('addyClock', 'NOT LIKE', '?:??')->whereIn('user', "
+            . "\$this->myInfo->getMapFriends(\$this->usr->id))->orderBy('name', 'asc')->get();");
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $i => $friend) {
+                $innerTable .= '<tr><td>' . ((trim($friend->playaName) != '') ? $friend->playaName . ' (' 
+                    . $friend->name . ')' : $friend->name) . ', ' . ((trim($friend->camp) != '') ? $friend->camp . ', '
+                    : '') . $friend->addyClock . ' & ' . $friend->addyLetter . ((trim($friend->addyLetter2) != '' 
+                    && $friend->addyLetter2 != '???') ? ' ' . $friend->addyLetter2 : '')
+                    . '</td><td>BRCPO9</td><td>Black Rock City, NV 89412</td></tr>'; // Gerlach NV 89412-0149
+            }
+        }
         return $GLOBALS["util"]->exportExcel($innerTable, $filename);
-	}
+    }
     
     protected function camps(Request $request)
     {

@@ -30,8 +30,7 @@ function loadCampInfo(campID) {
 		document.getElementById('campNameText').style.display='block'; 
 		document.getElementById('mapFields1').style.display='block';
 		document.getElementById('mapFields2').style.display='block';
-		document.getElementById('mapFields5').style.display='none';
-		document.getElementById('mapFields5desc').style.display='block';
+		document.getElementById('mapFields5').style.display='block';
 		document.getElementById('mapFieldsStatic').style.display='none';
 		document.getElementById('mapFieldsStatic2').style.display='none';
 		document.getElementById('shareWithCamp').style.display='block';
@@ -40,8 +39,7 @@ function loadCampInfo(campID) {
 	else if (campID == -1 || campID == 0) {
 		document.getElementById('mapFields1').style.display='block';
 		document.getElementById('mapFields2').style.display='block';
-		document.getElementById('mapFields5').style.display='none';
-		document.getElementById('mapFields5desc').style.display='block';
+		document.getElementById('mapFields5').style.display='block';
 		document.getElementById('mapFieldsStatic').style.display='none';
 		document.getElementById('mapFieldsStatic2').style.display='none';
 		document.getElementById('shareWithCamp').style.display='none';
@@ -55,7 +53,6 @@ function loadCampInfo(campID) {
 			document.getElementById('mapFields1').style.display='none';
 			document.getElementById('mapFields2').style.display='none';
 			document.getElementById('mapFields5').style.display='none';
-			document.getElementById('mapFields5desc').style.display='none';
 			document.getElementById('mapFieldsStatic').innerHTML="<nobr>"+campInfo[campID][6]+" set the camp address to "+campInfo[campID][3]+" & "+campInfo[campID][4]+"</nobr>";
 			document.getElementById('mapFieldsStatic').style.display='block';
 			document.getElementById('mapFieldsStatic2').style.display='block';
@@ -63,8 +60,7 @@ function loadCampInfo(campID) {
 		else {
 			document.getElementById('mapFields1').style.display='block';
 			document.getElementById('mapFields2').style.display='block';
-			document.getElementById('mapFields5').style.display='none';
-			document.getElementById('mapFields5desc').style.display='block';
+			document.getElementById('mapFields5').style.display='block';
 			document.getElementById('mapFieldsStatic').style.display='none';
 			document.getElementById('mapFieldsStatic2').style.display='none';
 		}
@@ -109,8 +105,7 @@ function autoBox(act) {
 function changeCoords() {
 	document.getElementById('mapFields1').style.display='block';
 	document.getElementById('mapFields2').style.display='block';
-	document.getElementById('mapFields5').style.display='none';
-	document.getElementById('mapFields5desc').style.display='block';
+	document.getElementById('mapFields5').style.display='block';
 	document.getElementById('mapFieldsStatic').style.display='none';
 	document.getElementById('mapFieldsStatic2').style.display='none';
 	return true;
@@ -126,8 +121,7 @@ function fillDivRun(searchStart) {
 }
 
 function clickFldNote() {
-    document.getElementById('mapFields5desc').style.display='none';
-    document.getElementById('mapFields5').style.display='block';
+    document.getElementById('mapFields5').style.display='none';
 }
 
 function clickShareVillage() {

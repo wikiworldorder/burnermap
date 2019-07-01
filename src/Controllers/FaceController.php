@@ -133,6 +133,9 @@ class FaceController extends Controller
      */
     public function loadUserInfo(Request $request)
     {
+        if ($this->archYear == date("Y")) {
+            $this->archYear = '';
+        }
         eval("\$this->myBurn = BurnerMap\\Models\\Burners" . $this->archYear . "::where('user', " . $this->usr->id . ")
             ->first();");
         if (!$this->myBurn) {

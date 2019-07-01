@@ -7,8 +7,6 @@
 <td class="mapTabsOn"><nobr><a href="?listAll=1">All Camps</a></nobr></td>
 <td><a href="?listAll={{ $listAll }}&print=1" target="_blank" style="text-decoration: none;"
     ><img src="/images/maps/mapPrint.png" border=0 align=left hspace=20 ></a></td>
-<td><a href="?listAll={{ $listAll }}&excel=1" target="_blank" style="text-decoration: none;"
-    ><img src="/images/page_excel.png" border=0 align=left >Mailing List</a></td>
 
 <td class="print20" style="text-align: right; padding: 0px; font-size: 9pt; color: #ff908f;">
     Camp info is public but<br />users' info is anonymous.</nobr></td>
@@ -43,6 +41,11 @@
     </div>
     
 @if (!$isPrint)
+
+<br />
+<a href="?listAll={{ $listAll }}&excel=1" target="_blank" style="text-decoration: none;"
+    >Mailing List Excel Export</a>
+
 </div></div></center>
 
 @endif

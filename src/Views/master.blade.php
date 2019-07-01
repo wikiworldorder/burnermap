@@ -71,7 +71,8 @@
             <a href="http://burningmanrides.com/" target="_blank">BurningManRides</a>, 
             <a href="http://bumblepuss.com/" target="_blank">Camp Bumblepuss</a>,<br />
             <a href="http://dojo.com/" target="_blank">Dojo</a>, 
-            <a href="http://www.gaiagps.com/news/article/iBurn%202011%20is%20Live" target="_blank">iBurn</a>, and 
+            <a href="https://iburnapp.com" target="_blank">iBurn</a>, 
+            <a href="https://www.facebook.com/TimeToBurnApp/" target="_blank">Time To Burn</a>, and 
             <a href="http://www.nectarvillage.com/" target="_blank">Nectar Village</a><br /><br />
             
             With special thanks to <a href="/images/zuckerborg.jpg" rel="shadowbox">The Zuckerborg</a>. 

@@ -41,7 +41,7 @@ class BurnerVars
         if ($chk->isNotEmpty()) {
             foreach ($chk as $row) $this->streetLetters[] = $row->value;
         }
-        $this->streetLetters2 = ['Man-side', 'Mountain-side'];
+        $this->streetLetters2 = ['Man-side', 'Mountain-side', 'Clock-side'];
         $chk = BurnerVillages::orderBy('name', 'asc')
             ->get();
         if ($chk->isNotEmpty()) {

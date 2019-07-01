@@ -22,11 +22,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/canvas-page', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::get( '/canvas-page', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     
-    Route::get('/login/facebook',          'BurnerMap\\Controllers\\FaceController@redirectToProvider')
+    Route::get('/login/facebook', 'BurnerMap\\Controllers\\FaceController@redirectToProvider')
         ->middleware('guest');
     Route::get('/login/facebook/callback', 'BurnerMap\\Controllers\\FaceController@handleProviderCallback')
         ->middleware('guest');
-    Route::get('/logout',                  'BurnerMap\\Controllers\\FaceController@logout');
+    Route::get('/logout', 'BurnerMap\\Controllers\\FaceController@logout');
     
     Route::post('/edit', 'BurnerMap\\Controllers\\BurnerMap@edit');
     Route::get( '/edit', 'BurnerMap\\Controllers\\BurnerMap@edit');

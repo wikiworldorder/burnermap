@@ -912,17 +912,13 @@ select#addyLetter2ID {
     width: 280px;
     font-size: 12pt;
 }
-#mapFields5desc {
-    left: 210px; 
-    top: 175px;
-}
 #mapFields5 {
-    display: none; 
     left: 225px; 
     top: 175px;
     margin-top: 10px;
 }
 #mapFieldsStatic {
+    left: 175px; 
     top: 145px; 
     font-size: 16pt; 
     letter-spacing: -0.04em;
@@ -1289,4 +1285,14 @@ a.absenteeMores:link, a.absenteeMores:visited, a.absenteeMores:active, a.absente
     height: 15px;
     width: 15px;
     border: 0px none;
+}
+
+
+#jsonInstruct {
+    display: none;
+}
+#jsonFrame {
+    height: 1px;
+    overflow: hidden;
+    padding-top: 1px;
 }

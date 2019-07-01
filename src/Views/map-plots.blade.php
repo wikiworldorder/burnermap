@@ -27,8 +27,6 @@
     <td id="allTab" class="mapTabs"><nobr><a href="?listAll=1">All Camps</a></nobr></td>
     <td><a href="/map/?print=1" target="_blank" style="text-decoration: none;">
         <img src="/images/maps/mapPrint.png" border=0 align=left hspace=20 ></a></td>
-    <td><a href="/map/?excel=1" target="_blank" class="f11" style="text-decoration: none;"><nobr>
-        <img src="/images/page_excel.png" border=0 align=left >Mailing List</nobr></a></td>
     <td class="mapTabsScroll"><div class="relDiv"><div class="absDiv" style="text-align: right;">
         <nobr><a href="/disclaimers.php" target="_blank">Map disclaimers from Burning Man</a></nobr>
         <br /><nobr><i>Map Archives:</i>&nbsp;&nbsp;
@@ -73,5 +71,27 @@
         @if ($request->has('zoom')) Burners without coordinates entered are at the bottom of the zoomed graph
         @else Burners without coordinates entered: @endif 
     </div>
+
+    <br />
+    <script type="text/javascript" src="/lib/FileSaver.min.js"></script>
+    <a id="jsonRevealBtn" data-listall="1" 
+        data-filename="BurnerMap_Export_{{ date('Y-m-d') }}.json"
+        href="javascript:;" style="text-decoration: none; margin-right: 20px;"
+        >Download Friends JSON Export</a>
+    <a href="?listAll=1&excel=1" target="_blank" style="text-decoration: none;"
+        >Download Mailing List Excel Export</a>
+
+    <div id="jsonInstruct">
+        <p><b>Friends JSON Export</b></p>
+        <p>This download can be used to import your friends' camping info to other apps. 
+        Your browser should prompt you to download this JSON file in a few seconds.</p>
+        <p>But if it doesn't, <nobr><a href="?listAll=1&json=1" target="_blank">click here</a></nobr>
+        and use the browser to "save the page" and download the file.</p>
+        <p>Hopefully soon, you will be able to upload this JSON file in other apps like 
+        <a href="https://iburnapp.com" target="_blank">iBurn</a> or
+        <a href="https://www.facebook.com/TimeToBurnApp/" target="_blank">Time To Burn</a>.</p>
+        <div id="jsonFrame"></div>
+    </div>
+
 </div></center>
 @endif

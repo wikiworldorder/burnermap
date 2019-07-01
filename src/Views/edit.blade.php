@@ -114,24 +114,21 @@
 				</select></nobr>
 			</div>
 			
-			<div id="mapFields5desc" class=" @if ($myInfo->myCampHasCoords) disNon @else disBlo @endif ">
-				<div class="editFldNotes">
-					<nobr><a id="editFldNot" href="javascript:;" onClick="clickFldNote();"
-					    >Know which side of the street you're on?</a></nobr><br />
-				</div>
-			</div>
-			<div id="mapFields5">
+			<div id="mapFields5" class=" @if ($myInfo->myCampHasCoords) disNon @else disBlo @endif ">
 				<select id="addyLetter2ID" name="addyLetter2" autocomplete="off">
 					<option value="???" @if ($s == $myBurn["addyLetter2"]) SELECTED @endif 
 					    >Which side of the street? (if known)</option>
 					<option value="Man-side" @if ($myBurn["addyLetter2"] == 'Man-side') SELECTED @endif 
-					    >Man-side (closer to the man)</option>
+					    >Letter Street, Man-side (closer to the man)</option>
 					<option value="Mountain-side" @if ($myBurn["addyLetter2"] == 'Mountain-side') SELECTED @endif
-					    >Mountain-side (closer to edge of city)</option>
+					    >Letter Street, Mountain-side (closer to edge of city)</option>
+					<option value="Clock-side" @if ($myBurn["addyLetter2"] == 'Clock-side') SELECTED @endif
+					    >Clock Street</option>
 				</select><br />
 			</div>
 			
-			<div id="mapFieldsStatic" class="condensed @if ($myInfo->myCampHasCoords) disBlo @else disNon @endif ">
+			<div id="mapFieldsStatic" class="condensed 
+				@if ($myInfo->myCampHasCoords) disBlo @else disNon @endif ">
 				@if ($myBurn->campID > 0 && $myInfo->myCampHasCoords)
 					<nobr> @if (isset($myInfo->myCamp->who) && $myInfo->myCamp->who == '???') A campmate 
 					@elseif (isset($myInfo->myCamp->who)) {{ $myInfo->myCamp->who }} @endif 
