@@ -1,6 +1,7 @@
 <?php
 namespace BurnerMap\Controllers;
 
+use Config;
 use BurnerMap\Models\BurnerCamps;
 use BurnerMap\Models\BurnerVillages;
 use BurnerMap\Models\TextSettings;
@@ -153,17 +154,23 @@ class BurnerVars
     
     public function lnkFbRemind()
     {
-        return 'https://www.facebook.com/dialog/apprequests?app_id=' . env('FB_CLIENT_ID') . '&redirect_uri=' 
-            . urlencode('https://apps.facebook.com/burnermap/') . '&message=Where are YOU camping at Burning Man? '
-            . 'Add your camp to my map so I can find you! And get your own printable friend map. https://BurnerMap.com';
+        return 'https://www.facebook.com/dialog/apprequests?app_id=' 
+            . Config::get('social.facebook.clientid')
+            . '&redirect_uri=' . urlencode('https://burnermap.com') 
+            . '&message=' . urlencode('Where are YOU camping at Burning Man? '
+            . 'Add your camp to my map so I can find you! '
+            . 'And get your own printable friend map. https://BurnerMap.com');
     }
     
     public function lnkFbShare()
     {
-        return 'https://www.facebook.com/sharer.php?s=100&p[title]=BurnerMap: Find Your Pals on the Playa&p[summary]='
-            . 'I just created a map of my friends\' locations at Burning Man! Add yourself to my map and get your own, '
-            . 'which you can print and take to the playa!&p[url]=https://burnermap.com&p[images][0]='
-            . 'https://BurnerMap.com/images/logo2.png';
+        return 'https://www.facebook.com/dialog/share?app_id='
+            . Config::get('social.facebook.clientid')
+            . '&display=popup&href=' . urlencode('https://burnermap.com') 
+            . '&redirect_uri=' . urlencode('https://burnermap.com') 
+            . '&quote=' . urlencode('I just created a map of my friends\' locations '
+            . 'at Burning Man! Add yourself to my map and get your own, '
+            . 'which you can print and take to the playa!');
     }
     
     public function refreshBtn($url)

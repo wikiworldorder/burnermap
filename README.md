@@ -48,7 +48,7 @@ $ nano composer.json
 ...
 "require": {
 	...
-    "laravel/socialite": "^4.1.0",
+    "laravel/socialite": "^4.1.4",
     "wikiworldorder/burnermap": "^1.0",
 	...
 },
@@ -100,7 +100,8 @@ $ php artisan db:seed --class=BurnerMapSeeder
 ```
 
 * Download packages and copy to these locations in Laravel's public folder...
-    - <a href="www.shadowbox-js.com/download.html" target="_blank">shadowbox-js.com/download.html</a>
+    - <a href="www.shadowbox-js.com/download.html" target="_blank"
+        >shadowbox-js.com/download.html</a>
     Copy the Shadowbox folder to your Laravel directory: public/js/shadowbox-3.0.3
     - <a href="https://github.com/flot/flot" target="_blank">github.com/flot/flot</a>
     Copy flot-master folder to your Laravel directory: public/js/flot-master

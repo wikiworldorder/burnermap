@@ -17,7 +17,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/',            'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::post('/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::get( '/welcome',     'BurnerMap\\Controllers\\OtherPages@welcomeHome');
-    Route::get( '/welcome.php', function () { return redirect('/welcome'); });
+    Route::get( '/welcome.php', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
+    //Route::get( '/welcome.php', function () { return redirect('/welcome'); });
 
     Route::post('/canvas-page', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
     Route::get( '/canvas-page', 'BurnerMap\\Controllers\\OtherPages@welcomeHome');
@@ -85,21 +86,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/export-laravel-seeder', 'BurnerMap\\Controllers\\BurnerAdmin@exportLaravelSeeder');
 
     
-    Route::get( '/js/jquery.min.js', function() {
-        $response = Response::make(file_get_contents('../vendor/components/jquery/jquery.min.js'));
-        $response->header('Content-Type', 'application/javascript');
-        return $response;
-    });
-    Route::get( '/js/jquery-ui.min.js', function() {
-        $response = Response::make(file_get_contents('../vendor/components/jqueryui/jquery-ui.min.js'));
-        $response->header('Content-Type', 'application/javascript');
-        return $response;
-    });
-    Route::get( '/js/jquery-ui.min.css', function() {
-        $response = Response::make(file_get_contents('../vendor/components/jqueryui/themes/base/jquery-ui.min.css'));
-        $response->header('Content-Type', 'text/css');
-        return $response;
-    });
+    Route::get( '/js/jquery.min.js', 'BurnerMap\\Controllers\\LoadSysFiles@jqueryJs');
+    Route::get( '/js/jquery-ui.min.js', 'BurnerMap\\Controllers\\LoadSysFiles@jqueryUiJs');
+    Route::get( '/js/jquery-ui.min.css', 'BurnerMap\\Controllers\\LoadSysFiles@jqueryUiCss');
     
 });    
 

@@ -10,9 +10,9 @@
     @else {!! $totsLabels !!} shared their camp info in {{ $archYear }}.
     @endif <br />
     
-    Please <a href="{!! $vars->lnkFbRemind() !!}" target="_blank" class="condensed">remind specific friends</a> and 
-    <a title="Share on Facebook" href="{!! $vars->lnkFbShare() !!}" target="_blank" class="condensed">share on your 
-    newsfeed.</a>
+    Please <a title="Share on Facebook" href="{!! $vars->lnkFbShare() !!}"
+        target="_blank" class="condensed">share on your newsfeed</a>
+        and tag or message specific friends.
 </nobr></div>
     
 <div class="relDiv">

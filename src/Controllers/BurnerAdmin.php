@@ -63,7 +63,9 @@ class BurnerAdmin extends FaceController
         }
         if ($request->has('refresh')) {
             DB::table('CacheBlobs')->truncate();
-            for ($i = 0; $i < 10; $i++) DB::table('CacheBlobs' . $i)->truncate();
+            for ($i = 0; $i < 10; $i++) {
+                DB::table('CacheBlobs' . $i)->truncate();
+            }
             DB::raw("UPDATE `Burners` u JOIN `BurnerCamps` c ON (u.`campID` = c.`id`) SET u.`camp` = c.`name`, "
                 . "u.`addyClock` = c.`addyClock`, u.`addyLetter` = c.`addyLetter`, u.`addyLetter2` = c.`addyLetter2`, "
                 . "u.`x` = c.`x`, u.`y` = c.`y`, u.`villageID` = c.`villageID` WHERE u.`campID` > '0'");
@@ -77,8 +79,11 @@ class BurnerAdmin extends FaceController
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $user) {
-                if (!isset($camps[$user->campID])) $camps[$user->campID] = 1;
-                else $camps[$user->campID]++;
+                if (!isset($camps[$user->campID])) {
+                    $camps[$user->campID] = 1;
+                } else {
+                    $camps[$user->campID]++;
+                }
             }
             foreach ($camps as $campID => $size) {
                 BurnerCamps::find($campID)->update([ 'size' => $size ]);
@@ -160,7 +165,7 @@ class BurnerAdmin extends FaceController
         }
         return view('vendor.burnermap.admin.dashboard-graph-stats', [
             "dataLineTxt" => $dataLineTxt
-            ])->render();
+        ])->render();
     }
     
     protected function plotAllYear()
@@ -174,7 +179,7 @@ class BurnerAdmin extends FaceController
                 ->get(),
             "pointOffX" => $this->map->pointOffX,
             "pointOffY" => $this->map->pointOffY
-            ])->render();
+        ])->render();
     }
     
     public function mergeCamps(Request $request)

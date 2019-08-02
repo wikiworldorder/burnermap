@@ -232,7 +232,7 @@ class BurnerMap extends FaceController
                     BurnerCamps::find($cID)->update([ 'size' => $size ]);
                 }
             }
-            $this->myBurn->camp        = $campName;
+            $this->myBurn->camp = $campName;
             $this->myBurn->save();
             return true;
         }

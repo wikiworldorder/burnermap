@@ -2,6 +2,7 @@
 namespace BurnerMap\Controllers;
 
 use DB;
+use Config;
 use Socialite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -290,7 +291,8 @@ class FaceController extends Controller
      */
     public function printPage(Request $request)
     {
-        $uID = (($this->usr && isset($this->usr->id) && intVal($this->usr->id) > 0) ? $this->usr->id : 0);
+        $uID = (($this->usr && isset($this->usr->id) && intVal($this->usr->id) > 0) 
+            ? $this->usr->id : 0);
         $load = new PageLoads;
         $load->user     = $uID;
         $load->currUser = $uID;
@@ -319,7 +321,8 @@ class FaceController extends Controller
      */
     public function isAdmin()
     {
-        return in_array($this->usr->id, $GLOBALS["util"]->mexplode(',', env('BURNER_ADMINS')));
+        return in_array($this->usr->id, $GLOBALS["util"]->mexplode(',', 
+            Config::get('social.facebook.admins')));
     }
     
     /**
