@@ -215,6 +215,8 @@ class AdminImportExport extends FaceController
             
         } elseif ($request->has('mergeImport')) {
             
+            BurnerCamps::where('apiID', '>', 0)
+                ->update([ 'apiID' => -3 ]);
             $updates = [0, 0];
             $apis = OfficialCampsAPI::get();
             if ($apis->isNotEmpty()) {

@@ -73,25 +73,11 @@
     </div>
 
     <br />
-    <script type="text/javascript" src="/lib/FileSaver.min.js"></script>
-    <a id="jsonRevealBtn" data-listall="1" 
-        data-filename="BurnerMap_Export_{{ date('Y-m-d') }}.json"
-        href="javascript:;" style="text-decoration: none; margin-right: 20px;"
+    <a id="jsonRevealBtn" href="/map-json" 
+        style="text-decoration: none; margin-right: 20px;"
         >Download Friends JSON Export</a>
     <a href="?listAll=1&excel=1" target="_blank" style="text-decoration: none;"
         >Download Mailing List Excel Export</a>
-
-    <div id="jsonInstruct">
-        <p><b>Friends JSON Export</b></p>
-        <p>This download can be used to import your friends' camping info to other apps. 
-        Your browser should prompt you to download this JSON file in a few seconds.</p>
-        <p>But if it doesn't, <nobr><a href="?listAll=1&json=1" target="_blank">click here</a></nobr>
-        and use the browser to "save the page" and download the file.</p>
-        <p>Hopefully soon, you will be able to upload this JSON file in other apps like 
-        <a href="https://iburnapp.com" target="_blank">iBurn</a> or
-        <a href="https://www.facebook.com/TimeToBurnApp/" target="_blank">Time To Burn</a>.</p>
-        <div id="jsonFrame"></div>
-    </div>
 
 </div></center>
 @endif

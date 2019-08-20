@@ -55,23 +55,28 @@ class MapDeets
     public function loadCampDeets($archYear = '')
     {
         $this->campDeets = $this->villDeets = $chk = [];
-        if ($archYear != '') eval("\$chk = BurnerMap\\Models\\BurnerCamps" . $archYear . "::get();");
-        else {
+        if ($archYear != '') {
+            eval("\$chk = BurnerMap\\Models\\BurnerCamps" . $archYear . "::get();");
+        } else {
             $chk = DB::table('BurnerCamps')
-                ->leftJoin('OfficialCampsAPI', 'BurnerCamps.apiID', '=', 'OfficialCampsAPI.uid')
+                ->leftJoin('OfficialCampsAPI', 'BurnerCamps.apiID', 'LIKE', 'OfficialCampsAPI.id')
                 ->select('BurnerCamps.*', 'OfficialCampsAPI.url', 'OfficialCampsAPI.description')
                 ->get();
         }
         if ($chk->isNotEmpty()) {
             foreach ($chk as $camp) {
                 $this->campDeets[$camp->id] = $camp;
-                if ($archYear != '') $this->chkCampRecord($camp->id);
+                if ($archYear != '') {
+                    $this->chkCampRecord($camp->id);
+                }
             }
         }
         $chk = BurnerVillages::orderBy('name', 'asc')
             ->get();
         if ($chk->isNotEmpty()) {
-            foreach ($chk as $village) $this->villDeets[$village->id] = $village;
+            foreach ($chk as $village) {
+                $this->villDeets[$village->id] = $village;
+            }
         }
         return true;
     }
@@ -109,9 +114,12 @@ class MapDeets
                 ? $this->villDeets[$this->campDeets[$campID]->villageID] : null),
             "isPrint" => $isPrint
             ])->render();
-        if (isset($this->campDeets[$campID]->description) && trim($this->campDeets[$campID]->description) != '') {
-            $this->ajax .= '$(document).ready(function(){ $("#campInfoBtn' . $camp->id . '").click(function(){ '
-                . '$("#campInfo' . $camp->id . '").slideToggle("slow"); }); });';
+        if (isset($this->campDeets[$campID]->description) 
+            && trim($this->campDeets[$campID]->description) != '') {
+            $this->ajax .= '$(document).ready(function(){ $("#campInfoBtn' 
+                . $this->campDeets[$campID]->id . '").click(function(){ '
+                . '$("#campInfo' . $this->campDeets[$campID]->id 
+                . '").slideToggle("slow"); }); });';
         }
         $this->plots[] = view('vendor.burnermap.map-camp-plot', [
             "cnt"        => $this->cnt,

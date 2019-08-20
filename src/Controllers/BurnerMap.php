@@ -402,7 +402,8 @@ class BurnerMap extends FaceController
             }
             $cache->blobber = '';
             if ($this->archYear != '') {
-                $cache->blobber .= '<center><h3 class="archYearLabel"><i>Your Archival Map From ' . $this->archYear
+                $cache->blobber .= '<center><h3 class="archYearLabel"><i>'
+                    . 'Your Archival Map From ' . $this->archYear
                     . '<br /><span class="f8 nobld">(time travellingly includes new friends)</span></i></h3></center>';
             }
             $this->map = new MapDeets;
@@ -419,12 +420,15 @@ class BurnerMap extends FaceController
                 && (intVal($this->myBurn->campID) > 0 || intVal($this->myBurn->villageID) > 0)) {
                 $qryBase .= "->where(function (\$query) { \$query" . $qryWhereIn;
                 if (intVal($this->myBurn->campID) > 0) {
-                    $qryBase .= "->orWhere(function (\$query2) { \$query2->where('yearStatus', 'Participating')"
-                        . "->where('campID', " . $this->myBurn->campID . ")->whereRaw('opts%3 = 0'); })";
+                    $qryBase .= "->orWhere(function (\$query2) { "
+                        . "\$query2->where('yearStatus', 'Participating')"
+                        . "->where('campID', " . $this->myBurn->campID . ")"
+                        . "->whereRaw('opts%3 = 0'); })";
                 }
                 if (intVal($this->myBurn->villageID) > 0) {
                     $qryBase .= "->orWhere(function (\$query3) { \$query3->where('yearStatus', 'Participating')"
-                        . "->where('villageID', " . $this->myBurn->villageID . ")->whereRaw('opts%13 = 0'); })";
+                        . "->where('villageID', " . $this->myBurn->villageID . ")"
+                        . "->whereRaw('opts%13 = 0'); })";
                 }
                 $qryBase .= "; })";
             } else {
@@ -436,7 +440,7 @@ class BurnerMap extends FaceController
                 "->where('campID', '>', 0)->whereNotIn('addyClock', [" . $this->map->specialTime . "])",
                 "->where('campID', '>', 0)->whereIn('addyClock', [" . $this->map->specialTime . "])",
                 "->where('campID', '<', 1)"
-                ];
+            ];
             foreach ($qrys as $q => $qry) {
                 eval($qryBase . $qry . $qryOrder);
                 if ($resFriends->isNotEmpty()) {
@@ -612,7 +616,8 @@ class BurnerMap extends FaceController
         $this->loadPage($request, 'map');
         $this->getAllPastFriends();
         $this->myInfo->loadBlocks($this->usr->id);
-        $all = AllPastUsers::whereIn('user', $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers))
+        $all = AllPastUsers::whereIn('user', 
+            $GLOBALS["util"]->mexplode(',', $this->myInfo->allPastFrnds->friendUsers))
             ->orderBy('name', 'asc')
             ->orderBy('playaName', 'asc')
             ->get();
@@ -639,21 +644,26 @@ class BurnerMap extends FaceController
             BurnerPastFriendUsers::whereIn('user', $clearUsers)
                 ->delete();
             DB::table('CacheBlobs')->truncate();
-            for ($i = 0; $i < 10; $i++) DB::table('CacheBlobs' . $i)->truncate();
+            for ($i = 0; $i < 10; $i++) {
+                DB::table('CacheBlobs' . $i)->truncate();
+            }
             return redirect('/map?refresh=1');
         }
         $this->mainout = view('vendor.burnermap.map-blockers', [
             "all"      => $all,
             "myBlocks" => $this->myInfo->myBlocks
-            ])->render();
+        ])->render();
         return $this->printPage($request);
     }
     
     protected function canAddFriend($friend)
     {
-        return ($friend->user != $this->myBurn->user && !in_array($friend->user, $this->myInfo->myFriends)
-            && strpos($this->myInfo->allPastFrnds->friendUsers, ',' . $friend->user . ',') === false
-            && ($friend->campID == $this->myBurn->campID || $friend->villageID == $this->myBurn->villageID));
+        $posFound = strpos($this->myInfo->allPastFrnds->friendUsers, 
+            ',' . $friend->user . ',');
+        return ($friend->user != $this->myBurn->user && $posFound === false
+            && !in_array($friend->user, $this->myInfo->myFriends)
+            && ($friend->campID == $this->myBurn->campID 
+                || $friend->villageID == $this->myBurn->villageID));
     }
     
     protected function getRightColTicket($friend, $cntTot)
@@ -663,8 +673,15 @@ class BurnerMap extends FaceController
             "myBurn" => $this->myBurn,
             "friend" => $friend,
             "cntTot" => $cntTot
-            ])->render();
-	}
+        ])->render();
+    }
+    
+    public function mapJsonPage(Request $request)
+    {
+        $this->loadPage($request, 'map-json');
+        $this->mainout = view('vendor.burnermap.map-json-page')->render();
+        return $this->printPage($request);
+    }
     
     protected function jsonFriends(Request $request)
     {
@@ -706,11 +723,17 @@ class BurnerMap extends FaceController
             . "\$this->myInfo->getMapFriends(\$this->usr->id))->orderBy('name', 'asc')->get();");
         if ($chk->isNotEmpty()) {
             foreach ($chk as $i => $friend) {
-                $innerTable .= '<tr><td>' . ((trim($friend->playaName) != '') ? $friend->playaName . ' (' 
-                    . $friend->name . ')' : $friend->name) . ', ' . ((trim($friend->camp) != '') ? $friend->camp . ', '
-                    : '') . $friend->addyClock . ' & ' . $friend->addyLetter . ((trim($friend->addyLetter2) != '' 
-                    && $friend->addyLetter2 != '???') ? ' ' . $friend->addyLetter2 : '')
-                    . '</td><td>BRCPO9</td><td>Black Rock City, NV 89412</td></tr>'; // Gerlach NV 89412-0149
+                $playaName = $friend->name;
+                if (trim($friend->playaName) != '') {
+                    $playaName = $friend->playaName . ' (' . $friend->name . ')';
+                }
+                $innerTable .= '<tr><td>' . $playaName . ', ' 
+                    . ((trim($friend->camp) != '') ? $friend->camp . ', ' : '')
+                    . $friend->addyClock . ' & ' . $friend->addyLetter 
+                    . ((trim($friend->addyLetter2) != '' && $friend->addyLetter2 != '???')
+                        ? ' ' . $friend->addyLetter2 : '')
+                    . '</td><td>BRCPO9</td><td>Black Rock City, NV 89412</td></tr>';
+                    // Gerlach NV 89412-0149
             }
         }
         return $GLOBALS["util"]->exportExcel($innerTable, $filename);
@@ -723,16 +746,21 @@ class BurnerMap extends FaceController
         $isExcel = ($request->has('excel') || $request->has('xls'));
         $listAll = intVal($request->get('listAll'));
         $this->currUrl = '?listAll=' . $listAll
-            . (($isPrint) ? '&print=1' : (($isExcel) ? '&excel=1' : '')) . (($request->has('zoom')) ? '&zoom=1' : '');
-        eval("\$cache = BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . "::where('user', 0)->where('type', '"
+            . (($isPrint) ? '&print=1' : (($isExcel) ? '&excel=1' : '')) 
+            . (($request->has('zoom')) ? '&zoom=1' : '');
+        eval("\$cache = BurnerMap\\Models\\CacheBlobs" 
+            . $this->myInfo->userMod . "::where('user', 0)->where('type', '"
             . $this->currUrl . "')->first();");
-        if (!$request->has('refresh') && $cache && isset($cache->blobber) && trim($cache->blobber) != '') {
+        if (!$request->has('refresh') && $cache 
+            && isset($cache->blobber) && trim($cache->blobber) != '') {
             $this->mainout .= '<div>' . $cache->blobber . '</div>' . "\n" 
-                . '<!-- Hurray! saved some database power by displaying a cache this time -->' . "\n";
+                . '<!-- Hurray! saved some database power by displaying '
+                . 'a cache this time -->' . "\n";
             return $this->printPage($request);
         }
         if (!$cache) {
-            eval("\$cache = new BurnerMap\\Models\\CacheBlobs" . $this->myInfo->userMod . ";");
+            eval("\$cache = new BurnerMap\\Models\\CacheBlobs" 
+                . $this->myInfo->userMod . ";");
             $cache->user = 0;
             $cache->type = $this->currUrl;
         }
@@ -759,8 +787,9 @@ class BurnerMap extends FaceController
         if (!$isPrint) {
             $this->java .= 'plotCnt = ' . $this->map->cnt . ';';
             $this->ajax .= $this->map->ajax;
-            $cache->blobber .= '<script type="text/javascript">' . $this->java
-                . '$(document).ready(function(){ ' . ((isset($this->ajax)) ? $this->ajax : '') . ' }); '
+            $cache->blobber .= '<script type="text/javascript">' 
+                . $this->java . '$(document).ready(function(){ ' 
+                . ((isset($this->ajax)) ? $this->ajax : '') . ' }); '
                 . '</script>';
         }
         $cache->save();
@@ -775,7 +804,8 @@ class BurnerMap extends FaceController
     {
         $this->loadPage($request, 'json');
         $this->map = new MapDeets;
-        return $this->map->jsonAllCamps(($request->has('year')) ? intVal($request->get('year')) : intVal(date("Y")));
+        return $this->map->jsonAllCamps(($request->has('year')) 
+            ? intVal($request->get('year')) : intVal(date("Y")));
     }
     
 }

@@ -241,8 +241,9 @@ class FaceController extends Controller
             if ($this->usr && isset($this->usr->id)) {
                 return $GLOBALS["util"]->jsRedirect('/map');
             }
-        } elseif (!in_array($this->currPage, ['privacy', 'json'])) {
-            if (!$this->usr || !isset($this->usr->id) || intVal($this->usr->id) <= 0 || !session()->has('burntok')) {
+        } elseif (!in_array($this->currPage, ['privacy', 'json', 'popup'])) {
+            if (!$this->usr || !isset($this->usr->id) || intVal($this->usr->id) <= 0 
+                || !session()->has('burntok')) {
                 return $GLOBALS["util"]->jsRedirect('/welcome');
             }
             $this->loadUserInfo($request);

@@ -652,11 +652,11 @@ class BurnerAdmin extends FaceController
     
     protected function currCoordPlot($coord)
     {
-        return '<div class="absDiv" style="z-index: 90; top: ' . ($coord->y-$this->map->pointOffY) . 'px; left: '
+        return '<div class="absDiv" style="z-index: 90; top: ' 
+            . ($coord->y-$this->map->pointOffY) . 'px; left: '
             . ($coord->x-$this->map->pointOffX) . 'px; opacity:0.95; filter:alpha(opacity=95);">'
             . '<img src="/images/pointer-small.png" border=0 ></div>' . "\n";
     }
-    
     
     
     // defaults to format for Laravel database seeder

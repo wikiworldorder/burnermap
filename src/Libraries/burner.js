@@ -85,27 +85,6 @@ function openFBmsgWin(user) {
 
 
 $(document).ready(function(){
-        
-	$(document).on("click", "#showJson", function() { $("#jsonDeets").slideToggle("fast"); });
-	
-    $(document).on("click", "#jsonRevealBtn", function() {
-        if (document.getElementById("jsonInstruct") && document.getElementById("jsonFrame")) {
-            if (document.getElementById("jsonInstruct").style.display!="block") {
-                $("#jsonInstruct").slideDown("fast");
-                var listAll = $(this).attr("data-listall");
-                var filename = $(this).attr("data-filename");
-                if (document.getElementById("jsonFrame").innerHTML=="") {
-                    $("#jsonFrame").load("?listAll="+listAll+"&json=1");
-                }
-                setTimeout(function() {
-                    var jsonOut = new Blob([$("#jsonFrame").html()], {type: "text/json;charset=utf-8"});
-                    saveAs(jsonOut, filename);
-                }, 5000);
-            } else {
-                $("#jsonInstruct").slideUp("fast");
-            }
-        }
-    });
 
     function toggleHidiv(fldGrp) {
         if (document.getElementById("hidiv"+fldGrp+"")) {

@@ -38,6 +38,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/blockers',  'BurnerMap\\Controllers\\BurnerMap@blockers');
     Route::get( '/blockers',  'BurnerMap\\Controllers\\BurnerMap@blockers');
     
+    Route::get( '/map-json',  'BurnerMap\\Controllers\\BurnerMap@mapJsonPage');
     Route::get( '/json', 'BurnerMap\\Controllers\\BurnerMap@jsonAllCamps');
     Route::get( '/json.php', 'BurnerMap\\Controllers\\BurnerMap@jsonAllCamps');
     

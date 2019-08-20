@@ -1,6 +1,8 @@
 <?php
 namespace BurnerMap\Controllers;
 
+use Illuminate\Support\Facades\Response;
+
 class LoadSysFiles
 {
     public function jqueryJs()

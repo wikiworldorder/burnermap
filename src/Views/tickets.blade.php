@@ -36,7 +36,7 @@ to make exchanges with, you should still<br />
 
 <form name="ticketForm" action="?ticketSub=1#thankYou" method="post">
 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-<table border=0 >
+<table border=0 width=100% >
 <tr><td><input type="radio" id="ticketType1" name="ticketType" value="need" onClick="return clickNeed();" 
     @if ($myBurn->ticketNeeds > 0) CHECKED @endif ></td>
     <td class="condensed f14"><nobr><label for="ticketType1">I need tickets</label></nobr></td>
@@ -47,6 +47,7 @@ to make exchanges with, you should still<br />
         @endfor
 	</select></nobr></div></td>
 </tr>
+
 <tr><td colspan=4 ><br /></td></tr>
 <tr><td><input type="radio" id="ticketType2" name="ticketType" value="have" onClick="return clickHave();" 
     @if ($myBurn->ticketHas > 0) CHECKED @endif ></td>
@@ -58,15 +59,13 @@ to make exchanges with, you should still<br />
 	@endfor
 	</select></nobr></div></td>
 </tr>
+
 <tr><td colspan=4 ><br /></td></tr>
 <tr><td><input type="radio" id="ticketType3" name="ticketType" value="help" onClick="return clickNeither();"
-    @if ($myBurn->ticketHas == 0 && $myBurn->ticketNeeds == 0 && $myBurn->opts%7 == 0) CHECKED @endif  ></td>
-    <td colspan=3 class="condensed f14"><nobr><label for="ticketType3">Neither, I'll help match up friends</label>
+    @if ($myBurn->ticketHas == 0 && $myBurn->ticketNeeds == 0) CHECKED @endif  ></td>
+    <td colspan=3 class="condensed f14"><nobr><label for="ticketType3">Neither</label>
         </nobr></td></tr>
-<tr><td colspan=4 ><br /></td></tr>
-<tr><td><input type="radio" id="ticketType4" name="ticketType" value="none" onClick="return clickNeither();" 
-    @if ($myBurn->ticketHas == 0 && $myBurn->ticketNeeds == 0 && $myBurn->opts%7 > 0) CHECKED @endif ></td>
-    <td colspan=3 class="condensed f14"><label for="ticketType4">No thanks</label></td></tr>
+
 <tr><td colspan=4 ><br /></td></tr>
 <tr><td colspan=4 ><center><input type="image" src="/images/ticket-save.jpg" border=0 
     onClick="document.ticketForm.submit();" ></center></td></tr>

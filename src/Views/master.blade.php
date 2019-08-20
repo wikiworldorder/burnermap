@@ -64,7 +64,10 @@
             <span class="feetSubtle"><a href="http://consumptionblog.com" target="_blank">Indecency</a></span>
             <br /><br />
             
-            <span class="footOrange"><b>With donations from hundreds of users, and Matt Mullenweg &lt;3</b><br /><br />
+            <span class="footOrange"><b>With donations from hundreds of users, Matt Mullenweg, 
+            <nobr>and <a href="https://info.terratori.com/" target="_blank"
+                >Terratori Technologies</a></nobr>
+            &lt;3</b><br /><br />
             
             <b>Shoutouts to some of our burner friends who create awesome things...</b></span><br />
             <a href="http://bluemorphocenternews.wordpress.com/" target="_blank">Blue Morpho</a>, 
